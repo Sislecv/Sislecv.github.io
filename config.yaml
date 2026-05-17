@@ -1,24 +1,22 @@
 baseurl: https://sislecv.github.io/
 locale: zh-cn
 theme: hugo-theme-stack
-title: My Blog
+title: Rethinking
 copyright: ""
 
 # Theme i18n support. Configurations are per language.
 languages:
     zh-cn:
         languageName: 中文
-        title: 我的博客
+        title: Rethinking
         weight: 1
         params:
             sidebar:
-                subtitle: 记录生活与技术
+                subtitle: Code, Create, Share
 
 services:
-    # Change it to your Disqus shortname before building
     disqus:
         shortname: ""
-    # GA Tracking ID
     googleAnalytics:
         id: ""
 
@@ -46,7 +44,7 @@ params:
 
     sidebar:
         emoji: "🚀"
-        subtitle: ""
+        subtitle: Code, Create, Share
         avatar:
             enabled: true
             local: true
@@ -81,7 +79,7 @@ params:
 
     opengraph:
         twitter:
-            site: "@example"
+            site: ""
             card: summary_large_image
 
     defaultImage:
@@ -100,8 +98,17 @@ params:
         content:
             enabled: true
 
-### Custom menu
-### See https://stack.jimmycai.com/config/menu
-### To disable, use menu: main: []
 menu:
-    main: []
+    main:
+        - identifier: home
+          name: 首页
+          url: /
+          weight: 1
+        - identifier: archives
+          name: 归档
+          url: /archives/
+          weight: 2
+        - identifier: search
+          name: 搜索
+          url: /search/
+          weight: 3
