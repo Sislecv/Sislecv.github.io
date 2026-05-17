@@ -1,4 +1,4 @@
-baseurl: https://example.org/
+baseurl: https://sislecv.github.io/
 locale: zh-cn
 theme: hugo-theme-stack
 title: My Blog
