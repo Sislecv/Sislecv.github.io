@@ -7,7 +7,7 @@ copyright: ""
 # Theme i18n support. Configurations are per language.
 languages:
     zh-cn:
-        languageName: 中文
+        label: 中文
         title: Rethinking
         weight: 1
         params:
@@ -45,10 +45,7 @@ params:
     sidebar:
         emoji: "🚀"
         subtitle: Code, Create, Share
-        avatar:
-            enabled: true
-            local: true
-            src: img/avatar.png
+        avatar: "img/avatar.png"
 
     article:
         math: false
