@@ -1,0 +1,107 @@
+baseurl: https://example.org/
+locale: zh-cn
+theme: hugo-theme-stack
+title: My Blog
+copyright: ""
+
+# Theme i18n support. Configurations are per language.
+languages:
+    zh-cn:
+        languageName: 中文
+        title: 我的博客
+        weight: 1
+        params:
+            sidebar:
+                subtitle: 记录生活与技术
+
+services:
+    # Change it to your Disqus shortname before building
+    disqus:
+        shortname: ""
+    # GA Tracking ID
+    googleAnalytics:
+        id: ""
+
+pagination:
+    pagerSize: 10
+
+permalinks:
+    post: /p/:slug/
+    page: /:slug/
+
+params:
+    mainSections:
+        - post
+    featuredImageField: image
+    rssFullContent: true
+    favicon: ""
+
+    footer:
+        since: 2026
+        customText: ""
+
+    dateFormat:
+        published: ":date_full"
+        lastUpdated: ":date_full"
+
+    sidebar:
+        emoji: "🚀"
+        subtitle: ""
+        avatar:
+            enabled: true
+            local: true
+            src: img/avatar.png
+
+    article:
+        math: false
+        toc: true
+        readingTime: true
+        license:
+            enabled: false
+            default: "Licensed under CC BY-NC-SA 4.0"
+
+    comments:
+        enabled: false
+        provider: disqus
+
+    widgets:
+        homepage:
+            - type: search
+            - type: archives
+              params:
+                  limit: 5
+            - type: categories
+              params:
+                  limit: 10
+            - type: tag-cloud
+              params:
+                  limit: 10
+        page:
+            - type: toc
+
+    opengraph:
+        twitter:
+            site: "@example"
+            card: summary_large_image
+
+    defaultImage:
+        opengraph:
+            enabled: false
+            local: false
+            src: ""
+
+    colorScheme:
+        toggle: true
+        default: auto
+
+    imageProcessing:
+        cover:
+            enabled: true
+        content:
+            enabled: true
+
+### Custom menu
+### See https://stack.jimmycai.com/config/menu
+### To disable, use menu: main: []
+menu:
+    main: []
