@@ -46,7 +46,7 @@ params:
     sidebar:
         emoji: "🚀"
         subtitle: Code, Create, Share
-        avatar: "img/avatar.png"
+        avatar: "img/avatar.jpg"
         compact: false
 
     article:
