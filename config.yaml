@@ -33,19 +33,21 @@ params:
     featuredImageField: image
     rssFullContent: true
     favicon: ""
+    description: Code, Create, Share
 
     footer:
         since: 2026
         customText: ""
 
     dateFormat:
-        published: ":date_full"
-        lastUpdated: ":date_full"
+        published: "2006年01月02日"
+        lastUpdated: "2006年01月02日 15:04"
 
     sidebar:
         emoji: "🚀"
         subtitle: Code, Create, Share
         avatar: "img/avatar.png"
+        compact: false
 
     article:
         math: false
@@ -73,6 +75,8 @@ params:
                   limit: 10
         page:
             - type: toc
+            - type: categories
+            - type: tag-cloud
 
     opengraph:
         twitter:
@@ -100,12 +104,41 @@ menu:
         - identifier: home
           name: 首页
           url: /
-          weight: 1
+          weight: -100
+          params:
+              icon: home
         - identifier: archives
           name: 归档
           url: /archives/
-          weight: 2
+          weight: -90
+          params:
+              icon: archives
+        - identifier: categories
+          name: 分类
+          url: /categories/
+          weight: -80
+          params:
+              icon: categories
+        - identifier: tags
+          name: 标签
+          url: /tags/
+          weight: -70
+          params:
+              icon: hash
         - identifier: search
           name: 搜索
           url: /search/
-          weight: 3
+          weight: -60
+          params:
+              icon: search
+    social:
+        - identifier: github
+          name: GitHub
+          url: https://github.com/Sislecv
+          params:
+              icon: brand-github
+        - identifier: rss
+          name: RSS
+          url: /index.xml
+          params:
+              icon: rss

@@ -2,7 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://sislecv.github.io/categories/</loc>
+    <lastmod>2026-05-17T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://sislecv.github.io/p/hello-world/</loc>
+    <lastmod>2026-05-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://sislecv.github.io/tags/hugo/</loc>
     <lastmod>2026-05-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://sislecv.github.io/post/</loc>
@@ -14,12 +20,15 @@
     <loc>https://sislecv.github.io/tags/</loc>
     <lastmod>2026-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://sislecv.github.io/tags/%E7%94%9F%E6%B4%BB/</loc>
+    <loc>https://sislecv.github.io/tags/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2026-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://sislecv.github.io/tags/%E9%9A%8F%E7%AC%94/</loc>
+    <loc>https://sislecv.github.io/archives/</loc>
     <lastmod>2026-05-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://sislecv.github.io/categories/</loc>
+    <loc>https://sislecv.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2026-05-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://sislecv.github.io/search/</loc>
   </url>
 </urlset>

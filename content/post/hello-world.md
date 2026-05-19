@@ -1,11 +1,12 @@
 ---
-title: Hello World
-description: 这是我的第一篇博客文章
+title: "Hello World"
+description: "这是我的第一篇博客文章，记录使用 Hugo 和 Stack 主题搭建博客的过程。"
 date: 2026-05-17
-image: ""
 tags:
-  - 生活
-  - 随笔
+  - Hugo
+  - 博客
+categories:
+  - 技术
 draft: false
 ---
 
@@ -18,5 +19,14 @@ draft: false
 - 使用 **Hugo** 静态网站生成器
 - 采用 **Stack** 卡片式主题
 - 部署在 **GitHub Pages**
+
+## 为什么选择 Hugo？
+
+Hugo 是一个用 Go 编写的静态网站生成器，具有以下优势：
+
+1. **极快的构建速度** - 即使是大型网站也能在几秒内构建完成
+2. **丰富的主题生态** - 拥有大量精美的主题可供选择
+3. **Markdown 友好** - 使用 Markdown 编写内容，专注于写作本身
+4. **部署简单** - 生成的静态文件可以轻松部署到任何静态托管服务
 
 期待在这里记录更多有趣的内容！

@@ -1,0 +1,30 @@
+/* Custom styles for Rethinking blog */
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Better article readability */
+.article-content {
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+/* Code block improvements */
+.article-content pre {
+    border-radius: 8px;
+}
+
+/* Card hover effect */
+.article-list .article-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Tag cloud spacing */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
