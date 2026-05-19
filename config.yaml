@@ -137,6 +137,11 @@ menu:
           url: https://github.com/Sislecv
           params:
               icon: brand-github
+        - identifier: x
+          name: X
+          url: https://x.com/sislecv95122
+          params:
+              icon: brand-twitter
         - identifier: rss
           name: RSS
           url: /index.xml
