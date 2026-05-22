@@ -1,0 +1,52 @@
+<div id="utterances-container"></div>
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+<script>
+    (function() {
+        const theme = document.documentElement.dataset.scheme === 'dark'
+            ? 'github-dark'
+            : 'github-light';
+
+        const container = document.getElementById('utterances-container');
+        const script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        script.setAttribute('repo', '{{ .Site.Params.comments.utterances.repo }}');
+        script.setAttribute('issue-term', '{{ .Site.Params.comments.utterances.issueTerm }}');
+        {{ with .Site.Params.comments.utterances.label }}
+        script.setAttribute('label', '{{ . }}');
+        {{ end }}
+        script.setAttribute('theme', theme);
+        script.setAttribute('crossorigin', 'anonymous');
+        script.async = true;
+        container.appendChild(script);
+
+        let utterancesLoaded = false;
+
+        function setUtterancesTheme(newTheme) {
+            const utterances = document.querySelector('.utterances iframe');
+            if (utterances) {
+                utterances.contentWindow.postMessage(
+                    {
+                        type: 'set-theme',
+                        theme: `github-${newTheme}`
+                    },
+                    'https://utteranc.es'
+                );
+            }
+        }
+
+        addEventListener('message', event => {
+            if (event.origin !== 'https://utteranc.es') return;
+            utterancesLoaded = true;
+            setUtterancesTheme(document.documentElement.dataset.scheme);
+        });
+
+        window.addEventListener('onColorSchemeChange', (e) => {
+            if (!utterancesLoaded) return;
+            setUtterancesTheme(e.detail);
+        });
+    })();
+</script>
