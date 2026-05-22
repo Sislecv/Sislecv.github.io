@@ -28,3 +28,25 @@ html {
     flex-wrap: wrap;
     gap: 8px;
 }
+
+/* --- Article content readability improvements --- */
+
+/* Widen main content by reducing right sidebar width */
+.container.extended {
+    @media (min-width: 768px) {
+        --right-sidebar-max-width: 22%;
+    }
+    @media (min-width: 1024px) {
+        --right-sidebar-max-width: 20%;
+    }
+    @media (min-width: 1280px) {
+        --right-sidebar-max-width: 18%;
+    }
+}
+
+/* Constrain article content text width for better readability */
+.article-content {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
