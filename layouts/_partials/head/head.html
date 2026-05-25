@@ -16,6 +16,15 @@
 
 <link rel="stylesheet" href="https://unpkg.com/mdui@2.1.4/mdui.css">
 <script src="https://unpkg.com/mdui@2.1.4/mdui.global.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Use Material You dynamic color scheme
+        // Set your preferred seed color here (e.g., a purple like #6750a4)
+        mdui.setColorScheme('#6750a4', {
+            target: document.documentElement
+        });
+    });
+</script>
 
 {{- partial "head/custom-font.html" . -}}
 {{- partial "head/style.html" . -}}
