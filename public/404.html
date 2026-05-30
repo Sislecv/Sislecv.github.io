@@ -26,13 +26,24 @@
             document.documentElement.dataset.scheme = isDark ? 'dark' : 'light';
         });
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('toggle-menu');
+        var menu = document.getElementById('main-menu');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function() {
+            menu.classList.toggle('show');
+            btn.classList.toggle('is-active');
+        });
+    });
 </script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
 
 
-<link rel="stylesheet" href="/scss/style.min.4113b6f71a20c077df4fb45ede735fdf1f7f20f0c78339c5cc4cca54573d7e91.css"><meta property='og:title' content="404 Page not found">
+<link rel="stylesheet" href="/scss/style.min.86247eba2d307060120998dd140ef1000529481932a2b6822f1949d193789bef.css"><meta property='og:title' content="404 Page not found">
 <meta property='og:description' content="Code, Create, Share">
 <meta property='og:url' content='https://sislecv.github.io/404.html'>
 <meta property='og:site_name' content='Rethinking'>

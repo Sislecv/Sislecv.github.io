@@ -33,6 +33,17 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('toggle-menu');
+        var menu = document.getElementById('main-menu');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function() {
+            menu.classList.toggle('show');
+            btn.classList.toggle('is-active');
+        });
+    });
+</script>
 
 {{- partial "head/custom-font.html" . -}}
 {{- partial "head/style.html" . -}}

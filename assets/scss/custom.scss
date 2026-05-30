@@ -992,19 +992,168 @@ img {
 }
 
 /* ============================================
-   Responsive
+   Responsive — Mobile First
    ============================================ */
 
+/* Small phones (< 360px) */
+@media (max-width: 359px) {
+    :root {
+        --container-padding: 12px;
+        --card-padding: 14px;
+    }
+    .left-sidebar {
+        padding: 14px;
+    }
+    .article-list article .article-title {
+        font-size: .95rem;
+    }
+    .main-article .article-header .article-title {
+        font-size: 1.3rem;
+    }
+    .main-article .article-content {
+        font-size: .9rem;
+    }
+    .terminal-body {
+        padding: 12px;
+    }
+    .terminal-line {
+        font-size: .78rem;
+    }
+}
+
+/* Phones (360px - 767px) */
 @media (max-width: 767px) {
     .container.main-container {
         padding: 16px;
+        gap: 16px;
     }
+
     .left-sidebar {
         position: relative;
         max-height: none;
+        overflow-y: visible;
     }
+
+    /* Show hamburger, hide menu by default */
+    .hamburger {
+        display: flex !important;
+    }
+    #main-menu {
+        display: none;
+        &.show {
+            display: flex;
+        }
+    }
+
+    /* Article list: single column */
+    .article-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Article card tweaks */
     .article-list article .article-image {
         aspect-ratio: 16 / 10;
+    }
+    .article-list article .article-details {
+        padding: 14px;
+    }
+
+    /* Article page */
+    .main-article .article-header .article-details {
+        padding: 16px;
+    }
+    .main-article .article-content {
+        padding: 0 16px 16px;
+        font-size: .9rem;
+        line-height: 1.7;
+    }
+    .main-article .article-content pre {
+        padding: 12px;
+        font-size: .8rem;
+        margin-left: -16px;
+        margin-right: -16px;
+        border-radius: 0;
+        width: calc(100% + 32px);
+    }
+
+    /* Table scroll */
+    .article-content .table-wrapper,
+    .article-content table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Terminal */
+    .puter-terminal {
+        margin: 0 0 16px;
+        border-radius: var(--shape-corner-md);
+    }
+    .terminal-body {
+        padding: 12px;
+        max-height: 300px;
+    }
+    .terminal-line {
+        font-size: .78rem;
+    }
+
+    /* Right sidebar: show below content */
+    .right-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        order: 3;
+    }
+
+    /* Section card */
+    .section-card {
+        padding: 14px;
+    }
+
+    /* Pagination */
+    .pagination {
+        gap: 6px;
+        padding: 16px 0;
+    }
+    .pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: .8rem;
+    }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container.main-container {
+        max-width: 900px;
+    }
+
+    .article-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .right-sidebar {
+        display: none;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .container.main-container {
+        max-width: 1280px;
+    }
+
+    .article-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Large desktop (1200px+) */
+@media (min-width: 1200px) {
+    .article-list {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
