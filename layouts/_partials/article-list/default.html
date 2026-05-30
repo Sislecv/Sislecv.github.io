@@ -1,0 +1,21 @@
+{{ $image := partial "helper/image" (dict "Image" .Params.image "Resources" .Resources "Context" .) }}
+<article class="{{ if $image }}has-image{{ end }}">
+    <a href="{{ .RelPermalink }}">
+        {{ if $image }}
+        <div class="article-image">
+            {{ partial "helper/responsive-image" (dict
+                "Resource" $image.Resource
+                "Widths" (cond .Site.Params.ImageProcessing.Content.Enabled .Site.Params.ImageProcessing.Content.Widths nil)
+                "Attributes" (dict
+                    "src" $image.Permalink
+                    "width" $image.Width
+                    "height" $image.Height
+                    "alt" (printf "Featured image of post %s" .Title)
+                    "loading" "lazy"
+                )
+            ) }}
+        </div>
+        {{ end }}
+        {{ partial "article/components/details" (dict "Page" . "IsList" true) }}
+    </a>
+</article>
