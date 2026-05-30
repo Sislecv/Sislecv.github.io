@@ -10,13 +10,28 @@
 
 <link rel="stylesheet" href="https://unpkg.com/mdui@2.1.4/mdui.css">
 <script src="https://unpkg.com/mdui@2.1.4/mdui.global.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var sw = document.getElementById('theme-switch');
+        if (!sw) return;
+        var key = 'StackColorScheme';
+        var val = localStorage.getItem(key) || 'auto';
+        var dark = val === 'dark' || (val === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        sw.checked = dark;
+        sw.addEventListener('change', function() {
+            var isDark = sw.checked;
+            localStorage.setItem(key, isDark ? 'dark' : 'light');
+            document.documentElement.dataset.scheme = isDark ? 'dark' : 'light';
+        });
+    });
+</script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
 
 
-<link rel="stylesheet" href="/scss/style.min.f7fc7ce538af992d358ef9c3efef7b13f29cf865959bcdf12b7c5e028d05ca02.css"><meta property='og:title' content="Categories">
+<link rel="stylesheet" href="/scss/style.min.846d5fa039cb2e94145b46047030b5c92c1c8ab51816faddba18830c2e29c88e.css"><meta property='og:title' content="Categories">
 <meta property='og:description' content="Code, Create, Share">
 <meta property='og:url' content='https://sislecv.github.io/categories/'>
 <meta property='og:site_name' content='Rethinking'>
@@ -176,8 +191,7 @@
 
                 
                     <li id="dark-mode-toggle">
-                        <i class="mdi mdi-weather-sunny" style="font-size:20px;line-height:1;vertical-align:middle;"></i>
-                        <i class="mdi mdi-weather-night" style="font-size:20px;line-height:1;vertical-align:middle;"></i>
+                        <mdui-switch id="theme-switch"></mdui-switch>
                         <span></span>
                     </li>
                 

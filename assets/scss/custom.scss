@@ -1058,10 +1058,21 @@ body,
     font-size: 22px;
 }
 
-/* Dark mode toggle icon */
-#dark-mode-toggle .mdi {
-    font-size: 22px;
-    opacity: .7;
+/* Dark mode toggle */
+#dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#dark-mode-toggle mdui-switch {
+    --md-sys-color-primary: var(--primary);
+    --md-sys-color-on-primary: var(--on-primary);
+    --md-sys-color-primary-container: var(--primary-container);
+    --md-sys-color-on-primary-container: var(--on-primary-container);
+    --md-sys-color-surface-container-highest: var(--surface-container-highest);
+    --md-sys-color-outline: var(--outline);
+    flex-shrink: 0;
 }
 
 /* Widget icons */
