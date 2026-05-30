@@ -1027,3 +1027,61 @@ body,
 .site-footer {
     transition: background-color .3s ease, box-shadow .3s ease, color .3s ease;
 }
+
+/* ============================================
+   MDI Icons
+   ============================================ */
+
+.mdi {
+    font-style: normal;
+    font-weight: normal;
+    display: inline-block;
+    text-rendering: auto;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sidebar menu icons */
+.left-sidebar #main-menu li a .mdi {
+    font-size: 22px;
+    width: 24px;
+    text-align: center;
+    opacity: .7;
+}
+.left-sidebar li.current a .mdi {
+    opacity: 1;
+}
+
+/* Social icons */
+.menu-social li a .mdi {
+    font-size: 22px;
+}
+
+/* Dark mode toggle icon */
+#dark-mode-toggle .mdi {
+    font-size: 22px;
+    opacity: .7;
+}
+
+/* Widget icons */
+.right-sidebar .widget-icon .mdi {
+    font-size: 22px;
+}
+
+/* Article meta icons */
+.article-meta .mdi {
+    font-size: 16px;
+    opacity: .6;
+    margin-right: 2px;
+}
+
+/* Tag icon in article tags */
+.article-tags .mdi {
+    font-size: 14px;
+}
+
+/* Search button icon */
+.search-form .mdi {
+    font-size: 22px;
+}

@@ -1,0 +1,38 @@
+{{- $iconMap := dict
+    "home" "mdi-home"
+    "archives" "mdi-archive-outline"
+    "categories" "mdi-shape-outline"
+    "hash" "mdi-pound"
+    "search" "mdi-magnify"
+    "brand-github" "mdi-github"
+    "brand-twitter" "mdi-twitter"
+    "rss" "mdi-rss"
+    "clock" "mdi-clock-outline"
+    "date" "mdi-calendar"
+    "language" "mdi-translate"
+    "tag" "mdi-tag-outline"
+    "toggle-left" "mdi-weather-sunny"
+    "toggle-right" "mdi-weather-night"
+    "link" "mdi-link"
+    "user" "mdi-account"
+    "messages" "mdi-message-text-outline"
+    "copyright" "mdi-copyright"
+    "dots" "mdi-dots-vertical"
+    "back" "mdi-arrow-left"
+    "arrow-back" "mdi-arrow-left"
+    "chevron-left" "mdi-chevron-left"
+    "chevron-right" "mdi-chevron-right"
+    "settings" "mdi-cog-outline"
+    "book" "mdi-book-open-page-variant-outline"
+    "bookmark" "mdi-bookmark-outline"
+    "code" "mdi-code-braces"
+    "external-link" "mdi-open-in-new"
+    "copy" "mdi-content-copy"
+    "check" "mdi-check"
+-}}
+{{- $mdiClass := index $iconMap . -}}
+{{- if $mdiClass -}}
+    <i class="mdi {{ $mdiClass }}" style="font-size:20px;line-height:1;vertical-align:middle;"></i>
+{{- else -}}
+    <i class="mdi mdi-help-circle-outline" style="font-size:20px;"></i>
+{{- end -}}
