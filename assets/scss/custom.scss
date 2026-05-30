@@ -1096,3 +1096,150 @@ body,
 .search-form .mdi {
     font-size: 22px;
 }
+
+/* ============================================
+   Puter.js AI Terminal
+   ============================================ */
+
+.puter-terminal {
+    background: var(--surface-container-highest);
+    border-radius: var(--shape-corner-lg);
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--outline-variant);
+    font-family: 'Roboto Mono', 'SF Mono', Consolas, monospace;
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--surface-container-high);
+    border-bottom: 1px solid var(--outline-variant);
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 6px;
+
+    span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--outline-variant);
+
+        &:nth-child(1) { background: #ff5f57; }
+        &:nth-child(2) { background: #febc2e; }
+        &:nth-child(3) { background: #28c840; }
+    }
+}
+
+.terminal-title {
+    flex: 1;
+    font-size: .75rem;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+}
+
+.terminal-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+    color: var(--on-surface-variant);
+    transition: background .15s;
+    line-height: 1;
+
+    &:hover { background: var(--state-hover); }
+    .mdi { font-size: 18px; }
+}
+
+.terminal-body {
+    padding: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--outline-variant) transparent;
+
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb {
+        background: var(--outline-variant);
+        border-radius: 2px;
+    }
+}
+
+.terminal-output {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.terminal-line {
+    font-size: .82rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.terminal-system {
+    color: var(--outline);
+    font-style: italic;
+}
+
+.terminal-user {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.terminal-ai {
+    color: var(--on-surface);
+}
+
+.terminal-error {
+    color: #b3261e;
+}
+
+.terminal-cursor {
+    display: inline;
+    animation: blink 1s step-end infinite;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+.terminal-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--outline-variant);
+    margin-top: 8px;
+}
+
+.terminal-prompt {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
+}
+
+.terminal-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .82rem;
+    caret-color: var(--primary);
+
+    &::placeholder {
+        color: var(--outline);
+        opacity: .6;
+    }
+}

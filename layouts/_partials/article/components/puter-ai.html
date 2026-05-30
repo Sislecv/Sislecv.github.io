@@ -1,0 +1,143 @@
+{{ if not (eq .Params.ai false) }}
+<div id="puter-ai-terminal" class="puter-terminal" data-title="{{ .Title }}">
+    <div class="terminal-header">
+        <div class="terminal-dots">
+            <span></span><span></span><span></span>
+        </div>
+        <span class="terminal-title">AI Assistant</span>
+        <button class="terminal-toggle" id="ai-toggle" title="展开/收起">
+            <i class="mdi mdi-chevron-up"></i>
+        </button>
+    </div>
+    <div class="terminal-body" id="ai-body">
+        <div class="terminal-output" id="ai-output"></div>
+        <div class="terminal-input-row" id="ai-input-row" style="display:none;">
+            <span class="terminal-prompt">&gt;</span>
+            <input type="text" id="ai-input" class="terminal-input" placeholder="问我任何关于这篇文章的问题..." autocomplete="off" />
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    var articleEl = document.querySelector('.article-content');
+    if (!articleEl) return;
+    var articleText = articleEl.innerText || articleEl.textContent;
+    if (!articleText || articleText.length < 50) return;
+
+    var maxLen = 6000;
+    if (articleText.length > maxLen) articleText = articleText.substring(0, maxLen) + '...';
+
+    var title = document.getElementById('puter-ai-terminal').getAttribute('data-title') || '这篇文章';
+    var output = document.getElementById('ai-output');
+    var inputRow = document.getElementById('ai-input-row');
+    var input = document.getElementById('ai-input');
+    var toggle = document.getElementById('ai-toggle');
+    var body = document.getElementById('ai-body');
+    var collapsed = false;
+
+    toggle.addEventListener('click', function() {
+        collapsed = !collapsed;
+        body.style.display = collapsed ? 'none' : '';
+        toggle.querySelector('i').className = collapsed ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-up';
+    });
+
+    var messages = [
+        { role: 'system', content: '你是一个文章助手。基于以下文章内容回答用户问题。回答要简洁准确。如果问题与文章无关，礼貌说明你只能回答与文章相关的问题。\n\n文章标题：' + title + '\n\n文章内容：\n' + articleText }
+    ];
+
+    function appendLine(text, cls) {
+        var line = document.createElement('div');
+        line.className = 'terminal-line ' + (cls || '');
+        line.textContent = text;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
+        return line;
+    }
+
+    function appendHTML(html, cls) {
+        var line = document.createElement('div');
+        line.className = 'terminal-line ' + (cls || '');
+        line.innerHTML = html;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
+        return line;
+    }
+
+    function showCursor(el) {
+        var cursor = document.createElement('span');
+        cursor.className = 'terminal-cursor';
+        cursor.textContent = '█';
+        el.appendChild(cursor);
+        return cursor;
+    }
+
+    async function streamSummary() {
+        appendLine('$ 正在分析文章...', 'terminal-system');
+
+        messages.push({ role: 'user', content: '请用中文总结这篇文章，2-3段话，突出核心要点。' });
+
+        try {
+            var resp = await puter.ai.chat(messages, { model: 'gpt-5-nano', stream: true });
+            var lineEl = appendLine('', 'terminal-ai');
+            var cursor = showCursor(lineEl);
+            var fullText = '';
+
+            for await (var part of resp) {
+                if (part && part.text) {
+                    fullText += part.text;
+                    lineEl.textContent = fullText;
+                    lineEl.appendChild(cursor);
+                    output.scrollTop = output.scrollHeight;
+                }
+            }
+
+            if (cursor.parentNode) cursor.remove();
+            messages.push({ role: 'assistant', content: fullText });
+
+            appendLine('', '');
+            inputRow.style.display = 'flex';
+            input.focus();
+        } catch (e) {
+            appendLine('⚠ AI 请求失败: ' + e.message, 'terminal-error');
+            inputRow.style.display = 'flex';
+        }
+    }
+
+    input.addEventListener('keydown', async function(e) {
+        if (e.key !== 'Enter' || !input.value.trim()) return;
+        var q = input.value.trim();
+        input.value = '';
+        input.disabled = true;
+
+        appendLine('> ' + q, 'terminal-user');
+        messages.push({ role: 'user', content: q });
+
+        try {
+            var resp = await puter.ai.chat(messages, { model: 'gpt-5-nano', stream: true });
+            var lineEl = appendLine('', 'terminal-ai');
+            var cursor = showCursor(lineEl);
+            var fullText = '';
+
+            for await (var part of resp) {
+                if (part && part.text) {
+                    fullText += part.text;
+                    lineEl.textContent = fullText;
+                    lineEl.appendChild(cursor);
+                    output.scrollTop = output.scrollHeight;
+                }
+            }
+
+            if (cursor.parentNode) cursor.remove();
+            messages.push({ role: 'assistant', content: fullText });
+        } catch (e) {
+            appendLine('⚠ 请求失败: ' + e.message, 'terminal-error');
+        }
+
+        input.disabled = false;
+        input.focus();
+    });
+
+    streamSummary();
+})();
+</script>
+{{ end }}
