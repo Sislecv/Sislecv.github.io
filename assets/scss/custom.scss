@@ -1105,7 +1105,7 @@ body,
     background: var(--surface-container-highest);
     border-radius: var(--shape-corner-lg);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin: 0 var(--card-padding) 20px;
     border: 1px solid var(--outline-variant);
     font-family: 'Roboto Mono', 'SF Mono', Consolas, monospace;
 }
