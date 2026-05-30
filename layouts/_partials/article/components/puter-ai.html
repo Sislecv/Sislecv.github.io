@@ -18,7 +18,7 @@
     </div>
 </div>
 <script>
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
     var articleEl = document.querySelector('.article-content');
     if (!articleEl) return;
     var articleText = articleEl.innerText || articleEl.textContent;
@@ -138,6 +138,6 @@
     });
 
     streamSummary();
-})();
+});
 </script>
 {{ end }}
