@@ -595,10 +595,10 @@ img {
         }
 
         /* title */
-        .article-title {
-            margin: 0;
-            font-size: 1.05rem;
-            font-weight: 600;
+.article-title {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
             line-height: 1.4;
             color: var(--on-surface);
 
@@ -707,12 +707,12 @@ img {
             gap: 4px;
             padding: 0;
         }
-        .article-title {
-            margin: 0;
-            font-size: .9rem;
-            font-weight: 500;
-            color: var(--on-surface);
-        }
+.article-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+}
         .article-meta { font-size: .75rem; }
     }
 }
