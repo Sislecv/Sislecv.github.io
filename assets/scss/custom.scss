@@ -176,8 +176,8 @@ img {
     flex-shrink: 0;
 
     @media (min-width: 768px) {
-        width: 320px !important;
-        max-width: 320px !important;
+        width: 300px !important;
+        max-width: 300px !important;
         position: sticky;
         top: var(--container-padding);
         max-height: calc(100vh - var(--container-padding) * 2);
