@@ -4,6 +4,7 @@
 
 /* --- CSS Variables (Light) --- */
 :root {
+    /* M3 variables */
     --body-background: #f8f5fa;
     --surface: #fffbfe;
     --on-surface: #1c1b1f;
@@ -54,6 +55,23 @@
     --container-max-width: 1200px;
     --container-padding: 24px;
     --card-padding: 20px;
+
+    /* Override theme variables to match M3 */
+    --card-background: var(--surface);
+    --card-background-selected: var(--surface-container-low);
+    --card-text-color-main: var(--on-surface);
+    --card-text-color-secondary: var(--on-surface-variant);
+    --card-text-color-tertiary: var(--outline);
+    --card-separator-color: var(--outline-variant);
+    --card-border-radius: var(--shape-corner-lg);
+    --accent-color: var(--primary);
+    --accent-color-darker: var(--primary-hover);
+    --accent-color-text: var(--on-primary);
+    --body-text-color: var(--on-surface-variant);
+    --article-font-family: var(--font-family);
+    --link-background-color: 103, 80, 164;
+    --link-background-opacity: 0.1;
+    --link-background-opacity-hover: 0.15;
 }
 
 /* --- CSS Variables (Dark) --- */
@@ -91,6 +109,21 @@
     --state-hover: rgba(230, 225, 229, .08);
     --state-pressed: rgba(230, 225, 229, .12);
     --state-focus: rgba(230, 225, 229, .12);
+
+    /* Override theme variables for dark */
+    --card-background: var(--surface-container);
+    --card-background-selected: var(--surface-container-high);
+    --card-text-color-main: var(--on-surface);
+    --card-text-color-secondary: var(--on-surface-variant);
+    --card-text-color-tertiary: var(--outline);
+    --card-separator-color: var(--outline-variant);
+    --accent-color: var(--primary);
+    --accent-color-darker: var(--primary-hover);
+    --accent-color-text: var(--on-primary);
+    --body-text-color: var(--on-surface-variant);
+    --link-background-color: 208, 188, 255;
+    --link-background-opacity: 0.15;
+    --link-background-opacity-hover: 0.25;
 }
 
 /* --- Reset & Base --- */
