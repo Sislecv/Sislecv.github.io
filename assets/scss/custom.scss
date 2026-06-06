@@ -824,10 +824,14 @@ img {
         font-size: .95rem;
         line-height: 1.75;
 
+        /* Nullify theme negative margins & widths */
         h1, h2, h3, h4, h5, h6 {
             color: var(--on-surface);
             margin-top: 1.6em;
             margin-bottom: .6em;
+            margin-inline-start: 0;
+            padding-inline-start: 0;
+            border-inline-start: none;
         }
         h2 {
             font-size: 1.25rem;
@@ -839,6 +843,20 @@ img {
         h4 { font-size: 1rem; font-weight: 600; }
 
         p { margin: 1em 0; }
+
+        /* Nullify theme negative margins + width on block-level children */
+        blockquote,
+        figure,
+        .highlight,
+        pre,
+        .gallery,
+        .video-wrapper,
+        .table-wrapper,
+        .s_video_simple {
+            margin-left: 0;
+            margin-right: 0;
+            width: auto;
+        }
 
         a {
             color: var(--primary);

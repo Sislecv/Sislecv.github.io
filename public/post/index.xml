@@ -1,21 +1,150 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>Posts on Rethinking</title>
-        <link>https://sislecv.github.io/post/</link>
-        <description>Recent content in Posts on Rethinking</description>
-        <generator>Hugo -- gohugo.io</generator>
-        <language>zh-cn</language>
-        <lastBuildDate>Sun, 31 May 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://sislecv.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
-            <title>写文章指南</title>
-            <link>https://sislecv.github.io/p/%E5%86%99%E6%96%87%E7%AB%A0%E6%8C%87%E5%8D%97/</link>
-            <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
-            <guid>https://sislecv.github.io/p/%E5%86%99%E6%96%87%E7%AB%A0%E6%8C%87%E5%8D%97/</guid>
-            <description>&lt;h1 id=&#34;写文章指南&#34;&gt;写文章指南&#xA;&lt;/h1&gt;&lt;h2 id=&#34;快速开始&#34;&gt;快速开始&#xA;&lt;/h2&gt;&lt;p&gt;新建 Markdown 文件放在 &lt;code&gt;content/post/&lt;/code&gt; 目录下，文件名任意（建议英文小写），然后编辑 Front Matter 和正文即可。&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;front-matter&#34;&gt;Front Matter&#xA;&lt;/h2&gt;&lt;p&gt;文章开头用 &lt;code&gt;---&lt;/code&gt; 包裹的基本参数：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;---&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;title&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;文章标题&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;description&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;文章简介，显示在卡片副标题和SEO&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;date&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;2026-05-31&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;tags&lt;/span&gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  - &lt;span style=&#34;color:#ae81ff&#34;&gt;Hugo&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  - &lt;span style=&#34;color:#ae81ff&#34;&gt;博客&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;categories&lt;/span&gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  - &lt;span style=&#34;color:#ae81ff&#34;&gt;技术&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;draft&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;---&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;所有可用参数&#34;&gt;所有可用参数&#xA;&lt;/h2&gt;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;参数&lt;/th&gt;&#xA;          &lt;th&gt;类型&lt;/th&gt;&#xA;          &lt;th&gt;默认值&lt;/th&gt;&#xA;          &lt;th&gt;说明&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;string&lt;/td&gt;&#xA;          &lt;td&gt;—&lt;/td&gt;&#xA;          &lt;td&gt;文章标题&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;string&lt;/td&gt;&#xA;          &lt;td&gt;—&lt;/td&gt;&#xA;          &lt;td&gt;文章简介&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;date&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;date&lt;/td&gt;&#xA;          &lt;td&gt;文件修改时间&lt;/td&gt;&#xA;          &lt;td&gt;发布日期&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;tags&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;array&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;标签列表&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;categories&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;array&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;分类列表&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;bool&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;为 &lt;code&gt;true&lt;/code&gt; 时不发布&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;image&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;string&lt;/td&gt;&#xA;          &lt;td&gt;—&lt;/td&gt;&#xA;          &lt;td&gt;文章头图路径（相对 &lt;code&gt;static/&lt;/code&gt;）&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;math&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;bool&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;是否启用数学公式渲染&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ai&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;bool&lt;/td&gt;&#xA;          &lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;是否启用 AI 摘要终端&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h2 id=&#34;ai-设置&#34;&gt;AI 设置&#xA;&lt;/h2&gt;&lt;p&gt;默认情况下，文章会自动加载 AI 摘要终端。如果你希望某篇文排斥禁用 AI：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;---&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;title&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;纯手动文章&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;ai&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;---&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;markdown-语法&#34;&gt;Markdown 语法&#xA;&lt;/h2&gt;&lt;h3 id=&#34;标题&#34;&gt;标题&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# 一级标题&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;## 二级标题&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;### 三级标题&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;文本样式&#34;&gt;文本样式&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;**粗体** &lt;span style=&#34;font-style:italic&#34;&gt;*斜体*&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;~~删除线~~&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`行内代码`&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;列表&#34;&gt;列表&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;-&lt;/span&gt; 无序列表项 1&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;-&lt;/span&gt; 无序列表项 2&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;1.&lt;/span&gt; 有序列表项 1&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;2.&lt;/span&gt; 有序列表项 2&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;引用&#34;&gt;引用&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;这是一个引用块&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;可以跨越多行&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;代码块&#34;&gt;代码块&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```go&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello!&amp;#34;&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;表格&#34;&gt;表格&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 列1 | 列2 |&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|-----|-----|&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 值1 | 值2 |&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 值3 | 值4 |&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;图片&#34;&gt;图片&#xA;&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![&lt;span style=&#34;color:#f92672&#34;&gt;描述文字&lt;/span&gt;](&lt;span style=&#34;color:#a6e22e&#34;&gt;/images/example.jpg&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;&#xA;&lt;h2 id=&#34;文件结构示例&#34;&gt;文件结构示例&#xA;&lt;/h2&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;content/&#xA;└── post/&#xA;    ├── hello-world.md&#xA;    ├── my-second-post.md&#xA;    └── ...&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;撰写流程&#34;&gt;撰写流程&#xA;&lt;/h2&gt;&lt;ol&gt;&#xA;&lt;li&gt;在 &lt;code&gt;content/post/&lt;/code&gt; 下新建 &lt;code&gt;.md&lt;/code&gt; 文件&lt;/li&gt;&#xA;&lt;li&gt;填写 Front Matter（参考上文）&lt;/li&gt;&#xA;&lt;li&gt;在 &lt;code&gt;---&lt;/code&gt; 下方写正文&lt;/li&gt;&#xA;&lt;li&gt;本地预览：&lt;code&gt;hugo server --buildDrafts&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;推送到 &lt;code&gt;master&lt;/code&gt; 分支自动部署&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;</description>
-        </item><item>
-            <title>Hello World</title>
-            <link>https://sislecv.github.io/p/hello-world/</link>
-            <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
-            <guid>https://sislecv.github.io/p/hello-world/</guid>
-            <description>&lt;p&gt;你好，世界！&lt;/p&gt;&#xA;&lt;p&gt;这是我使用 Hugo 和 Stack 主题搭建的第一篇博客。&lt;/p&gt;&#xA;&lt;h2 id=&#34;关于这个博客&#34;&gt;关于这个博客&#xA;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;使用 &lt;strong&gt;Hugo&lt;/strong&gt; 静态网站生成器&lt;/li&gt;&#xA;&lt;li&gt;采用 &lt;strong&gt;Stack&lt;/strong&gt; 卡片式主题&lt;/li&gt;&#xA;&lt;li&gt;部署在 &lt;strong&gt;GitHub Pages&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;为什么选择-hugo&#34;&gt;为什么选择 Hugo？&#xA;&lt;/h2&gt;&lt;p&gt;Hugo 是一个用 Go 编写的静态网站生成器，具有以下优势：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;极快的构建速度&lt;/strong&gt; - 即使是大型网站也能在几秒内构建完成&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;丰富的主题生态&lt;/strong&gt; - 拥有大量精美的主题可供选择&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Markdown 友好&lt;/strong&gt; - 使用 Markdown 编写内容，专注于写作本身&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;部署简单&lt;/strong&gt; - 生成的静态文件可以轻松部署到任何静态托管服务&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;期待在这里记录更多有趣的内容！&lt;/p&gt;&#xA;</description>
-        </item></channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Rethinking</title><link>https://sislecv.github.io/post/</link><description>Recent content in Posts on Rethinking</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 31 May 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://sislecv.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>写文章指南</title><link>https://sislecv.github.io/p/%E5%86%99%E6%96%87%E7%AB%A0%E6%8C%87%E5%8D%97/</link><pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate><guid>https://sislecv.github.io/p/%E5%86%99%E6%96%87%E7%AB%A0%E6%8C%87%E5%8D%97/</guid><description>&lt;h1 id="写文章指南"&gt;写文章指南
+&lt;/h1&gt;&lt;h2 id="快速开始"&gt;快速开始
+&lt;/h2&gt;&lt;p&gt;新建 Markdown 文件放在 &lt;code&gt;content/post/&lt;/code&gt; 目录下，文件名任意（建议英文小写），然后编辑 Front Matter 和正文即可。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="front-matter"&gt;Front Matter
+&lt;/h2&gt;&lt;p&gt;文章开头用 &lt;code&gt;---&lt;/code&gt; 包裹的基本参数：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;title&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;文章标题&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;description&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;文章简介，显示在卡片副标题和SEO&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;date&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;2026-05-31&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;tags&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ae81ff"&gt;Hugo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ae81ff"&gt;博客&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;categories&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - &lt;span style="color:#ae81ff"&gt;技术&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;draft&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="所有可用参数"&gt;所有可用参数
+&lt;/h2&gt;&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;参数&lt;/th&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;默认值&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;string&lt;/td&gt;
+ &lt;td&gt;—&lt;/td&gt;
+ &lt;td&gt;文章标题&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;string&lt;/td&gt;
+ &lt;td&gt;—&lt;/td&gt;
+ &lt;td&gt;文章简介&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;date&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;date&lt;/td&gt;
+ &lt;td&gt;文件修改时间&lt;/td&gt;
+ &lt;td&gt;发布日期&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;tags&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;array&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;标签列表&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;categories&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;array&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;分类列表&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;bool&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;为 &lt;code&gt;true&lt;/code&gt; 时不发布&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;image&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;string&lt;/td&gt;
+ &lt;td&gt;—&lt;/td&gt;
+ &lt;td&gt;文章头图路径（相对 &lt;code&gt;static/&lt;/code&gt;）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;math&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;bool&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;是否启用数学公式渲染&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;ai&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;bool&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;是否启用 AI 摘要终端&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="ai-设置"&gt;AI 设置
+&lt;/h2&gt;&lt;p&gt;默认情况下，文章会自动加载 AI 摘要终端。如果你希望某篇文排斥禁用 AI：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;title&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;纯手动文章&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;ai&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="markdown-语法"&gt;Markdown 语法
+&lt;/h2&gt;&lt;h3 id="标题"&gt;标题
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# 一级标题
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 二级标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 三级标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="文本样式"&gt;文本样式
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;**粗体** &lt;span style="font-style:italic"&gt;*斜体*&lt;/span&gt; &lt;span style="color:#f92672"&gt;~~删除线~~&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`行内代码`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="列表"&gt;列表
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 无序列表项 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 无序列表项 2
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;1.&lt;/span&gt; 有序列表项 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;2.&lt;/span&gt; 有序列表项 2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="引用"&gt;引用
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;这是一个引用块
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;&amp;gt; &lt;/span&gt;&lt;span style="font-style:italic"&gt;可以跨越多行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="代码块"&gt;代码块
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;```go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;```&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="表格"&gt;表格
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| 列1 | 列2 |
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;|-----|-----|
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| 值1 | 值2 |
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;| 值3 | 值4 |
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="图片"&gt;图片
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;![&lt;span style="color:#f92672"&gt;描述文字&lt;/span&gt;](&lt;span style="color:#a6e22e"&gt;/images/example.jpg&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="文件结构示例"&gt;文件结构示例
+&lt;/h2&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;content/
+└── post/
+ ├── hello-world.md
+ ├── my-second-post.md
+ └── ...
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="撰写流程"&gt;撰写流程
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;在 &lt;code&gt;content/post/&lt;/code&gt; 下新建 &lt;code&gt;.md&lt;/code&gt; 文件&lt;/li&gt;
+&lt;li&gt;填写 Front Matter（参考上文）&lt;/li&gt;
+&lt;li&gt;在 &lt;code&gt;---&lt;/code&gt; 下方写正文&lt;/li&gt;
+&lt;li&gt;本地预览：&lt;code&gt;hugo server --buildDrafts&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;推送到 &lt;code&gt;master&lt;/code&gt; 分支自动部署&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>Hello World</title><link>https://sislecv.github.io/p/hello-world/</link><pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate><guid>https://sislecv.github.io/p/hello-world/</guid><description>&lt;p&gt;你好，世界！&lt;/p&gt;
+&lt;p&gt;这是我使用 Hugo 和 Stack 主题搭建的第一篇博客。&lt;/p&gt;
+&lt;h2 id="关于这个博客"&gt;关于这个博客
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;使用 &lt;strong&gt;Hugo&lt;/strong&gt; 静态网站生成器&lt;/li&gt;
+&lt;li&gt;采用 &lt;strong&gt;Stack&lt;/strong&gt; 卡片式主题&lt;/li&gt;
+&lt;li&gt;部署在 &lt;strong&gt;GitHub Pages&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="为什么选择-hugo"&gt;为什么选择 Hugo？
+&lt;/h2&gt;&lt;p&gt;Hugo 是一个用 Go 编写的静态网站生成器，具有以下优势：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;极快的构建速度&lt;/strong&gt; - 即使是大型网站也能在几秒内构建完成&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;丰富的主题生态&lt;/strong&gt; - 拥有大量精美的主题可供选择&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Markdown 友好&lt;/strong&gt; - 使用 Markdown 编写内容，专注于写作本身&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;部署简单&lt;/strong&gt; - 生成的静态文件可以轻松部署到任何静态托管服务&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;期待在这里记录更多有趣的内容！&lt;/p&gt;</description></item></channel></rss>
