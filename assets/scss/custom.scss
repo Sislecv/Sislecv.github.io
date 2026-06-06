@@ -993,11 +993,11 @@ img {
 }
 
 /* Light mode: override Monokai inline colors for readability */
-:root .main-article .article-content .highlight {
+[data-scheme="light"] .main-article .article-content .highlight {
     background: var(--surface-container-high) !important;
 }
-:root .main-article .article-content .highlight pre,
-:root .main-article .article-content .highlight pre span {
+[data-scheme="light"] .main-article .article-content .highlight pre,
+[data-scheme="light"] .main-article .article-content .highlight pre span {
     color: var(--on-surface) !important;
 }
 
