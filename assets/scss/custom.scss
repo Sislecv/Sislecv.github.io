@@ -906,6 +906,21 @@ img {
             }
         }
 
+    }
+}
+
+/* Light mode: override Monokai inline colors for readability */
+:root .main-article .article-content .highlight {
+    background: var(--surface-container-high) !important;
+}
+:root .main-article .article-content .highlight pre,
+:root .main-article .article-content .highlight pre span {
+    color: var(--on-surface) !important;
+}
+
+.main-article {
+    .article-content {
+
         pre {
             background: var(--surface-container-lowest);
             border: 1px solid var(--outline-variant);
@@ -975,6 +990,15 @@ img {
             width: 60%;
         }
     }
+}
+
+/* Light mode: override Monokai inline colors for readability */
+:root .main-article .article-content .highlight {
+    background: var(--surface-container-high) !important;
+}
+:root .main-article .article-content .highlight pre,
+:root .main-article .article-content .highlight pre span {
+    color: var(--on-surface) !important;
 }
 
 /* ============================================
