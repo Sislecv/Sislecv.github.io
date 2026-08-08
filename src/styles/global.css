@@ -438,7 +438,7 @@ mdui-card[clickable].bento-card:hover,
 .stack-icon {
 	width: 44px;
 	height: 44px;
-	border-radius: 50%;
+	border-radius: 12px;
 	padding: 8px;
 	background: var(--mdui-color-surface-container-high);
 	object-fit: contain;

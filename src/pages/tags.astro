@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getAllPosts, getTags } from "../lib/posts";
-import "@mdui/icons/tag--outlined.js";
 
 const posts = await getAllPosts();
 const tags = [...getTags(posts).entries()];

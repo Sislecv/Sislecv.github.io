@@ -1,20 +1,14 @@
 ---
-import "@mdui/icons/rocket-launch--outlined.js";
-
 const STACK = [
 	{ name: "Python", icon: "/stack/python.svg", url: "https://www.python.org/" },
 	{ name: "Node.js", icon: "/stack/nodedotjs.svg", url: "https://nodejs.org/" },
 	{ name: "Astro", icon: "/stack/astro.svg", url: "https://astro.build/" },
-	{ name: "OMP", icon: "/stack/omp.svg", url: "https://opencode.ai/" },
+	{ name: "OMP", icon: "/stack/omp.png", url: "https://opencode.ai/" },
 ];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card">
 	<div class="card-body" style="padding: 12px 14px; gap: 6px">
-		<div style="font-size: 0.78rem; font-weight: 600; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; gap: 6px">
-			<mdui-icon-rocket-launch--outlined style="font-size: 16px; color: var(--mdui-color-primary)"></mdui-icon-rocket-launch--outlined>
-			技术栈
-		</div>
 		<div class="stack-viewport">
 			<div class="stack-track">
 				{

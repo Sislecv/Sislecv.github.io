@@ -1,9 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getAllPosts, formatDate, getPostSlug, getPostUrl, getCategories } from "../lib/posts";
-import "@mdui/icons/folder--outlined.js";
-import "@mdui/icons/history--outlined.js";
-import "@mdui/icons/tag--outlined.js";
 
 const posts = await getAllPosts();
 const categories = [...getCategories(posts).entries()];

@@ -2,7 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import { getAllPosts } from "../../lib/posts";
 import PostCard from "../../components/PostCard.astro";
-import "@mdui/icons/tag--outlined.js";
 
 export async function getStaticPaths() {
 	const posts = await getAllPosts();
