@@ -1,27 +1,37 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { SITE, SOCIAL_LINKS } from "../consts";
+import "@mdui/icons/rss-feed--outlined.js";
+import "@mdui/icons/person--outlined.js";
+import "@mdui/icons/edit--outlined.js";
 ---
 
 <Layout title="关于" description="关于我">
 	<div class="bento">
 		<div class="col-8">
-			<mdui-card variant="elevated">
-				<div class="card-body" style="padding: 32px">
-					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
-						<mdui-icon-person--outlined></mdui-icon-person--outlined>
+			<mdui-card clickable variant="elevated" class="bento-card">
+				<div class="card-body" style="padding: 28px">
+					<h1 style="margin: 0 0 12px; font-size: 1.5rem; display: flex; align-items: center; gap: 8px">
+						<mdui-icon-person--outlined style="color: var(--mdui-color-primary)"></mdui-icon-person--outlined>
 						关于我
 					</h1>
 					<div class="mdui-prose">
 						<p>你好，我是 {SITE.author}。欢迎来到我的博客。</p>
 						<p>这里记录我折腾代码与技术的过程。</p>
-						<p>博客使用 Astro + MDUI (Material Design 3) 构建，部署于 GitHub Pages。</p>
+						<p>博客使用 Astro + MDUI (Material Design 3) 构建，Bento 卡片式布局，部署于 GitHub Pages。</p>
 					</div>
-					<div style="display: flex; gap: 8px; margin-top: 24px; flex-wrap: wrap">
+					<div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap">
 						{
 							SOCIAL_LINKS.map((link) => (
 								<a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-									<mdui-button variant="tonal">{link.label}</mdui-button>
+									<mdui-button variant="tonal">
+										{
+											link.label === "RSS" && (
+												<mdui-icon-rss-feed--outlined slot="icon" style="font-size: 18px"></mdui-icon-rss-feed--outlined>
+											)
+										}
+										{link.label}
+									</mdui-button>
 								</a>
 							))
 						}
@@ -29,20 +39,28 @@ import { SITE, SOCIAL_LINKS } from "../consts";
 				</div>
 			</mdui-card>
 		</div>
-		<div class="col-4">
-			<mdui-card variant="filled">
-				<div class="card-body" style="align-items: center; text-align: center; padding: 32px 20px">
+
+		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
+			<mdui-card clickable variant="filled" class="bento-card">
+				<div class="card-body" style="align-items: center; text-align: center; padding: 24px 16px; gap: 10px">
 					<img
 						src="/favicon/favicon-light-192.png"
 						alt={SITE.author}
-						width="96"
-						height="96"
-						style="border-radius: 50%; background: rgb(var(--mdui-color-surface-container-highest))"
+						width="80"
+						height="80"
+						style="border-radius: 50%; background: var(--mdui-color-surface-container-highest)"
 					/>
-					<div style="font-weight: 700; font-size: 1.2rem; margin-top: 12px">{SITE.author}</div>
-					<div style="font-size: 0.85rem; color: rgb(var(--mdui-color-on-surface-variant))">
+					<div style="font-weight: 700; font-size: 1.15rem">{SITE.author}</div>
+					<div style="font-size: 0.82rem; color: var(--mdui-color-on-surface-variant)">
 						{SITE.description}
 					</div>
+				</div>
+			</mdui-card>
+
+			<mdui-card clickable href="/archive/" variant="filled" class="bento-card">
+				<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 6px">
+					<mdui-icon-edit--outlined style="font-size: 30px; color: var(--mdui-color-primary)"></mdui-icon-edit--outlined>
+					<div style="font-weight: 600">浏览文章</div>
 				</div>
 			</mdui-card>
 		</div>

@@ -38,29 +38,23 @@ const categories = [...getCategories(posts).entries()];
 			<div class="sq-group">
 				<SearchCard />
 
-				<a href="/archive/" style="display: block; height: 100%">
-					<mdui-card clickable variant="filled" class="bento-card sq-card">
-						<div class="sq-body">
-							<mdui-icon-history--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-history--outlined>
-						</div>
-					</mdui-card>
-				</a>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
+					<div class="sq-body">
+						<mdui-icon-history--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-history--outlined>
+					</div>
+				</mdui-card>
 
-				<a href="/archive/" style="display: block; height: 100%">
-					<mdui-card clickable variant="filled" class="bento-card sq-card">
-						<div class="sq-body">
-							<mdui-icon-folder--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-folder--outlined>
-						</div>
-					</mdui-card>
-				</a>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
+					<div class="sq-body">
+						<mdui-icon-folder--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-folder--outlined>
+					</div>
+				</mdui-card>
 
-				<a href="/tags/" style="display: block; height: 100%">
-					<mdui-card clickable variant="filled" class="bento-card sq-card">
-						<div class="sq-body">
-							<mdui-icon-tag--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-tag--outlined>
-						</div>
-					</mdui-card>
-				</a>
+				<mdui-card clickable href="/tags/" variant="filled" class="bento-card sq-card">
+					<div class="sq-body">
+						<mdui-icon-tag--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-tag--outlined>
+					</div>
+				</mdui-card>
 			</div>
 		</div>
 

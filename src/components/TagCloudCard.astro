@@ -11,7 +11,7 @@ const { posts } = Astro.props;
 const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 ---
 
-<mdui-card variant="elevated" class="bento-card">
+<mdui-card clickable variant="elevated" class="bento-card">
 	<div class="card-body">
 		<div class="tag-cloud" style="margin-top: 4px">
 			{

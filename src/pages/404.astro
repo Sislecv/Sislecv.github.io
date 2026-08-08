@@ -1,20 +1,36 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import "@mdui/icons/error--outlined.js";
+import "@mdui/icons/search--outlined.js";
+import "@mdui/icons/history--outlined.js";
 ---
 
 <Layout title="404">
 	<div class="bento">
-		<div class="col-12">
-			<mdui-card variant="elevated">
-				<div class="card-body" style="align-items: center; text-align: center; padding: 64px 20px">
-					<mdui-icon-error--outlined style="font-size: 64px; color: rgb(var(--mdui-color-error))"></mdui-icon-error--outlined>
-					<h1 style="font-size: 3rem; font-weight: 700; margin: 16px 0 8px">404</h1>
-					<p style="color: rgb(var(--mdui-color-on-surface-variant)); margin: 0 0 24px">
+		<div class="col-8">
+			<mdui-card clickable variant="elevated" class="bento-card">
+				<div class="card-body" style="align-items: center; text-align: center; padding: 56px 20px">
+					<mdui-icon-error--outlined style="font-size: 60px; color: var(--mdui-color-error)"></mdui-icon-error--outlined>
+					<div style="font-size: 2.8rem; font-weight: 700; margin: 12px 0 4px">404</div>
+					<p style="color: var(--mdui-color-on-surface-variant); margin: 0 0 20px">
 						页面不存在或已被移动
 					</p>
-					<a href="/">
-						<mdui-button variant="filled">返回首页</mdui-button>
-					</a>
+					<mdui-button variant="filled" href="/">返回首页</mdui-button>
+				</div>
+			</mdui-card>
+		</div>
+
+		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
+			<mdui-card clickable href="/search/" variant="filled" class="bento-card">
+				<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px; padding: 28px 16px">
+					<mdui-icon-search--outlined style="font-size: 32px; color: var(--mdui-color-primary)"></mdui-icon-search--outlined>
+					<div style="font-weight: 600">搜索</div>
+				</div>
+			</mdui-card>
+			<mdui-card clickable href="/archive/" variant="filled" class="bento-card">
+				<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px; padding: 28px 16px">
+					<mdui-icon-history--outlined style="font-size: 32px; color: var(--mdui-color-primary)"></mdui-icon-history--outlined>
+					<div style="font-weight: 600">归档</div>
 				</div>
 			</mdui-card>
 		</div>

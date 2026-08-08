@@ -27,9 +27,7 @@ const url = getPostUrl(getPostSlug(post));
 				<div class="tag-cloud" style="margin-top: auto; padding-top: 12px">
 					{
 						post.data.tags.slice(0, 4).map((tag) => (
-							<a href={`/tags/${encodeURIComponent(tag)}/`}>
-								<mdui-chip variant="assist">{tag}</mdui-chip>
-							</a>
+							<mdui-chip variant="assist">{tag}</mdui-chip>
 						))
 					}
 				</div>

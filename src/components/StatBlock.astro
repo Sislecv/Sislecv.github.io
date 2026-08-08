@@ -8,11 +8,9 @@ interface Props {
 const { value, label, href } = Astro.props;
 ---
 
-<a href={href} style="display: block; height: 100%">
-	<mdui-card clickable variant="filled" class="bento-card">
-		<div class="stat-block">
-			<div class="stat-number">{value}</div>
-			<div class="stat-label">{label}</div>
-		</div>
-	</mdui-card>
-</a>
+<mdui-card clickable href={href} variant="filled" class="bento-card">
+	<div class="stat-block">
+		<div class="stat-number">{value}</div>
+		<div class="stat-label">{label}</div>
+	</div>
+</mdui-card>

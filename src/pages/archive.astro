@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getAllPosts, formatDate, getPostSlug, getPostUrl, getCategories } from "../lib/posts";
+import "@mdui/icons/folder--outlined.js";
+import "@mdui/icons/history--outlined.js";
+import "@mdui/icons/tag--outlined.js";
 
 const posts = await getAllPosts();
-const categories = getCategories(posts);
+const categories = [...getCategories(posts).entries()];
 
-// Group posts by year
 const byYear = new Map<number, typeof posts>();
 for (const post of posts) {
 	const year = new Date(post.data.published).getFullYear();
@@ -17,53 +19,80 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 
 <Layout title="归档" description={`全部 ${posts.length} 篇文章`}>
 	<div class="bento">
-		<div class="col-12">
-			<mdui-card variant="elevated">
-				<div class="card-body">
-					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
-						<mdui-icon-archive--outlined></mdui-icon-archive--outlined>
-						归档 · 共 {posts.length} 篇
-					</h1>
-
-					{
-						categories.size > 0 && (
-							<div class="tag-cloud" style="margin-bottom: 20px">
-								{
-									[...categories.entries()].map(([cat, count]) => (
-										<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
-											<mdui-chip variant="filter">
-												<mdui-icon-folder--outlined slot="icon"></mdui-icon-folder--outlined>
-												{cat} ({count})
-											</mdui-chip>
-										</a>
-									))
-								}
-							</div>
-						)
-					}
-
-					{
-						years.map(([year, yearPosts]) => (
-							<div style="margin-bottom: 24px">
-								<h2 id={`cat-${year}`} style="font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; color: rgb(var(--mdui-color-primary))">
+		<div class="col-8" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
+			{
+				years.map(([year, yearPosts]) => (
+					<mdui-card variant="filled" class="bento-card">
+						<div class="card-body">
+							<div style="display: flex; align-items: center; justify-content: space-between">
+								<h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--mdui-color-primary)">
+									<mdui-icon-history--outlined style="font-size: 20px; vertical-align: -3px"></mdui-icon-history--outlined>
 									{year}
 								</h2>
-								<mdui-list>
-									{
-										yearPosts.map((post) => (
-											<mdui-list-item href={getPostUrl(getPostSlug(post))} rounded>
-												<div slot="headline" style="font-weight: 500">{post.data.title}</div>
-												<div slot="supporting">
-													{formatDate(post.data.published)}
-													{post.data.category && ` · ${post.data.category}`}
-												</div>
-											</mdui-list-item>
-										))
-									}
-								</mdui-list>
+								<span style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant)">
+									{yearPosts.length} 篇
+								</span>
 							</div>
-						))
-					}
+							<mdui-list style="margin-top: 8px">
+								{
+									yearPosts.map((post) => (
+										<mdui-list-item
+											href={getPostUrl(getPostSlug(post))}
+											rounded
+											headline={post.data.title}
+											description={`${formatDate(post.data.published)}${post.data.category ? ` · ${post.data.category}` : ""}`}
+										></mdui-list-item>
+									))
+								}
+							</mdui-list>
+						</div>
+					</mdui-card>
+				))
+			}
+			{
+				posts.length === 0 && (
+					<mdui-card variant="filled">
+						<div class="card-body" style="align-items: center; text-align: center; padding: 48px 20px">
+							<div style="font-weight: 600">暂无文章</div>
+						</div>
+					</mdui-card>
+				)
+			}
+		</div>
+
+		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
+			<mdui-card clickable href="/tags/" variant="elevated" class="bento-card">
+				<div class="card-body">
+					<h2 class="card-title">
+						<mdui-icon-tag--outlined></mdui-icon-tag--outlined>
+						标签
+					</h2>
+					<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
+						按主题浏览全部文章
+					</div>
+				</div>
+			</mdui-card>
+
+			<mdui-card variant="elevated" class="bento-card">
+				<div class="card-body">
+					<h2 class="card-title">
+						<mdui-icon-folder--outlined></mdui-icon-folder--outlined>
+						分类
+					</h2>
+					<div class="tag-cloud" style="margin-top: 8px">
+						{
+							categories.map(([cat, count]) => (
+								<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
+									<mdui-chip variant="filter">{cat} ({count})</mdui-chip>
+								</a>
+							))
+						}
+						{
+							categories.length === 0 && (
+								<span style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">暂无分类</span>
+							)
+						}
+					</div>
 				</div>
 			</mdui-card>
 		</div>
