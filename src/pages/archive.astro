@@ -21,7 +21,7 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 			<mdui-card variant="elevated">
 				<div class="card-body">
 					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
-						<mdui-icon-archive></mdui-icon-archive>
+						<mdui-icon-archive--outlined></mdui-icon-archive--outlined>
 						归档 · 共 {posts.length} 篇
 					</h1>
 
@@ -32,7 +32,7 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 									[...categories.entries()].map(([cat, count]) => (
 										<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
 											<mdui-chip variant="filter">
-												<mdui-icon-folder slot="icon"></mdui-icon-folder>
+												<mdui-icon-folder--outlined slot="icon"></mdui-icon-folder--outlined>
 												{cat} ({count})
 											</mdui-chip>
 										</a>

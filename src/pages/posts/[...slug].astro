@@ -29,12 +29,12 @@ const { Content, headings } = await render(post);
 					<header class="article-header">
 						<div class="post-meta" style="margin-bottom: 12px">
 							<span>
-								<mdui-icon-event style="font-size: 16px; vertical-align: -3px"></mdui-icon-event>
+								<mdui-icon-event--outlined style="font-size: 16px; vertical-align: -3px"></mdui-icon-event--outlined>
 								{formatDate(post.data.published)}
 							</span>
 							<span>·</span>
 							<span>
-								<mdui-icon-schedule style="font-size: 16px; vertical-align: -3px"></mdui-icon-schedule>
+								<mdui-icon-schedule--outlined style="font-size: 16px; vertical-align: -3px"></mdui-icon-schedule--outlined>
 								{getReadingTime(post)}
 							</span>
 							{
@@ -71,7 +71,7 @@ const { Content, headings } = await render(post);
 						<mdui-card clickable href={getPostUrl(getPostSlug(prev))} variant="filled" style="flex: 1">
 							<div class="card-body" style="padding: 16px 20px">
 								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; gap: 4px">
-									<mdui-icon-chevron-left></mdui-icon-chevron-left>
+									<mdui-icon-chevron-left--outlined></mdui-icon-chevron-left--outlined>
 									上一篇
 								</div>
 								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
@@ -89,7 +89,7 @@ const { Content, headings } = await render(post);
 							<div class="card-body" style="padding: 16px 20px; text-align: right">
 								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
 									下一篇
-									<mdui-icon-chevron-right></mdui-icon-chevron-right>
+									<mdui-icon-chevron-right--outlined></mdui-icon-chevron-right--outlined>
 								</div>
 								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
 									{next.data.title}

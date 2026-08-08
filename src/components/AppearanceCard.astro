@@ -1,0 +1,104 @@
+---
+import "@mdui/icons/palette--outlined.js";
+import "@mdui/icons/light-mode--outlined.js";
+import "@mdui/icons/dark-mode--outlined.js";
+
+const SCHEMES = [
+	{ name: "蓝", color: "#0b57d0" },
+	{ name: "靛蓝", color: "#2f3aa8" },
+	{ name: "紫", color: "#9334e6" },
+	{ name: "粉", color: "#c2185b" },
+	{ name: "红", color: "#b3261e" },
+	{ name: "橙", color: "#b25000" },
+	{ name: "绿", color: "#1b873b" },
+	{ name: "青", color: "#006a6a" },
+];
+---
+
+<mdui-card variant="elevated" class="bento-card">
+	<div class="card-body">
+		<h2 class="card-title">
+			<mdui-icon-palette--outlined></mdui-icon-palette--outlined>
+			外观
+		</h2>
+		<div class="appearance-row">
+			<mdui-icon-light-mode--outlined style="font-size: 20px"></mdui-icon-light-mode--outlined>
+			<mdui-switch id="dark-switch" aria-label="深色模式"></mdui-switch>
+			<mdui-icon-dark-mode--outlined style="font-size: 20px"></mdui-icon-dark-mode--outlined>
+		</div>
+		<div class="scheme-grid">
+			{
+				SCHEMES.map((s) => (
+					<button
+						type="button"
+						class="scheme-dot"
+						style={`background: ${s.color}`}
+						data-color={s.color}
+						aria-label={s.name}
+						title={s.name}
+					></button>
+				))
+			}
+		</div>
+		<label class="scheme-custom">
+			<mdui-icon-palette--outlined style="font-size: 18px"></mdui-icon-palette--outlined>
+			<input type="color" id="scheme-custom-input" value="#0b57d0" aria-label="自定义颜色" />
+		</label>
+	</div>
+</mdui-card>
+
+<script>
+	import { setColorScheme } from "mdui";
+
+	const darkSwitch = document.getElementById("dark-switch") as HTMLInputElement | null;
+
+	const isDark = () =>
+		document.documentElement.classList.contains("mdui-theme-dark") ||
+		(!document.documentElement.classList.contains("mdui-theme-light") &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+	const syncSwitch = () => {
+		if (darkSwitch) darkSwitch.checked = isDark();
+	};
+
+	darkSwitch?.addEventListener("change", () => {
+		const html = document.documentElement;
+		if (darkSwitch.checked) {
+			html.classList.remove("mdui-theme-light");
+			html.classList.add("mdui-theme-dark");
+			localStorage.setItem("theme", "dark");
+		} else {
+			html.classList.remove("mdui-theme-dark");
+			html.classList.add("mdui-theme-light");
+			localStorage.setItem("theme", "light");
+		}
+	});
+
+	window
+		.matchMedia("(prefers-color-scheme: dark)")
+		.addEventListener("change", syncSwitch);
+	syncSwitch();
+
+	const card = darkSwitch?.closest("mdui-card");
+	card?.addEventListener("click", (e: Event) => {
+		const dot = (e.target as HTMLElement).closest(".scheme-dot") as HTMLElement | null;
+		if (dot?.dataset.color) {
+			try {
+				setColorScheme(dot.dataset.color);
+				localStorage.setItem("scheme", dot.dataset.color);
+			} catch {
+				/* ignore */
+			}
+		}
+	});
+
+	const custom = document.getElementById("scheme-custom-input") as HTMLInputElement | null;
+	custom?.addEventListener("input", () => {
+		try {
+			setColorScheme(custom.value);
+			localStorage.setItem("scheme", custom.value);
+		} catch {
+			/* ignore */
+		}
+	});
+</script>

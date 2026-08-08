@@ -1,31 +1,49 @@
 ---
 import { formatDate, getPostSlug, getPostUrl, getReadingTime, type Post } from "../lib/posts";
+import "@mdui/icons/event--outlined.js";
+import "@mdui/icons/schedule--outlined.js";
 
 interface Props {
 	post: Post;
+	featured?: boolean;
 }
 
 const { post } = Astro.props;
+const featured = Astro.props.featured ?? false;
 const url = getPostUrl(getPostSlug(post));
 ---
 
-<mdui-card clickable href={url} variant="filled" class="bento-card post-card">
-	<div class="card-body">
-		<div class="post-meta">
-			<span>{formatDate(post.data.published)}</span>
-			<span>·</span>
-			<span>{getReadingTime(post)}</span>
-		</div>
-		<h3 class="post-title">{post.data.title}</h3>
-		{post.data.description && <p class="post-desc">{post.data.description}</p>}
-		<div class="tag-cloud" style="margin-top: auto; padding-top: 10px">
-			{
-				post.data.tags.slice(0, 3).map((tag) => (
-					<a href={`/tags/${encodeURIComponent(tag)}/`}>
-						<mdui-chip variant="assist">{tag}</mdui-chip>
-					</a>
-				))
-			}
-		</div>
-	</div>
+<mdui-card clickable href={url} variant={featured ? "elevated" : "filled"} class:list={["bento-card", { "post-featured": featured, "post-card": !featured }]}>
+	{
+		featured ? (
+			<div class="card-body">
+				<div class="post-meta">
+					<mdui-icon-event--outlined style="font-size: 15px"></mdui-icon-event--outlined>
+					<span>{formatDate(post.data.published)}</span>
+					<span>·</span>
+					<mdui-icon-schedule--outlined style="font-size: 15px"></mdui-icon-schedule--outlined>
+					<span>{getReadingTime(post)}</span>
+				</div>
+				<h3 class="post-title-featured">{post.data.title}</h3>
+				{post.data.description && <p class="post-desc">{post.data.description}</p>}
+				<div class="tag-cloud" style="margin-top: auto; padding-top: 12px">
+					{
+						post.data.tags.slice(0, 4).map((tag) => (
+							<a href={`/tags/${encodeURIComponent(tag)}/`}>
+								<mdui-chip variant="assist">{tag}</mdui-chip>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		) : (
+			<div class="card-body">
+				<div class="post-meta">
+					<mdui-icon-event--outlined style="font-size: 14px"></mdui-icon-event--outlined>
+					<span>{formatDate(post.data.published)}</span>
+				</div>
+				<h3 class="post-title">{post.data.title}</h3>
+			</div>
+		)
+	}
 </mdui-card>
