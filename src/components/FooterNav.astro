@@ -5,6 +5,8 @@ import "@mdui/icons/archive--outlined.js";
 import "@mdui/icons/tag--outlined.js";
 import "@mdui/icons/person--outlined.js";
 import "@mdui/icons/search--outlined.js";
+import "@mdui/icons/light-mode--outlined.js";
+import "@mdui/icons/dark-mode--outlined.js";
 
 const { pathname } = Astro.url;
 ---
@@ -36,4 +38,45 @@ const { pathname } = Astro.url;
 			</a>
 		))
 	}
+	<div style="flex: 1"></div>
+	<mdui-icon-button id="footer-theme-toggle" aria-label="切换主题" title="切换主题">
+		<mdui-icon-dark-mode--outlined id="footer-icon-dark" style="display: none"></mdui-icon-dark-mode--outlined>
+		<mdui-icon-light-mode--outlined id="footer-icon-light" style="display: none"></mdui-icon-light-mode--outlined>
+	</mdui-icon-button>
 </mdui-card>
+
+<script is:inline>
+	const btn = document.getElementById("footer-theme-toggle");
+	if (btn) {
+		const iconDark = document.getElementById("footer-icon-dark");
+		const iconLight = document.getElementById("footer-icon-light");
+
+		const isDark = () =>
+			document.documentElement.classList.contains("mdui-theme-dark") ||
+			(!document.documentElement.classList.contains("mdui-theme-light") &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+		const syncIcon = () => {
+			const dark = isDark();
+			iconDark.style.display = dark ? "" : "none";
+			iconLight.style.display = dark ? "none" : "";
+		};
+
+		btn.addEventListener("click", () => {
+			const html = document.documentElement;
+			if (isDark()) {
+				html.classList.remove("mdui-theme-dark");
+				html.classList.add("mdui-theme-light");
+				localStorage.setItem("theme", "light");
+			} else {
+				html.classList.remove("mdui-theme-light");
+				html.classList.add("mdui-theme-dark");
+				localStorage.setItem("theme", "dark");
+			}
+			syncIcon();
+		});
+
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncIcon);
+		syncIcon();
+	}
+</script>
