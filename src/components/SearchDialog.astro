@@ -1,0 +1,92 @@
+---
+import "@mdui/icons/search--outlined.js";
+import "@mdui/icons/close--outlined.js";
+---
+
+<!-- Rendered at top level of <body> (outside transformed bento ancestors) so the dialog's
+     position:fixed attaches to the viewport, not a card's transform containing block. -->
+<mdui-dialog id="search-dialog" style="width: min(680px, calc(100vw - 32px))" close-on-esc close-on-overlay-click>
+	<div class="search-panel">
+		<div class="search-head">
+			<mdui-text-field id="search-input" class="search-box" label="搜索文章">
+				<mdui-icon-search--outlined slot="icon"></mdui-icon-search--outlined>
+			</mdui-text-field>
+			<mdui-icon-button id="search-close" aria-label="关闭搜索">
+				<mdui-icon-close--outlined></mdui-icon-close--outlined>
+			</mdui-icon-button>
+		</div>
+		<div id="search-status" class="search-status"></div>
+		<div id="search-results" class="search-results"></div>
+	</div>
+</mdui-dialog>
+
+<script is:inline>
+	(function () {
+		const dialog = document.getElementById("search-dialog");
+		const input = document.getElementById("search-input");
+		const trigger = document.getElementById("search-trigger");
+		const closeBtn = document.getElementById("search-close");
+		const status = document.getElementById("search-status");
+		const resultsEl = document.getElementById("search-results");
+		let pagefind = null;
+		let debounce = null;
+
+		async function ensurePagefind() {
+			if (!pagefind) {
+				const mod = await import("/pagefind/pagefind.js");
+				pagefind = mod.createInstance({ basePath: "/pagefind/", noWorker: true });
+			}
+			return pagefind;
+		}
+
+		async function doSearch(query) {
+			if (!query.trim()) {
+				status.textContent = "";
+				resultsEl.innerHTML = "";
+				return;
+			}
+			try {
+				const pf = await ensurePagefind();
+				status.textContent = "搜索中…";
+				const search = await pf.search(query);
+				status.textContent = `找到 ${search.results.length} 条结果`;
+				const data = await Promise.all(search.results.slice(0, 20).map((r) => r.data()));
+				resultsEl.innerHTML = "";
+				for (const item of data) {
+					const title = item.meta?.title || "未命名";
+					const excerpt = item.excerpt || item.plain_excerpt || "";
+					const card = document.createElement("a");
+					card.href = item.url;
+					card.innerHTML =
+						`<mdui-card variant="filled" clickable style="width:100%">` +
+						`<div style="padding: 12px 16px">` +
+						`<div style="font-weight:600;margin-bottom:4px">${title}</div>` +
+						`<div style="font-size:.85rem;color:var(--mdui-color-on-surface-variant);line-height:1.6">${excerpt}</div>` +
+						`</div></mdui-card>`;
+					resultsEl.appendChild(card);
+				}
+				if (data.length === 0) status.textContent = "没有找到相关结果";
+			} catch (e) {
+				status.textContent = "搜索功能暂不可用";
+				console.error(e);
+			}
+		}
+
+		function onInput() {
+			clearTimeout(debounce);
+			debounce = setTimeout(() => doSearch(input.value), 200);
+		}
+
+		function open() {
+			if (dialog) dialog.open = true;
+			setTimeout(() => input?.focus(), 120);
+		}
+		function close() {
+			if (dialog) dialog.open = false;
+		}
+
+		if (trigger) trigger.addEventListener("click", open);
+		if (closeBtn) closeBtn.addEventListener("click", close);
+		if (input) input.addEventListener("input", onInput);
+	})();
+</script>

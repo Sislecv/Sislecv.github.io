@@ -628,6 +628,36 @@ mdui-card[clickable].bento-card:hover,
 	width: 100%;
 }
 
+/* Floating search dialog */
+.search-panel {
+	padding: 4px;
+	max-height: 80vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.search-head {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.search-head .search-box {
+	flex: 1;
+}
+
+.search-status {
+	margin-top: 4px;
+	font-size: 0.85rem;
+	color: var(--mdui-color-on-surface-variant);
+}
+
+.search-panel .search-results {
+	overflow-y: auto;
+	max-height: calc(80vh - 120px);
+}
+
 .search-results {
 	display: flex;
 	flex-direction: column;
