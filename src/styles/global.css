@@ -191,6 +191,82 @@ mdui-icon-palette {
 	.col-8, .col-4, .col-6, .col-3, .col-2 { grid-column: span 12; }
 }
 
+/* ===== 8-column bento grid (row AND column spans, square cells) ===== */
+.bento-8 {
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	grid-auto-flow: dense;
+	gap: var(--blog-gap);
+}
+
+.bento-8 > * {
+	min-width: 0;
+}
+
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-5 { grid-column: span 5; }
+.span-6 { grid-column: span 6; }
+.span-8 { grid-column: span 8; }
+
+.bento-8 > * {
+	animation: bento-in 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.bento-8 > *:nth-child(1) { animation-delay: 0.02s; }
+.bento-8 > *:nth-child(2) { animation-delay: 0.06s; }
+.bento-8 > *:nth-child(3) { animation-delay: 0.10s; }
+.bento-8 > *:nth-child(4) { animation-delay: 0.14s; }
+.bento-8 > *:nth-child(5) { animation-delay: 0.18s; }
+.bento-8 > *:nth-child(6) { animation-delay: 0.22s; }
+.bento-8 > *:nth-child(7) { animation-delay: 0.26s; }
+.bento-8 > *:nth-child(8) { animation-delay: 0.30s; }
+.bento-8 > *:nth-child(9) { animation-delay: 0.34s; }
+
+/* Square icon cards (2x2 grid cells) */
+.sq-group {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: 1fr;
+	gap: var(--blog-gap);
+	height: 100%;
+}
+
+.sq-card {
+	aspect-ratio: 1;
+	width: 100%;
+	height: 100%;
+}
+
+.sq-body {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	color: var(--mdui-color-on-surface);
+}
+
+.emoji-card {
+	aspect-ratio: 1;
+}
+
+.emoji-hero:hover {
+	transform: scale(1.12) rotate(-4deg);
+}
+
+@media (max-width: 1024px) {
+	.bento-8 .span-2, .bento-8 .span-3, .bento-8 .span-4, .bento-8 .span-5, .bento-8 .span-6 { grid-column: span 4; }
+}
+
+@media (max-width: 640px) {
+	.bento-8 .span-2, .bento-8 .span-3, .bento-8 .span-4, .bento-8 .span-5, .bento-8 .span-6, .bento-8 .span-8 { grid-column: span 8; }
+	.sq-card { aspect-ratio: auto; min-height: 120px; }
+}
+
 /* ===== Cards ===== */
 .bento-card {
 	display: flex;
@@ -277,8 +353,8 @@ mdui-card[clickable].bento-card:hover,
 /* ===== Contribution calendar ===== */
 .contrib-grid {
 	display: grid;
-	grid-template-columns: repeat(52, 1fr);
-	grid-auto-rows: 12px;
+	grid-template-columns: repeat(52, minmax(0, 1fr));
+	grid-auto-rows: 1fr;
 	gap: 3px;
 }
 

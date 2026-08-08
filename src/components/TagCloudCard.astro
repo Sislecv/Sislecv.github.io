@@ -1,5 +1,6 @@
 ---
 import { getTags, type Post } from "../lib/posts";
+import "@mdui/icons/tag--outlined.js";
 
 interface Props {
 	posts: Post[];
@@ -12,11 +13,7 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 
 <mdui-card variant="elevated" class="bento-card">
 	<div class="card-body">
-		<h2 class="card-title">
-			<mdui-icon-tag--outlined></mdui-icon-tag--outlined>
-			标签云
-		</h2>
-		<div class="tag-cloud" style="margin-top: 8px">
+		<div class="tag-cloud" style="margin-top: 4px">
 			{
 				tags.map(([tag, count]) => (
 					<a href={`/tags/${encodeURIComponent(tag)}/`}>
@@ -25,8 +22,5 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 				))
 			}
 		</div>
-		<a href="/tags/" style="margin-top: auto; padding-top: 12px; font-size: 0.85rem; color: var(--mdui-color-primary)">
-			查看全部标签 →
-		</a>
 	</div>
 </mdui-card>

@@ -8,48 +8,6 @@ import "mdui/mdui.css";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
 
-// MDUI components (cherry-picked)
-import "mdui/components/card.js";
-import "mdui/components/icon.js";
-import "mdui/components/button-icon.js";
-import "mdui/components/chip.js";
-import "mdui/components/list.js";
-import "mdui/components/list-item.js";
-import "mdui/components/list-subheader.js";
-import "mdui/components/text-field.js";
-import "mdui/components/button.js";
-import "mdui/components/divider.js";
-import "mdui/components/dropdown.js";
-import "mdui/components/switch.js";
-import "mdui/components/circular-progress.js";
-import "mdui/components/linear-progress.js";
-
-// Material Design 3 blue color scheme (default), restore persisted pick
-import { setColorScheme } from "mdui";
-try {
-	const saved = localStorage.getItem("scheme");
-	setColorScheme(saved || "#0b57d0");
-} catch {
-	setColorScheme("#0b57d0");
-}
-
-// Icons
-import "@mdui/icons/home--outlined.js";
-import "@mdui/icons/archive--outlined.js";
-import "@mdui/icons/tag--outlined.js";
-import "@mdui/icons/person--outlined.js";
-import "@mdui/icons/search--outlined.js";
-import "@mdui/icons/light-mode--outlined.js";
-import "@mdui/icons/dark-mode--outlined.js";
-import "@mdui/icons/chevron-right--outlined.js";
-import "@mdui/icons/chevron-left--outlined.js";
-import "@mdui/icons/folder--outlined.js";
-import "@mdui/icons/schedule--outlined.js";
-import "@mdui/icons/event--outlined.js";
-import "@mdui/icons/error--outlined.js";
-import "@mdui/icons/palette--outlined.js";
-import "@mdui/icons/history--outlined.js";
-
 interface Props {
 	title?: string;
 	description?: string;
@@ -117,3 +75,48 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 		</div>
 	</body>
 </html>
+
+<script>
+	// Register MDUI components (bundled by Astro)
+	import "mdui/components/card.js";
+	import "mdui/components/icon.js";
+	import "mdui/components/button-icon.js";
+	import "mdui/components/chip.js";
+	import "mdui/components/list.js";
+	import "mdui/components/list-item.js";
+	import "mdui/components/list-subheader.js";
+	import "mdui/components/text-field.js";
+	import "mdui/components/button.js";
+	import "mdui/components/divider.js";
+	import "mdui/components/dropdown.js";
+	import "mdui/components/dialog.js";
+	import "mdui/components/switch.js";
+	import "mdui/components/circular-progress.js";
+	import "mdui/components/linear-progress.js";
+
+	// Material Design 3 blue color scheme (default), restore persisted pick
+	import { setColorScheme } from "mdui";
+	try {
+		const saved = localStorage.getItem("scheme");
+		setColorScheme(saved || "#0b57d0");
+	} catch {
+		setColorScheme("#0b57d0");
+	}
+
+	// Icons
+	import "@mdui/icons/home--outlined.js";
+	import "@mdui/icons/archive--outlined.js";
+	import "@mdui/icons/tag--outlined.js";
+	import "@mdui/icons/person--outlined.js";
+	import "@mdui/icons/search--outlined.js";
+	import "@mdui/icons/light-mode--outlined.js";
+	import "@mdui/icons/dark-mode--outlined.js";
+	import "@mdui/icons/chevron-right--outlined.js";
+	import "@mdui/icons/chevron-left--outlined.js";
+	import "@mdui/icons/folder--outlined.js";
+	import "@mdui/icons/schedule--outlined.js";
+	import "@mdui/icons/event--outlined.js";
+	import "@mdui/icons/error--outlined.js";
+	import "@mdui/icons/palette--outlined.js";
+	import "@mdui/icons/history--outlined.js";
+</script>

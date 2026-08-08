@@ -5,78 +5,70 @@ import ProfileCard from "../components/ProfileCard.astro";
 import AppearanceCard from "../components/AppearanceCard.astro";
 import ContributionCard from "../components/ContributionCard.astro";
 import EmojiCard from "../components/EmojiCard.astro";
+import SearchCard from "../components/SearchCard.astro";
+import TagCloudCard from "../components/TagCloudCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
 import "@mdui/icons/folder--outlined.js";
-import "@mdui/icons/search--outlined.js";
 import "@mdui/icons/history--outlined.js";
+import "@mdui/icons/tag--outlined.js";
 
 const posts = await getAllPosts();
 const categories = [...getCategories(posts).entries()];
 ---
 
 <Layout showFooterNav={false}>
-	<div class="bento">
-		<div class="col-4">
+	<div class="bento-8">
+		<div class="span-4">
 			<ProfileCard />
 		</div>
 
-		<div class="col-4">
+		<div class="span-2">
 			<AppearanceCard />
 		</div>
 
-		<div class="col-4">
+		<div class="span-2">
 			<EmojiCard />
 		</div>
 
-		<div class="col-8">
+		<div class="span-8">
 			<ContributionCard posts={posts} />
 		</div>
 
-		<div class="col-4">
-			<a href="/search/" style="display: block; height: 100%">
-				<mdui-card clickable variant="filled" class="bento-card">
-					<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px">
-						<mdui-icon-search--outlined style="font-size: 36px; color: var(--mdui-color-primary)"></mdui-icon-search--outlined>
-						<div style="font-weight: 600; font-size: 1rem">搜索</div>
-					</div>
-				</mdui-card>
-			</a>
-		</div>
+		<div class="span-4">
+			<div class="sq-group">
+				<SearchCard />
 
-		<div class="col-4">
-			<a href="/archive/" style="display: block; height: 100%">
-				<mdui-card clickable variant="filled" class="bento-card">
-					<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px">
-						<mdui-icon-history--outlined style="font-size: 36px; color: var(--mdui-color-primary)"></mdui-icon-history--outlined>
-						<div style="font-weight: 600; font-size: 1rem">归档</div>
-					</div>
-				</mdui-card>
-			</a>
-		</div>
-
-		<div class="col-4">
-			<a href="/archive/" style="display: block; height: 100%">
-				<mdui-card clickable variant="filled" class="bento-card">
-					<div class="card-body">
-						<h2 class="card-title">
-							<mdui-icon-folder--outlined></mdui-icon-folder--outlined>
-							分类
-						</h2>
-						<div class="tag-cloud" style="margin-top: 8px">
-							{
-								categories.map(([cat, count]) => (
-									<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
-										<mdui-chip variant="filter">{cat} ({count})</mdui-chip>
-									</a>
-								))
-							}
-							{
-								categories.length === 0 && <span style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">暂无分类</span>
-							}
+				<a href="/archive/" style="display: block; height: 100%">
+					<mdui-card clickable variant="filled" class="bento-card sq-card">
+						<div class="sq-body">
+							<mdui-icon-history--outlined style="font-size: 40px; color: var(--mdui-color-primary)"></mdui-icon-history--outlined>
+							<span>归档</span>
 						</div>
-					</div>
-				</mdui-card>
-			</a>
+					</mdui-card>
+				</a>
+
+				<a href="/archive/" style="display: block; height: 100%">
+					<mdui-card clickable variant="filled" class="bento-card sq-card">
+						<div class="sq-body">
+							<mdui-icon-folder--outlined style="font-size: 40px; color: var(--mdui-color-primary)"></mdui-icon-folder--outlined>
+							<span>分类</span>
+						</div>
+					</mdui-card>
+				</a>
+
+				<a href="/tags/" style="display: block; height: 100%">
+					<mdui-card clickable variant="filled" class="bento-card sq-card">
+						<div class="sq-body">
+							<mdui-icon-tag--outlined style="font-size: 40px; color: var(--mdui-color-primary)"></mdui-icon-tag--outlined>
+							<span>标签</span>
+						</div>
+					</mdui-card>
+				</a>
+			</div>
+		</div>
+
+		<div class="span-4">
+			<TagCloudCard posts={posts} />
 		</div>
 	</div>
 

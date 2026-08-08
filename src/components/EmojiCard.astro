@@ -1,41 +1,16 @@
 ---
 import "@mdui/icons/emoji-emotions--outlined.js";
-
-const EMOJIS = [
-	{ src: "/emoji/zany-face.webp", alt: "🤪" },
-	{ src: "/emoji/partying-face.webp", alt: "🥳" },
-	{ src: "/emoji/fire.webp", alt: "🔥" },
-	{ src: "/emoji/wave.webp", alt: "👋" },
-];
 ---
 
-<mdui-card variant="elevated" class="bento-card">
-	<div class="card-body">
-		<h2 class="card-title">
-			<mdui-icon-emoji-emotions--outlined></mdui-icon-emoji-emotions--outlined>
-			动效表情
-		</h2>
-		<div class="emoji-row" style="margin-top: 12px">
-			{
-				EMOJIS.map((e) => (
-					<img
-						src={e.src}
-						alt={e.alt}
-						width="52"
-						height="52"
-						loading="lazy"
-						class="emoji-img"
-					/>
-				))
-			}
-		</div>
-		<a
-			href="https://googlefonts.github.io/noto-emoji-animation/"
-			target="_blank"
-			rel="noreferrer"
-			style="margin-top: auto; padding-top: 12px; font-size: 0.78rem; color: var(--mdui-color-primary)"
-		>
-			Google Noto Emoji Animation
-		</a>
+<mdui-card variant="elevated" class="bento-card emoji-card">
+	<div class="card-body" style="align-items: center; justify-content: center; padding: 16px">
+		<img
+			src="/emoji/partying-face.webp"
+			alt="🥳"
+			width="88"
+			height="88"
+			loading="lazy"
+			class="emoji-img emoji-hero"
+		/>
 	</div>
 </mdui-card>

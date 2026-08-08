@@ -17,16 +17,12 @@ const SCHEMES = [
 
 <mdui-card variant="elevated" class="bento-card">
 	<div class="card-body">
-		<h2 class="card-title">
-			<mdui-icon-palette--outlined></mdui-icon-palette--outlined>
-			外观
-		</h2>
-		<div class="appearance-row">
+		<div class="appearance-row" style="padding: 0">
 			<mdui-icon-light-mode--outlined style="font-size: 20px"></mdui-icon-light-mode--outlined>
 			<mdui-switch id="dark-switch" aria-label="深色模式"></mdui-switch>
 			<mdui-icon-dark-mode--outlined style="font-size: 20px"></mdui-icon-dark-mode--outlined>
 		</div>
-		<div class="scheme-grid" style="margin-top: 8px">
+		<div class="scheme-grid" style="margin-top: 12px">
 			{
 				SCHEMES.map((s) => (
 					<button
