@@ -416,10 +416,10 @@ mdui-card[clickable].bento-card:hover,
 }
 
 /* Each item carries its own trailing margin so one loop unit
-   (4 items + 4 margins = 296px) tiles perfectly at -50%. */
+   (4 items + 4 margins = 360px) tiles perfectly. */
 @keyframes stack-scroll {
 	from { transform: translateX(0); }
-	to { transform: translateX(-296px); }
+	to { transform: translateX(-360px); }
 }
 
 .stack-item {
@@ -435,10 +435,10 @@ mdui-card[clickable].bento-card:hover,
 }
 
 .stack-icon {
-	width: 56px;
-	height: 56px;
-	border-radius: 14px;
-	padding: 9px;
+	width: 72px;
+	height: 72px;
+	border-radius: 18px;
+	padding: 12px;
 	background: var(--mdui-color-surface-container-high);
 	object-fit: contain;
 	box-sizing: border-box;
