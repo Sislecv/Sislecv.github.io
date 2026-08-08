@@ -4,16 +4,21 @@ import "@mdui/icons/search--outlined.js";
 
 <mdui-card clickable id="search-trigger" variant="filled" class="bento-card sq-card">
 	<div class="sq-body">
-		<mdui-icon-search--outlined style="font-size: 40px; color: var(--mdui-color-primary)"></mdui-icon-search--outlined>
+		<mdui-icon-search--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-search--outlined>
 	</div>
 </mdui-card>
 
-<mdui-dialog id="search-dialog" style="width: min(680px, calc(100vw - 32px))">
-	<div style="padding: 8px 4px 4px">
-		<mdui-text-field id="search-input" class="search-box" label="搜索文章" clearable autofocus>
-			<mdui-icon-search--outlined slot="icon"></mdui-icon-search--outlined>
-		</mdui-text-field>
-		<div id="search-status" style="margin-top: 12px; font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)"></div>
+<mdui-dialog id="search-dialog" style="width: min(680px, calc(100vw - 32px))" close-on-esc close-on-overlay-click>
+	<div style="padding: 4px 4px 4px">
+		<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px">
+			<mdui-text-field id="search-input" class="search-box" label="搜索文章" clearable autofocus>
+				<mdui-icon-search--outlined slot="icon"></mdui-icon-search--outlined>
+			</mdui-text-field>
+			<mdui-icon-button id="search-close" aria-label="关闭搜索">
+				<mdui-icon-close--outlined></mdui-icon-close--outlined>
+			</mdui-icon-button>
+		</div>
+		<div id="search-status" style="margin-top: 4px; font-size: 0.85rem; color: rgb(var(--mdui-color-on-surface-variant))"></div>
 		<div id="search-results" class="search-results"></div>
 	</div>
 </mdui-dialog>
@@ -54,7 +59,7 @@ import "@mdui/icons/search--outlined.js";
 				card.innerHTML = `<mdui-card variant="filled" clickable style="width:100%">
 					<div style="padding: 14px 18px">
 						<div style="font-weight:600;margin-bottom:4px">${title}</div>
-						<div style="font-size:.85rem;color:var(--mdui-color-on-surface-variant);line-height:1.6">${item.excerpt || item.plain_excerpt || ""}</div>
+						<div style="font-size:.85rem;color:rgb(var(--mdui-color-on-surface-variant));line-height:1.6">${item.excerpt || item.plain_excerpt || ""}</div>
 					</div>
 				</mdui-card>`;
 				resultsEl.appendChild(card);
@@ -72,6 +77,10 @@ import "@mdui/icons/search--outlined.js";
 			setTimeout(() => input?.focus(), 100);
 		});
 	}
+
+	document.getElementById("search-close")?.addEventListener("click", () => {
+		if (dialog) dialog.open = false;
+	});
 
 	input?.addEventListener("input", () => doSearch(input.value));
 </script>

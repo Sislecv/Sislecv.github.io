@@ -39,7 +39,7 @@ const { Content, headings } = await render(post);
 							</span>
 							{
 								post.data.category && (
-									<a href={`/archive/#cat-${encodeURIComponent(post.data.category)}`} style="color: var(--mdui-color-primary)">
+									<a href={`/archive/#cat-${encodeURIComponent(post.data.category)}`} style="color: rgb(var(--mdui-color-primary))">
 										{post.data.category}
 									</a>
 								)
@@ -70,7 +70,7 @@ const { Content, headings } = await render(post);
 					prev ? (
 						<mdui-card clickable href={getPostUrl(getPostSlug(prev))} variant="filled" style="flex: 1">
 							<div class="card-body" style="padding: 16px 20px">
-								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; gap: 4px">
+								<div style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; gap: 4px">
 									<mdui-icon-chevron-left--outlined></mdui-icon-chevron-left--outlined>
 									上一篇
 								</div>
@@ -87,7 +87,7 @@ const { Content, headings } = await render(post);
 					next ? (
 						<mdui-card clickable href={getPostUrl(getPostSlug(next))} variant="filled" style="flex: 1">
 							<div class="card-body" style="padding: 16px 20px; text-align: right">
-								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
+								<div style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
 									下一篇
 									<mdui-icon-chevron-right--outlined></mdui-icon-chevron-right--outlined>
 								</div>

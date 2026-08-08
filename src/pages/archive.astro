@@ -45,7 +45,7 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 					{
 						years.map(([year, yearPosts]) => (
 							<div style="margin-bottom: 24px">
-								<h2 id={`cat-${year}`} style="font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; color: var(--mdui-color-primary)">
+								<h2 id={`cat-${year}`} style="font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; color: rgb(var(--mdui-color-primary))">
 									{year}
 								</h2>
 								<mdui-list>

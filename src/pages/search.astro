@@ -16,7 +16,7 @@ const query = Astro.url.searchParams.get("q") ?? "";
 					<mdui-text-field id="search-input" class="search-box" label="输入关键词" clearable autofocus value={query}>
 						<mdui-icon-search--outlined slot="icon"></mdui-icon-search--outlined>
 					</mdui-text-field>
-					<div id="search-status" style="margin-top: 12px; font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)"></div>
+					<div id="search-status" style="margin-top: 12px; font-size: 0.85rem; color: rgb(var(--mdui-color-on-surface-variant))"></div>
 					<div id="search-results" class="search-results"></div>
 				</div>
 			</mdui-card>
