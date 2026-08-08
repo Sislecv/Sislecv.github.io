@@ -1,0 +1,75 @@
+---
+import type { Post } from "../lib/posts";
+import "@mdui/icons/calendar-month--outlined.js";
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+
+// Group post dates by ISO date string
+const postDates = new Map<string, number>();
+for (const post of posts) {
+	const d = new Date(post.data.published);
+	const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+	postDates.set(iso, (postDates.get(iso) ?? 0) + 1);
+}
+
+// Build last 52 weeks x 7 days grid, ending today
+const DAY_MS = 86400000;
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const WEEKS = 52;
+
+const weeks: { date: Date; count: number }[][] = [];
+for (let w = WEEKS - 1; w >= 0; w--) {
+	const week: { date: Date; count: number }[] = [];
+	for (let d = 6; d >= 0; d--) {
+		const date = new Date(today.getTime() - (w * 7 + d) * DAY_MS);
+		const iso = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+		week.push({ date, count: postDates.get(iso) ?? 0 });
+	}
+	weeks.push(week);
+}
+
+const levelColor = (count: number) =>
+	count === 0
+		? "var(--mdui-color-surface-container-high)"
+		: count >= 3
+			? "#1a7f37"
+			: count === 2
+				? "#40c463"
+				: "#9be9a8";
+---
+
+<mdui-card variant="elevated" class="bento-card">
+	<div class="card-body">
+		<h2 class="card-title">
+			<mdui-icon-calendar-month--outlined></mdui-icon-calendar-month--outlined>
+			写作足迹
+		</h2>
+		<div class="contrib-grid" style="margin-top: 12px">
+			{
+				weeks.map((week) =>
+					week.map((cell, i) => (
+						<div
+							class="contrib-cell"
+							style={`background: ${levelColor(cell.count)}`}
+							title={`${cell.date.toISOString().slice(0, 10)}${cell.count ? `：${cell.count} 篇` : ""}`}
+							data-level={cell.count}
+						></div>
+					)),
+				)
+			}
+		</div>
+		<div class="contrib-legend">
+			<span style="font-size: 0.75rem; color: var(--mdui-color-on-surface-variant)">少</span>
+			<div class="contrib-cell" style="background: var(--mdui-color-surface-container-high)"></div>
+			<div class="contrib-cell" style="background: #9be9a8"></div>
+			<div class="contrib-cell" style="background: #40c463"></div>
+			<div class="contrib-cell" style="background: #1a7f37"></div>
+			<span style="font-size: 0.75rem; color: var(--mdui-color-on-surface-variant)">多</span>
+		</div>
+	</div>
+</mdui-card>

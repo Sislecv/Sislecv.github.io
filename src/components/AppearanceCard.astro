@@ -26,7 +26,7 @@ const SCHEMES = [
 			<mdui-switch id="dark-switch" aria-label="深色模式"></mdui-switch>
 			<mdui-icon-dark-mode--outlined style="font-size: 20px"></mdui-icon-dark-mode--outlined>
 		</div>
-		<div class="scheme-grid">
+		<div class="scheme-grid" style="margin-top: 8px">
 			{
 				SCHEMES.map((s) => (
 					<button
@@ -40,10 +40,6 @@ const SCHEMES = [
 				))
 			}
 		</div>
-		<label class="scheme-custom">
-			<mdui-icon-palette--outlined style="font-size: 18px"></mdui-icon-palette--outlined>
-			<input type="color" id="scheme-custom-input" value="#0b57d0" aria-label="自定义颜色" />
-		</label>
 	</div>
 </mdui-card>
 
@@ -89,16 +85,6 @@ const SCHEMES = [
 			} catch {
 				/* ignore */
 			}
-		}
-	});
-
-	const custom = document.getElementById("scheme-custom-input") as HTMLInputElement | null;
-	custom?.addEventListener("input", () => {
-		try {
-			setColorScheme(custom.value);
-			localStorage.setItem("scheme", custom.value);
-		} catch {
-			/* ignore */
 		}
 	});
 </script>

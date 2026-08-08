@@ -1,0 +1,22 @@
+---
+import { formatDate, type Post } from "../lib/posts";
+import "@mdui/icons/event--outlined.js";
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+const url = `/posts/${post.id.replace(/\.(md|mdx)$/i, "")}/`;
+---
+
+<mdui-card clickable href={url} variant="filled" class="masonry-card">
+	<div class="card-body">
+		<h3 class="masonry-title">{post.data.title}</h3>
+		<div class="post-meta">
+			<mdui-icon-event--outlined style="font-size: 13px"></mdui-icon-event--outlined>
+			<span>{formatDate(post.data.published)}</span>
+		</div>
+		{post.data.description && <p class="masonry-desc">{post.data.description}</p>}
+	</div>
+</mdui-card>

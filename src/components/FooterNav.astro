@@ -1,0 +1,39 @@
+---
+import { NAV_LINKS } from "../consts";
+import "@mdui/icons/home--outlined.js";
+import "@mdui/icons/archive--outlined.js";
+import "@mdui/icons/tag--outlined.js";
+import "@mdui/icons/person--outlined.js";
+import "@mdui/icons/search--outlined.js";
+
+const { pathname } = Astro.url;
+---
+
+<mdui-card variant="filled" class="nav-card" style="margin-top: 32px">
+	{
+		NAV_LINKS.map((link) => (
+			<a
+				href={link.href}
+				class="nav-link"
+				aria-current={pathname === link.href || pathname.startsWith(link.href + "/") ? "page" : undefined}
+			>
+				{
+					link.icon === "home" && <mdui-icon-home--outlined></mdui-icon-home--outlined>
+				}
+				{
+					link.icon === "archive" && <mdui-icon-archive--outlined></mdui-icon-archive--outlined>
+				}
+				{
+					link.icon === "tag" && <mdui-icon-tag--outlined></mdui-icon-tag--outlined>
+				}
+				{
+					link.icon === "person" && <mdui-icon-person--outlined></mdui-icon-person--outlined>
+				}
+				{
+					link.icon === "search" && <mdui-icon-search--outlined></mdui-icon-search--outlined>
+				}
+				<span>{link.label}</span>
+			</a>
+		))
+	}
+</mdui-card>
