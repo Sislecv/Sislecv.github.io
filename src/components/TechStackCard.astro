@@ -5,25 +5,28 @@ const STACK = [
 	{ name: "Astro", icon: "/stack/astro.svg", url: "https://astro.build/" },
 	{ name: "OMP", icon: "/stack/omp.png", url: "https://opencode.ai/" },
 ];
+
+// Repeat the track 4x so its width exceeds 2x the viewport,
+// making the -50% loop seamless.
+const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card">
-	<div class="card-body" style="padding: 12px 14px; gap: 6px">
+	<div class="card-body" style="padding: 14px; justify-content: center">
 		<div class="stack-viewport">
 			<div class="stack-track">
 				{
-					STACK.map((s) => (
-						<a class="stack-item" href={s.url} target="_blank" rel="noreferrer" title={s.name}>
-							<img src={s.icon} alt={s.name} loading="lazy" class="stack-icon" />
-							<span>{s.name}</span>
-						</a>
-					))
-				}
-				{
-					STACK.map((s) => (
-						<a class="stack-item" href={s.url} target="_blank" rel="noreferrer" title={s.name} aria-hidden="true" tabindex="-1">
-							<img src={s.icon} alt="" loading="lazy" class="stack-icon" />
-							<span>{s.name}</span>
+					TRACK_ITEMS.map((s, i) => (
+						<a
+							class="stack-item"
+							href={s.url}
+							target="_blank"
+							rel="noreferrer"
+							title={s.name}
+							aria-hidden={i >= STACK.length ? "true" : undefined}
+							tabindex={i >= STACK.length ? -1 : undefined}
+						>
+							<img src={s.icon} alt={i < STACK.length ? s.name : ""} loading="lazy" class="stack-icon" />
 						</a>
 					))
 				}
