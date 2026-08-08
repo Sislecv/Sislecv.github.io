@@ -1,5 +1,12 @@
 ---
 import "@mdui/icons/rocket-launch--outlined.js";
+
+const STACK = [
+	{ name: "Python", icon: "/stack/python.svg", url: "https://www.python.org/" },
+	{ name: "Node.js", icon: "/stack/nodedotjs.svg", url: "https://nodejs.org/" },
+	{ name: "Astro", icon: "/stack/astro.svg", url: "https://astro.build/" },
+	{ name: "OMP", icon: "/stack/omp.svg", url: "https://opencode.ai/" },
+];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card">
@@ -8,23 +15,25 @@ import "@mdui/icons/rocket-launch--outlined.js";
 			<mdui-icon-rocket-launch--outlined style="font-size: 16px; color: var(--mdui-color-primary)"></mdui-icon-rocket-launch--outlined>
 			技术栈
 		</div>
-		<div class="stack-scroll">
-			<a class="stack-item" href="https://www.python.org/" target="_blank" rel="noreferrer" title="Python">
-				<img src="/stack/python.svg" alt="Python" loading="lazy" class="stack-icon" />
-				<span>Python</span>
-			</a>
-			<a class="stack-item" href="https://nodejs.org/" target="_blank" rel="noreferrer" title="Node.js">
-				<img src="/stack/nodedotjs.svg" alt="Node.js" loading="lazy" class="stack-icon" />
-				<span>Node.js</span>
-			</a>
-			<a class="stack-item" href="https://astro.build/" target="_blank" rel="noreferrer" title="Astro">
-				<img src="/stack/astro.svg" alt="Astro" loading="lazy" class="stack-icon" />
-				<span>Astro</span>
-			</a>
-			<a class="stack-item" href="https://opencode.ai/" target="_blank" rel="noreferrer" title="Oh My Pi">
-				<img src="/stack/omp.svg" alt="Oh My Pi" loading="lazy" class="stack-icon" />
-				<span>OMP</span>
-			</a>
+		<div class="stack-viewport">
+			<div class="stack-track">
+				{
+					STACK.map((s) => (
+						<a class="stack-item" href={s.url} target="_blank" rel="noreferrer" title={s.name}>
+							<img src={s.icon} alt={s.name} loading="lazy" class="stack-icon" />
+							<span>{s.name}</span>
+						</a>
+					))
+				}
+				{
+					STACK.map((s) => (
+						<a class="stack-item" href={s.url} target="_blank" rel="noreferrer" title={s.name} aria-hidden="true" tabindex="-1">
+							<img src={s.icon} alt="" loading="lazy" class="stack-icon" />
+							<span>{s.name}</span>
+						</a>
+					))
+				}
+			</div>
 		</div>
 	</div>
 </mdui-card>

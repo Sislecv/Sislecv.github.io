@@ -59,12 +59,13 @@ const categories = [...getCategories(posts).entries()];
 			</div>
 		</div>
 
-		<div class="span-2">
-			<TagCloudCard posts={posts} />
-		</div>
-
-		<div class="span-2">
-			<TechStackCard />
+		<div class="span-2" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
+			<div style="flex: 1">
+				<TagCloudCard posts={posts} />
+			</div>
+			<div style="flex: 1">
+				<TechStackCard />
+			</div>
 		</div>
 	</div>
 

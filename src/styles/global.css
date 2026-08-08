@@ -395,13 +395,27 @@ mdui-card[clickable].bento-card:hover,
 	align-items: center;
 }
 
-/* ===== Tech stack card ===== */
-.stack-scroll {
+/* ===== Tech stack card (auto-scrolling) ===== */
+.stack-viewport {
+	overflow: hidden;
+	-webkit-mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+	mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+}
+
+.stack-track {
 	display: flex;
 	gap: 12px;
-	overflow-x: auto;
-	padding: 4px 2px 6px;
-	scrollbar-width: thin;
+	width: max-content;
+	animation: stack-scroll 14s linear infinite;
+}
+
+.stack-viewport:hover .stack-track {
+	animation-play-state: paused;
+}
+
+@keyframes stack-scroll {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
 }
 
 .stack-item {
@@ -429,6 +443,13 @@ mdui-card[clickable].bento-card:hover,
 	background: var(--mdui-color-surface-container-high);
 	object-fit: contain;
 	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.stack-track {
+		animation: none;
+		overflow-x: auto;
+	}
 }
 
 .emoji-img {
