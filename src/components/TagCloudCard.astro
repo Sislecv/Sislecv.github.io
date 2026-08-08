@@ -13,7 +13,7 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 <mdui-card variant="elevated" class="bento-card">
 	<div class="card-body">
 		<h2 class="card-title">
-			<mdui-icon name="tag"></mdui-icon>
+			<mdui-icon-tag></mdui-icon-tag>
 			标签云
 		</h2>
 		<div class="tag-cloud" style="margin-top: 8px">

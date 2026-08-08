@@ -3,33 +3,24 @@ import { formatDate, getPostSlug, getPostUrl, getReadingTime, type Post } from "
 
 interface Props {
 	post: Post;
-	featured?: boolean;
 }
 
 const { post } = Astro.props;
-const featured = Astro.props.featured ?? false;
 const url = getPostUrl(getPostSlug(post));
 ---
 
-<mdui-card clickable href={url} variant={featured ? "elevated" : "filled"} class="bento-card">
+<mdui-card clickable href={url} variant="filled" class="bento-card post-card">
 	<div class="card-body">
 		<div class="post-meta">
 			<span>{formatDate(post.data.published)}</span>
 			<span>·</span>
 			<span>{getReadingTime(post)}</span>
-			{post.data.category && (
-				<a href={`/archive/#${encodeURIComponent(post.data.category)}`} style="color: var(--mdui-color-primary)">
-					{post.data.category}
-				</a>
-			)}
 		</div>
-		<h3 class={featured ? "post-title" : ""} style={!featured ? "font-size: 1.05rem; font-weight: 600; margin: 6px 0" : ""}>
-			{post.data.title}
-		</h3>
-		{post.data.description && <p class={featured ? "post-desc" : ""} style={!featured ? "font-size: 0.9rem; color: var(--mdui-color-on-surface-variant); margin: 0; line-height: 1.6; flex: 1" : ""}>{post.data.description}</p>}
-		<div class="tag-cloud" style="margin-top: auto; padding-top: 12px">
+		<h3 class="post-title">{post.data.title}</h3>
+		{post.data.description && <p class="post-desc">{post.data.description}</p>}
+		<div class="tag-cloud" style="margin-top: auto; padding-top: 10px">
 			{
-				post.data.tags.slice(0, 4).map((tag) => (
+				post.data.tags.slice(0, 3).map((tag) => (
 					<a href={`/tags/${encodeURIComponent(tag)}/`}>
 						<mdui-chip variant="assist">{tag}</mdui-chip>
 					</a>

@@ -1,75 +1,87 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { SITE } from "../consts";
-import { getAllPosts, formatDate, getPostSlug, getPostUrl, getReadingTime } from "../lib/posts";
+import { getAllPosts, formatDate, getPostSlug, getPostUrl, getReadingTime, getStats, getTags, getCategories } from "../lib/posts";
 import PostCard from "../components/PostCard.astro";
 import ProfileCard from "../components/ProfileCard.astro";
-import StatsCard from "../components/StatsCard.astro";
+import StatBlock from "../components/StatBlock.astro";
 import TagCloudCard from "../components/TagCloudCard.astro";
 
 const posts = await getAllPosts();
-const featured = posts[0];
-const recent = posts.slice(1, 4);
+const stats = getStats(posts);
+const tags = [...getTags(posts).entries()];
+const categories = [...getCategories(posts).entries()];
+const newestYear = posts.length ? new Date(posts[0].data.published).getFullYear() : new Date().getFullYear();
+const oldestYear = posts.length ? new Date(posts[posts.length - 1].data.published).getFullYear() : newestYear;
 ---
 
 <Layout>
 	<div class="bento">
 		{
-			featured && (
-				<div class="col-8 row-span-2 feature-card">
-					<PostCard post={featured} featured />
+			posts.slice(0, 6).map((post) => (
+				<div class="col-4">
+					<PostCard post={post} />
 				</div>
-			)
+			))
 		}
 
 		<div class="col-4">
 			<ProfileCard />
 		</div>
 
-		<div class="col-4">
-			<StatsCard posts={posts} />
+		<div class="col-2">
+			<StatBlock value={String(stats.postCount)} label="文章" href="/archive/" />
+		</div>
+		<div class="col-2">
+			<StatBlock value={String(stats.tagCount)} label="标签" href="/tags/" />
+		</div>
+		<div class="col-2">
+			<StatBlock value={`${(stats.totalWords / 1000).toFixed(1)}k`} label="总字数" href="/archive/" />
+		</div>
+		<div class="col-2">
+			<StatBlock value={String(newestYear - oldestYear + 1)} label="写龄(年)" href="/archive/" />
 		</div>
 
 		<div class="col-4">
 			<TagCloudCard posts={posts} />
 		</div>
 
-		<div class="col-8">
-			<mdui-card variant="elevated" class="bento-card">
-				<div class="card-body">
-					<h2 class="card-title">
-						<mdui-icon name="article"></mdui-icon>
-						最新文章
-					</h2>
-					<mdui-list>
-						{
-							recent.map((post) => (
-								<mdui-list-item href={getPostUrl(getPostSlug(post))} rounded>
-									<div slot="headline" style="font-weight: 500">{post.data.title}</div>
-									<div slot="supporting">
-										{formatDate(post.data.published)} · {getReadingTime(post)}
-									</div>
-								</mdui-list-item>
-							))
-						}
-					</mdui-list>
-					<a href="/archive/" style="margin-top: 12px; font-size: 0.85rem; color: var(--mdui-color-primary)">
-						查看全部文章 →
-					</a>
-				</div>
-			</mdui-card>
+		<div class="col-4">
+			<a href="/archive/" style="display: block; height: 100%">
+				<mdui-card clickable variant="filled" class="bento-card">
+					<div class="card-body">
+						<h2 class="card-title">
+							<mdui-icon-folder></mdui-icon-folder>
+							分类
+						</h2>
+						<div class="tag-cloud" style="margin-top: 8px">
+							{
+								categories.map(([cat, count]) => (
+									<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
+										<mdui-chip variant="filter">{cat} ({count})</mdui-chip>
+									</a>
+								))
+							}
+							{
+								categories.length === 0 && <span style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">暂无分类</span>
+							}
+						</div>
+					</div>
+				</mdui-card>
+			</a>
 		</div>
 
 		<div class="col-4">
-			<mdui-card variant="filled" clickable href="/search/">
-				<div class="card-body" style="align-items: center; text-align: center; padding: 32px 20px">
-					<mdui-icon name="search" style="font-size: 48px; color: var(--mdui-color-primary)"></mdui-icon>
-					<div style="font-weight: 600; font-size: 1.05rem">搜索文章</div>
-					<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
-						全文检索 {posts.length} 篇文章
+			<a href="/search/" style="display: block; height: 100%">
+				<mdui-card clickable variant="filled" class="bento-card">
+					<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px">
+						<mdui-icon-search style="font-size: 40px; color: var(--mdui-color-primary)"></mdui-icon-search>
+						<div style="font-weight: 600; font-size: 1.05rem">搜索文章</div>
+						<div style="font-size: 0.82rem; color: var(--mdui-color-on-surface-variant)">
+							全文检索 {posts.length} 篇文章
+						</div>
 					</div>
-				</div>
-			</mdui-card>
+				</mdui-card>
+			</a>
 		</div>
 	</div>
 </Layout>

@@ -1,13 +1,19 @@
 ---
 import { SITE, NAV_LINKS } from "../consts";
 import ThemeToggle from "./ThemeToggle.astro";
+import ColorSchemePicker from "./ColorSchemePicker.astro";
+import "@mdui/icons/home.js";
+import "@mdui/icons/archive.js";
+import "@mdui/icons/tag.js";
+import "@mdui/icons/person.js";
+import "@mdui/icons/search.js";
 
 const { pathname } = Astro.url;
 ---
 
 <mdui-card variant="filled" class="nav-card">
 	<a href="/" class="nav-link" style="font-weight: 700; font-size: 1rem">
-		<mdui-icon name="home"></mdui-icon>
+		<mdui-icon-home></mdui-icon-home>
 		<span>{SITE.title}</span>
 	</a>
 	<mdui-divider vertical style="height: 24px; margin: 0 8px"></mdui-divider>
@@ -18,11 +24,23 @@ const { pathname } = Astro.url;
 				class="nav-link"
 				aria-current={pathname === link.href || pathname.startsWith(link.href + "/") ? "page" : undefined}
 			>
-				<mdui-icon name={link.icon}></mdui-icon>
+				{
+					link.icon === "archive" && <mdui-icon-archive></mdui-icon-archive>
+				}
+				{
+					link.icon === "tag" && <mdui-icon-tag></mdui-icon-tag>
+				}
+				{
+					link.icon === "person" && <mdui-icon-person></mdui-icon-person>
+				}
+				{
+					link.icon === "search" && <mdui-icon-search></mdui-icon-search>
+				}
 				<span>{link.label}</span>
 			</a>
 		))
 	}
 	<div class="nav-spacer"></div>
+	<ColorSchemePicker />
 	<ThemeToggle />
 </mdui-card>

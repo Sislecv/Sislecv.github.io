@@ -89,9 +89,18 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	import "mdui/components/text-field.js";
 	import "mdui/components/button.js";
 	import "mdui/components/divider.js";
+	import "mdui/components/dropdown.js";
 	import "mdui/components/circular-progress.js";
 	import "mdui/components/linear-progress.js";
 
+	// Material Design 3 blue color scheme (default), restore persisted pick
+	import { setColorScheme } from "mdui";
+	try {
+		const saved = localStorage.getItem("scheme");
+		setColorScheme(saved || "#0b57d0");
+	} catch {
+		setColorScheme("#0b57d0");
+	}
 	// Icons
 	import "@mdui/icons/home.js";
 	import "@mdui/icons/archive.js";
@@ -112,8 +121,5 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	import "@mdui/icons/error.js";
 	import "@mdui/icons/edit.js";
 	import "@mdui/icons/mail.js";
-
-	// Material Design 3 blue color scheme
-	import { setColorScheme } from "mdui";
-	setColorScheme("#0b57d0");
+	import "@mdui/icons/palette.js";
 </script>
