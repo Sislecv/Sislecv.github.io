@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getAllPosts, formatDate, getPostUrl, getReadingTime } from "../../lib/posts";
+import PostCard from "../../components/PostCard.astro";
+
+export async function getStaticPaths() {
+	const posts = await getAllPosts();
+	const tags = new Set<string>();
+	for (const post of posts) {
+		for (const tag of post.data.tags) tags.add(tag);
+	}
+	return [...tags].map((tag) => ({
+		params: { tag },
+		props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) },
+	}));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Layout title={`标签: ${tag}`} description={`标签 ${tag} 下的文章`}>
+	<div class="bento">
+		<div class="col-12">
+			<mdui-card variant="elevated">
+				<div class="card-body">
+					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
+						<mdui-icon name="tag"></mdui-icon>
+						标签：{tag} · {posts.length} 篇
+					</h1>
+				</div>
+			</mdui-card>
+		</div>
+		{
+			posts.map((post) => (
+				<div class="col-6">
+					<PostCard post={post} />
+				</div>
+			))
+		}
+	</div>
+</Layout>

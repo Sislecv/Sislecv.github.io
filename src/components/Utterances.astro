@@ -1,0 +1,64 @@
+---
+---
+
+<div id="utterances-container" style="margin-top: 32px">
+	<h2 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 12px">评论</h2>
+	<div id="utterances"></div>
+</div>
+
+<script is:inline>
+	function isDark() {
+		return document.documentElement.classList.contains("mdui-theme-dark");
+	}
+
+	function themeFor() {
+		return isDark() ? "github-dark" : "github-light";
+	}
+
+	function loadUtterances() {
+		const container = document.getElementById("utterances");
+		if (!container) return;
+
+		container.innerHTML = "";
+		const script = document.createElement("script");
+		script.src = "https://utteranc.es/client.js";
+		script.setAttribute("repo", "Sislecv/sislecv.github.io");
+		script.setAttribute("issue-term", "pathname");
+		script.setAttribute("theme", themeFor());
+		script.crossOrigin = "anonymous";
+		script.async = true;
+		container.appendChild(script);
+	}
+
+	// Follow theme changes via the mdui-theme-* class on <html>
+	function observeTheme() {
+		let frame = null;
+		const syncTheme = () => {
+			frame =
+				frame ||
+				document.querySelector(".utterances-frame, iframe[title='comments']");
+			if (frame?.contentWindow) {
+				frame.contentWindow.postMessage(
+					{ type: "set-theme", theme: themeFor() },
+					"https://utteranc.es",
+				);
+			}
+		};
+		const observer = new MutationObserver(syncTheme);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class"],
+		});
+		const poll = setInterval(() => {
+			if (document.querySelector(".utterances-frame, iframe[title='comments']")) {
+				frame = null;
+				syncTheme();
+				clearInterval(poll);
+			}
+		}, 1000);
+		setTimeout(() => clearInterval(poll), 30000);
+	}
+
+	loadUtterances();
+	observeTheme();
+</script>

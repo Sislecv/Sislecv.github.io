@@ -1,0 +1,32 @@
+---
+import { getTags, type Post } from "../lib/posts";
+
+interface Props {
+	posts: Post[];
+	limit?: number;
+}
+
+const { posts } = Astro.props;
+const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
+---
+
+<mdui-card variant="elevated" class="bento-card">
+	<div class="card-body">
+		<h2 class="card-title">
+			<mdui-icon name="tag"></mdui-icon>
+			标签云
+		</h2>
+		<div class="tag-cloud" style="margin-top: 8px">
+			{
+				tags.map(([tag, count]) => (
+					<a href={`/tags/${encodeURIComponent(tag)}/`}>
+						<mdui-chip>{tag} ({count})</mdui-chip>
+					</a>
+				))
+			}
+		</div>
+		<a href="/tags/" style="margin-top: auto; padding-top: 12px; font-size: 0.85rem; color: var(--mdui-color-primary)">
+			查看全部标签 →
+		</a>
+	</div>
+</mdui-card>

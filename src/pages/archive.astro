@@ -1,14 +1,71 @@
 ---
-import ArchivePanel from "@components/ArchivePanel.svelte";
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
-import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPostsList } from "../utils/content-utils";
+import Layout from "../layouts/Layout.astro";
+import { getAllPosts, formatDate, getPostSlug, getPostUrl, getCategories } from "../lib/posts";
 
-const sortedPostsList = await getSortedPostsList();
+const posts = await getAllPosts();
+const categories = getCategories(posts);
+
+// Group posts by year
+const byYear = new Map<number, typeof posts>();
+for (const post of posts) {
+	const year = new Date(post.data.published).getFullYear();
+	if (!byYear.has(year)) byYear.set(year, []);
+	byYear.get(year)!.push(post);
+}
+const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 ---
 
-<MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
-</MainGridLayout>
+<Layout title="归档" description={`全部 ${posts.length} 篇文章`}>
+	<div class="bento">
+		<div class="col-12">
+			<mdui-card variant="elevated">
+				<div class="card-body">
+					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
+						<mdui-icon name="archive"></mdui-icon>
+						归档 · 共 {posts.length} 篇
+					</h1>
 
+					{
+						categories.size > 0 && (
+							<div class="tag-cloud" style="margin-bottom: 20px">
+								{
+									[...categories.entries()].map(([cat, count]) => (
+										<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
+											<mdui-chip variant="filter">
+												<mdui-icon name="folder" slot="icon"></mdui-icon>
+												{cat} ({count})
+											</mdui-chip>
+										</a>
+									))
+								}
+							</div>
+						)
+					}
+
+					{
+						years.map(([year, yearPosts]) => (
+							<div style="margin-bottom: 24px">
+								<h2 id={`cat-${year}`} style="font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; color: var(--mdui-color-primary)">
+									{year}
+								</h2>
+								<mdui-list>
+									{
+										yearPosts.map((post) => (
+											<mdui-list-item href={getPostUrl(getPostSlug(post))} rounded>
+												<div slot="headline" style="font-weight: 500">{post.data.title}</div>
+												<div slot="supporting">
+													{formatDate(post.data.published)}
+													{post.data.category && ` · ${post.data.category}`}
+												</div>
+											</mdui-list-item>
+										))
+									}
+								</mdui-list>
+							</div>
+						))
+					}
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>

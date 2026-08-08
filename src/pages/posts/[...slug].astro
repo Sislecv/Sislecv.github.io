@@ -1,139 +1,110 @@
 ---
-import path from "node:path";
-import License from "@components/misc/License.astro";
-import Markdown from "@components/misc/Markdown.astro";
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
-import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPosts } from "@utils/content-utils";
-import { getDir, getPostUrlBySlug } from "@utils/url-utils";
-import { Icon } from "astro-icon/components";
-import { licenseConfig } from "src/config";
-import ImageWrapper from "../../components/misc/ImageWrapper.astro";
-import PostMetadata from "../../components/PostMeta.astro";
-import Utterances from "../../components/misc/Utterances.astro";
-import { profileConfig, siteConfig } from "../../config";
-import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import { render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Toc from "../../components/Toc.astro";
+import Utterances from "../../components/Utterances.astro";
+import { getAllPosts, formatDate, getPostSlug, getPostUrl, getReadingTime } from "../../lib/posts";
 
 export async function getStaticPaths() {
-	const blogEntries = await getSortedPosts();
-	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
+	const posts = await getAllPosts();
+	return posts.map((post, i) => ({
+		params: { slug: getPostSlug(post) },
+		props: {
+			post,
+			prev: posts[i + 1] ?? null,
+			next: posts[i - 1] ?? null,
+		},
 	}));
 }
 
-const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
-
-const { remarkPluginFrontmatter } = await entry.render();
-
-const jsonLd = {
-	"@context": "https://schema.org",
-	"@type": "BlogPosting",
-	headline: entry.data.title,
-	description: entry.data.description || entry.data.title,
-	keywords: entry.data.tags,
-	author: {
-		"@type": "Person",
-		name: profileConfig.name,
-		url: Astro.site,
-	},
-	datePublished: formatDateToYYYYMMDD(entry.data.published),
-	inLanguage: entry.data.lang
-		? entry.data.lang.replace("_", "-")
-		: siteConfig.lang.replace("_", "-"),
-	// TODO include cover image here
-};
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
 ---
-<MainGridLayout banner={entry.data.image} title={entry.data.title} description={entry.data.description} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
-    <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
-        <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
-            {}
-        ]}>
-            <!-- word count and reading time -->
-            <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
-                <div class="flex flex-row items-center">
-                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
-                        <Icon name="material-symbols:notes-rounded"></Icon>
-                    </div>
-                    <div class="text-sm">{remarkPluginFrontmatter.words} {" " + i18n(I18nKey.wordsCount)}</div>
-                </div>
-                <div class="flex flex-row items-center">
-                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
-                        <Icon name="material-symbols:schedule-outline-rounded"></Icon>
-                    </div>
-                    <div class="text-sm">
-                        {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
-                    </div>
-                </div>
-            </div>
 
-            <!-- title -->
-            <div class="relative onload-animation">
-                <div
-                    data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title"
-                    class="transition w-full block font-bold mb-3
-                    text-3xl md:text-[2.25rem]/[2.75rem]
-                    text-black/90 dark:text-white/90
-                    md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
-                    before:absolute before:top-[0.75rem] before:left-[-1.125rem]
-                ">
-                    {entry.data.title}
-                </div>
-            </div>
+<Layout title={post.data.title} description={post.data.description}>
+	<div class="article-grid">
+		<article>
+			<mdui-card variant="elevated">
+				<div class="article-body">
+					<header class="article-header">
+						<div class="post-meta" style="margin-bottom: 12px">
+							<span>
+								<mdui-icon name="event" style="font-size: 16px; vertical-align: -3px"></mdui-icon>
+								{formatDate(post.data.published)}
+							</span>
+							<span>·</span>
+							<span>
+								<mdui-icon name="schedule" style="font-size: 16px; vertical-align: -3px"></mdui-icon>
+								{getReadingTime(post)}
+							</span>
+							{
+								post.data.category && (
+									<a href={`/archive/#cat-${encodeURIComponent(post.data.category)}`} style="color: var(--mdui-color-primary)">
+										{post.data.category}
+									</a>
+								)
+							}
+						</div>
+						<h1 class="article-title">{post.data.title}</h1>
+						<div class="tag-cloud">
+							{
+								post.data.tags.map((tag) => (
+									<a href={`/tags/${encodeURIComponent(tag)}/`}>
+										<mdui-chip variant="assist">{tag}</mdui-chip>
+									</a>
+								))
+							}
+						</div>
+					</header>
 
-            <!-- metadata -->
-            <div class="onload-animation">
-                <PostMetadata
-                        class="mb-5"
-                        published={entry.data.published}
-                        updated={entry.data.updated}
-                        tags={entry.data.tags}
-                        category={entry.data.category}
-                ></PostMetadata>
-                {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
-            </div>
+					<div class="mdui-prose">
+						<Content />
+					</div>
 
-            <!-- always show cover as long as it has one -->
+					<Utterances />
+				</div>
+			</mdui-card>
 
-            {entry.data.image &&
-                <ImageWrapper id="post-cover" src={entry.data.image} basePath={path.join("content/posts/", getDir(entry.id))} class="mb-8 rounded-xl banner-container onload-animation"/>
-            }
+			<div style="display: flex; gap: 16px; margin-top: 16px">
+				{
+					prev ? (
+						<mdui-card clickable href={getPostUrl(getPostSlug(prev))} variant="filled" style="flex: 1">
+							<div class="card-body" style="padding: 16px 20px">
+								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; gap: 4px">
+									<mdui-icon name="chevron-left"></mdui-icon>
+									上一篇
+								</div>
+								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+									{prev.data.title}
+								</div>
+							</div>
+						</mdui-card>
+					) : (
+						<div style="flex: 1"></div>
+					)
+				}
+				{
+					next ? (
+						<mdui-card clickable href={getPostUrl(getPostSlug(next))} variant="filled" style="flex: 1">
+							<div class="card-body" style="padding: 16px 20px; text-align: right">
+								<div style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
+									下一篇
+									<mdui-icon name="chevron-right"></mdui-icon>
+								</div>
+								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+									{next.data.title}
+								</div>
+							</div>
+						</mdui-card>
+					) : (
+						<div style="flex: 1"></div>
+					)
+				}
+			</div>
+		</article>
 
-
-            <Markdown class="mb-6 markdown-content onload-animation">
-                <Content />
-            </Markdown>
-
-            {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
-
-        </div>
-    </div>
-
-    <div class="flex flex-col md:flex-row justify-between mb-4 gap-4 overflow-hidden w-full">
-        <a href={entry.data.nextSlug ? getPostUrlBySlug(entry.data.nextSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.nextSlug}]}>
-            {entry.data.nextSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-start gap-4" >
-                <Icon name="material-symbols:chevron-left-rounded" class="text-[2rem] text-[var(--primary)]" />
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.nextTitle}
-                </div>
-            </div>}
-        </a>
-
-        <a href={entry.data.prevSlug ? getPostUrlBySlug(entry.data.prevSlug) : "#"}
-           class:list={["w-full font-bold overflow-hidden active:scale-95", {"pointer-events-none": !entry.data.prevSlug}]}>
-            {entry.data.prevSlug && <div class="btn-card rounded-2xl w-full h-[3.75rem] max-w-full px-4 flex items-center !justify-end gap-4">
-                <div class="overflow-hidden transition overflow-ellipsis whitespace-nowrap max-w-[calc(100%_-_3rem)] text-black/75 dark:text-white/75">
-                    {entry.data.prevTitle}
-                </div>
-                <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
-            </div>}
-        </a>
-    </div>
-
-    <Utterances />
-
-</MainGridLayout>
+		<aside>
+			<Toc headings={headings} />
+		</aside>
+	</div>
+</Layout>

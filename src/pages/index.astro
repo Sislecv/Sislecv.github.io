@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../consts";
+import { getAllPosts, formatDate, getPostSlug, getPostUrl, getReadingTime } from "../lib/posts";
+import PostCard from "../components/PostCard.astro";
+import ProfileCard from "../components/ProfileCard.astro";
+import StatsCard from "../components/StatsCard.astro";
+import TagCloudCard from "../components/TagCloudCard.astro";
+
+const posts = await getAllPosts();
+const featured = posts[0];
+const recent = posts.slice(1, 4);
+---
+
+<Layout>
+	<div class="bento">
+		{
+			featured && (
+				<div class="col-8 row-span-2 feature-card">
+					<PostCard post={featured} featured />
+				</div>
+			)
+		}
+
+		<div class="col-4">
+			<ProfileCard />
+		</div>
+
+		<div class="col-4">
+			<StatsCard posts={posts} />
+		</div>
+
+		<div class="col-4">
+			<TagCloudCard posts={posts} />
+		</div>
+
+		<div class="col-8">
+			<mdui-card variant="elevated" class="bento-card">
+				<div class="card-body">
+					<h2 class="card-title">
+						<mdui-icon name="article"></mdui-icon>
+						最新文章
+					</h2>
+					<mdui-list>
+						{
+							recent.map((post) => (
+								<mdui-list-item href={getPostUrl(getPostSlug(post))} rounded>
+									<div slot="headline" style="font-weight: 500">{post.data.title}</div>
+									<div slot="supporting">
+										{formatDate(post.data.published)} · {getReadingTime(post)}
+									</div>
+								</mdui-list-item>
+							))
+						}
+					</mdui-list>
+					<a href="/archive/" style="margin-top: 12px; font-size: 0.85rem; color: var(--mdui-color-primary)">
+						查看全部文章 →
+					</a>
+				</div>
+			</mdui-card>
+		</div>
+
+		<div class="col-4">
+			<mdui-card variant="filled" clickable href="/search/">
+				<div class="card-body" style="align-items: center; text-align: center; padding: 32px 20px">
+					<mdui-icon name="search" style="font-size: 48px; color: var(--mdui-color-primary)"></mdui-icon>
+					<div style="font-weight: 600; font-size: 1.05rem">搜索文章</div>
+					<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
+						全文检索 {posts.length} 篇文章
+					</div>
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>

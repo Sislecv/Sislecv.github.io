@@ -1,13 +1,13 @@
 # sislecv.github.io
 
-基于 [Astro](https://astro.build) + [Fuwari](https://github.com/saicaca/fuwari) 的个人静态博客，部署于 GitHub Pages。
+基于 [Astro](https://astro.build) 7 + [MDUI](https://www.mdui.org/zh-cn/)（Material Design 3 Web Components）的个人静态博客，Bento 卡片式模块化布局，部署于 GitHub Pages。
 
 ## 功能
 
-- 深浅色模式、可自定义主题色与横幅
-- Pagefind 全文搜索
-- MDX 扩展语法（Admonitions、GitHub 仓库卡片、Expressive Code 代码块）
-- RSS / Sitemap / TOC / KaTeX 数学公式
+- **Bento 首页**：导航/简介/统计/标签云/精选文章等模块化卡片
+- **Material Design 3**：MDUI 组件库、深浅色模式（跟随系统 + 手动切换）、MD3 蓝色主题、原生 View Transitions
+- **Pagefind 全文搜索**、KaTeX 数学公式、TOC 目录、utterances 评论（GitHub Issue 驱动）
+- RSS / Sitemap / OG 标签
 
 ## 本地开发
 
@@ -16,15 +16,14 @@ pnpm install
 pnpm dev          # 开发服务器 http://localhost:4321
 pnpm build        # 构建到 dist/（含 Pagefind 索引）
 pnpm preview      # 本地预览构建产物
+pnpm check        # 类型检查
 ```
 
 ## 写文章
 
-```sh
-pnpm new-post <文件名>
-```
+文章存放在 `src/content/posts/`，frontmatter 结构参考 `src/content/posts/welcome.md`。
 
-文章存放在 `src/content/posts/`，站点信息在 `src/config.ts` 中配置。
+站点信息（标题、导航、社交链接）在 `src/consts.ts` 中配置；MDUI 组件注册在 `src/layouts/Layout.astro` 的 script 块中。
 
 ## 部署
 

@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getAllPosts, getTags } from "../lib/posts";
+
+const posts = await getAllPosts();
+const tags = [...getTags(posts).entries()];
+---
+
+<Layout title="标签" description={`共 ${tags.length} 个标签`}>
+	<div class="bento">
+		<div class="col-12">
+			<mdui-card variant="elevated">
+				<div class="card-body">
+					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
+						<mdui-icon name="tag"></mdui-icon>
+						标签 · 共 {tags.length} 个
+					</h1>
+					<div class="tag-cloud">
+						{
+							tags.map(([tag, count]) => (
+								<a href={`/tags/${encodeURIComponent(tag)}/`}>
+									<mdui-chip variant="filter">{tag} ({count})</mdui-chip>
+								</a>
+							))
+						}
+					</div>
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>

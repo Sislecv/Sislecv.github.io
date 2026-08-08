@@ -1,0 +1,28 @@
+---
+import { SITE, NAV_LINKS } from "../consts";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const { pathname } = Astro.url;
+---
+
+<mdui-card variant="filled" class="nav-card">
+	<a href="/" class="nav-link" style="font-weight: 700; font-size: 1rem">
+		<mdui-icon name="home"></mdui-icon>
+		<span>{SITE.title}</span>
+	</a>
+	<mdui-divider vertical style="height: 24px; margin: 0 8px"></mdui-divider>
+	{
+		NAV_LINKS.filter((l) => l.href !== "/").map((link) => (
+			<a
+				href={link.href}
+				class="nav-link"
+				aria-current={pathname === link.href || pathname.startsWith(link.href + "/") ? "page" : undefined}
+			>
+				<mdui-icon name={link.icon}></mdui-icon>
+				<span>{link.label}</span>
+			</a>
+		))
+	}
+	<div class="nav-spacer"></div>
+	<ThemeToggle />
+</mdui-card>

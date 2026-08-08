@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404">
+	<div class="bento">
+		<div class="col-12">
+			<mdui-card variant="elevated">
+				<div class="card-body" style="align-items: center; text-align: center; padding: 64px 20px">
+					<mdui-icon name="error" style="font-size: 64px; color: var(--mdui-color-error)"></mdui-icon>
+					<h1 style="font-size: 3rem; font-weight: 700; margin: 16px 0 8px">404</h1>
+					<p style="color: var(--mdui-color-on-surface-variant); margin: 0 0 24px">
+						页面不存在或已被移动
+					</p>
+					<a href="/">
+						<mdui-button variant="filled">返回首页</mdui-button>
+					</a>
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>

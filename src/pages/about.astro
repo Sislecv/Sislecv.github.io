@@ -1,25 +1,50 @@
 ---
-
-import { getEntry, render } from "astro:content";
-import Markdown from "@components/misc/Markdown.astro";
-import I18nKey from "../i18n/i18nKey";
-import { i18n } from "../i18n/translation";
-import MainGridLayout from "../layouts/MainGridLayout.astro";
-
-const aboutPost = await getEntry("spec", "about");
-
-if (!aboutPost) {
-	throw new Error("About page content not found");
-}
-
-const { Content } = await render(aboutPost);
+import Layout from "../layouts/Layout.astro";
+import { SITE, SOCIAL_LINKS } from "../consts";
 ---
-<MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <Markdown class="mt-2">
-                <Content />
-            </Markdown>
-        </div>
-    </div>
-</MainGridLayout>
+
+<Layout title="关于" description="关于我">
+	<div class="bento">
+		<div class="col-8">
+			<mdui-card variant="elevated">
+				<div class="card-body" style="padding: 32px">
+					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
+						<mdui-icon name="person"></mdui-icon>
+						关于我
+					</h1>
+					<div class="mdui-prose">
+						<p>你好，我是 {SITE.author}。欢迎来到我的博客。</p>
+						<p>这里记录我折腾代码与技术的过程。</p>
+						<p>博客使用 Astro + MDUI (Material Design 3) 构建，部署于 GitHub Pages。</p>
+					</div>
+					<div style="display: flex; gap: 8px; margin-top: 24px; flex-wrap: wrap">
+						{
+							SOCIAL_LINKS.map((link) => (
+								<a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+									<mdui-button variant="tonal">{link.label}</mdui-button>
+								</a>
+							))
+						}
+					</div>
+				</div>
+			</mdui-card>
+		</div>
+		<div class="col-4">
+			<mdui-card variant="filled">
+				<div class="card-body" style="align-items: center; text-align: center; padding: 32px 20px">
+					<img
+						src="/favicon/favicon-light-192.png"
+						alt={SITE.author}
+						width="96"
+						height="96"
+						style="border-radius: 50%; background: var(--mdui-color-surface-container-highest)"
+					/>
+					<div style="font-weight: 700; font-size: 1.2rem; margin-top: 12px">{SITE.author}</div>
+					<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
+						{SITE.description}
+					</div>
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>

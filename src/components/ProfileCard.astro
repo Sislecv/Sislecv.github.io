@@ -1,0 +1,36 @@
+---
+import { SITE, SOCIAL_LINKS } from "../consts";
+---
+
+<mdui-card variant="elevated" class="bento-card">
+	<div class="card-body">
+		<h2 class="card-title">
+			<mdui-icon name="person"></mdui-icon>
+			关于我
+		</h2>
+		<div style="display: flex; align-items: center; gap: 16px; margin: 8px 0">
+			<img
+				src="/favicon/favicon-light-192.png"
+				alt={SITE.author}
+				width="64"
+				height="64"
+				style="border-radius: 50%; background: var(--mdui-color-surface-container-highest)"
+			/>
+			<div>
+				<div style="font-weight: 700; font-size: 1.1rem">{SITE.author}</div>
+				<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
+					{SITE.description}
+				</div>
+			</div>
+		</div>
+		<div style="display: flex; gap: 8px; margin-top: auto; padding-top: 8px">
+			{
+				SOCIAL_LINKS.map((link) => (
+					<a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+						<mdui-button variant="tonal">{link.label}</mdui-button>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</mdui-card>

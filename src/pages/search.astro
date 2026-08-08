@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const query = Astro.url.searchParams.get("q") ?? "";
+---
+
+<Layout title="搜索" description="全文搜索">
+	<div class="bento">
+		<div class="col-12">
+			<mdui-card variant="elevated">
+				<div class="card-body">
+					<h1 class="card-title" style="font-size: 1.5rem; margin-bottom: 16px">
+						<mdui-icon name="search"></mdui-icon>
+						搜索文章
+					</h1>
+					<mdui-text-field id="search-input" class="search-box" label="输入关键词" clearable autofocus value={query}>
+						<mdui-icon name="search" slot="icon"></mdui-icon>
+					</mdui-text-field>
+					<div id="search-status" style="margin-top: 12px; font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)"></div>
+					<div id="search-results" class="search-results"></div>
+				</div>
+			</mdui-card>
+		</div>
+	</div>
+</Layout>
+
+<script is:inline>
+	const input = document.getElementById("search-input");
+	const status = document.getElementById("search-status");
+	const resultsEl = document.getElementById("search-results");
+	let pagefind = null;
+
+	async function ensurePagefind() {
+		if (!pagefind) {
+			pagefind = await import("/pagefind/pagefind.js");
+		}
+		return pagefind;
+	}
+
+	async function doSearch(query) {
+		if (!query.trim()) {
+			status.textContent = "";
+			resultsEl.innerHTML = "";
+			return;
+		}
+		try {
+			const pf = await ensurePagefind();
+			status.textContent = "搜索中…";
+			const search = await pf.search(query);
+			status.textContent = `找到 ${search.results.length} 条结果`;
+			const data = await Promise.all(search.results.slice(0, 20).map((r) => r.data()));
+			resultsEl.innerHTML = "";
+			for (const item of data) {
+				const card = document.createElement("a");
+				card.href = item.url;
+				card.className = "search-result-card";
+				card.innerHTML = `
+					<mdui-card variant="filled" clickable style="width:100%">
+						<div class="card-body" style="padding: 16px 20px">
+							<h3>${item.title}</h3>
+							<p>${item.excerpt}</p>
+						</div>
+					</mdui-card>`;
+				resultsEl.appendChild(card);
+			}
+			if (data.length === 0) {
+				status.textContent = "没有找到相关结果";
+			}
+		} catch (e) {
+			status.textContent = "搜索功能暂不可用";
+			console.error(e);
+		}
+	}
+
+	input.addEventListener("input", () => {
+		const q = input.value;
+		const url = new URL(location.href);
+		url.searchParams.set("q", q);
+		history.replaceState(null, "", url);
+		doSearch(q);
+	});
+
+	if (input.value) {
+		doSearch(input.value);
+	}
+</script>

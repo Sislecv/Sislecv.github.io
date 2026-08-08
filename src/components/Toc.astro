@@ -1,0 +1,33 @@
+---
+import { formatDate, getPostUrl, type Post } from "../lib/posts";
+
+interface Props {
+	headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const toc = headings.filter((h) => h.depth <= 3);
+---
+
+{
+	toc.length > 0 && (
+		<mdui-card variant="filled" class="toc-wrap">
+			<div class="card-body" style="padding: 16px">
+				<h2 style="font-size: 0.95rem; font-weight: 600; margin: 0 0 12px; color: var(--mdui-color-primary)">
+					目录
+				</h2>
+				<ul class="toc-list">
+					{
+						toc.map((h) => (
+							<li>
+								<a href={`#${h.slug}`} class={`toc-h${h.depth}`}>
+									{h.text}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</mdui-card>
+	)
+}
