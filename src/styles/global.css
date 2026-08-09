@@ -456,7 +456,6 @@ mdui-card[clickable].bento-card:hover,
 }
 
 .grid-stack-item-content {
-	height: 100%;
 	overflow: hidden;
 }
 
