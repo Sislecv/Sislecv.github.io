@@ -577,6 +577,7 @@ mdui-card[clickable].bento-card:hover,
 /* ===== Contribution calendar ===== */
 .contrib-body {
 	padding: 0 !important;
+	height: 100%;
 }
 
 .contrib-grid {
@@ -592,7 +593,6 @@ mdui-card[clickable].bento-card:hover,
 
 .contrib-cell {
 	border-radius: 2px;
-	aspect-ratio: 1;
 	width: 100%;
 	height: 100%;
 	transition: transform 0.15s;
