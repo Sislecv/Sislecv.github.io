@@ -1,8 +1,8 @@
 ---
 ---
 
-<!-- Interactive pixel-grid background, base.org style:
-     sparse blocks fade out near the cursor. Canvas-drawn, theme-aware. -->
+<!-- base.org style interactive background: sparse blocks ATTRACT toward the cursor,
+     forming a cluster near it, and relax back when the cursor leaves. -->
 <canvas id="ascii-bg" aria-hidden="true"></canvas>
 
 <script is:inline>
@@ -11,19 +11,20 @@
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d");
 
-		const CELL = 34; // grid cell size
-		const BLOCK = 9; // block size within a cell
-		const FADE_RADIUS = 130; // cursor influence radius
-		const MAX_ALPHA = 0.22;
+		const CELL = 38; // base grid spacing
+		const BLOCK = 10; // block size
+		const RADIUS = 280; // attract radius
+		const MAX_ALPHA = 0.5;
 
 		let width = 0;
 		let height = 0;
 		let cols = 0;
 		let rows = 0;
-		const blocks = []; // { x, y, ox, oy, alpha, target }
+		const blocks = []; // { bx, by, x, y, alpha, bright }
 
 		let mouseX = -9999;
 		let mouseY = -9999;
+		let mouseActive = false;
 		let primary = [11, 87, 208];
 		let reduced = false;
 
@@ -47,7 +48,6 @@
 			cols = Math.ceil(width / CELL) + 1;
 			rows = Math.ceil(height / CELL) + 1;
 			blocks.length = 0;
-			// deterministic pseudo-random per cell
 			let seed = 42;
 			const rand = () => {
 				seed = (seed * 16807) % 2147483647;
@@ -55,15 +55,18 @@
 			};
 			for (let r = 0; r < rows; r++) {
 				for (let c = 0; c < cols; c++) {
-					// ~55% sparse
-					if (rand() < 0.45) continue;
+					if (rand() < 0.3) continue; // ~70% sparse
 					const jx = (rand() - 0.5) * (CELL - BLOCK);
 					const jy = (rand() - 0.5) * (CELL - BLOCK);
+					const bx = c * CELL + CELL / 2 + jx;
+					const by = r * CELL + CELL / 2 + jy;
 					blocks.push({
-						x: c * CELL + CELL / 2 + jx,
-						y: r * CELL + CELL / 2 + jy,
+						bx,
+						by,
+						x: bx,
+						y: by,
 						alpha: 0.35 + rand() * 0.65,
-						cur: 0,
+						bright: 0, // extra alpha while attracted
 					});
 				}
 			}
@@ -71,16 +74,34 @@
 
 		function draw() {
 			ctx.clearRect(0, 0, width, height);
-			const dx = mouseX;
-			const dy = mouseY;
-			const r2 = FADE_RADIUS * FADE_RADIUS;
+			const r2 = RADIUS * RADIUS;
 			for (const b of blocks) {
-				const dist2 = (b.x - dx) * (b.x - dx) + (b.y - dy) * (b.y - dy);
-				const target = dist2 < r2 ? 0 : b.alpha * MAX_ALPHA;
-				b.cur += (target - b.cur) * 0.12;
-				if (b.cur < 0.004) continue;
-				ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${b.cur})`;
-				ctx.fillRect(b.x - BLOCK / 2, b.y - BLOCK / 2, BLOCK, BLOCK);
+				const dx = b.x - mouseX;
+				const dy = b.y - mouseY;
+				const dist2 = dx * dx + dy * dy;
+				let tx = b.bx;
+				let ty = b.by;
+				let targetBright = 0;
+				if (mouseActive && dist2 < r2) {
+					const dist = Math.sqrt(dist2) || 1;
+					const t = 1 - dist / RADIUS;
+					// strong converge: near-cursor blocks collapse onto the cursor
+					const shrink = 1 - t * 0.88;
+					tx = mouseX + dx * shrink;
+					ty = mouseY + dy * shrink;
+					targetBright = t * 0.85; // glow while clustered
+				}
+				const ease = 0.1;
+				b.x += (tx - b.x) * ease;
+				b.y += (ty - b.y) * ease;
+				b.bright += (targetBright - b.bright) * ease;
+				const a = Math.min(b.alpha * MAX_ALPHA + b.bright, 0.9);
+				if (a < 0.004) continue;
+				// blocks grow while clustered
+				const grow = 1 + (b.bright / 0.7) * 1.2;
+				const s = BLOCK * grow;
+				ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${a})`;
+				ctx.fillRect(b.x - s / 2, b.y - s / 2, s, s);
 			}
 		}
 
@@ -92,16 +113,14 @@
 		window.addEventListener("mousemove", (e) => {
 			mouseX = e.clientX;
 			mouseY = e.clientY;
+			mouseActive = true;
 		});
 		window.addEventListener("mouseleave", () => {
-			mouseX = -9999;
-			mouseY = -9999;
+			mouseActive = false;
 		});
 		window.addEventListener("resize", resize);
 
-		reduced =
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		// theme-aware color (also covers dynamic color scheme changes)
+		reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		readThemeColor();
 		const observer = new MutationObserver(() => readThemeColor());
 		observer.observe(document.documentElement, {
