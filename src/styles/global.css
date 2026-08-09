@@ -140,21 +140,6 @@ mdui-card[clickable].bento-card:hover {
 	pointer-events: none;
 }
 
-/* Cards translucent so the background halo shows through */
-mdui-card {
-	--mdui-color-surface-container-low: 247 242 250 / 0.72;
-	--mdui-color-surface-container-high: 236 230 240 / 0.72;
-	--mdui-color-surface-container-highest: 230 224 233 / 0.72;
-	--mdui-color-surface-variant: 231 224 236 / 0.72;
-}
-
-html.mdui-theme-dark mdui-card {
-	--mdui-color-surface-container-low: 29 27 32 / 0.75;
-	--mdui-color-surface-container-high: 43 41 48 / 0.75;
-	--mdui-color-surface-container-highest: 54 52 59 / 0.75;
-	--mdui-color-surface-variant: 73 69 79 / 0.75;
-}
-
 .blog-container {
 	position: relative;
 	z-index: 1;
