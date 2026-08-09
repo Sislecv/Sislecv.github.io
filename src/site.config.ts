@@ -107,6 +107,24 @@ export const homeTiles = [
 	"gallery",
 ] as const;
 
+// 自定义卡片（追加到首页磁贴网格，可随意增删）
+// id: 唯一标识（小写英文）；icon: 预置图标名或图片路径（/ 或 http 开头为图片）
+// 预置图标：star/favorite/settings/info/link/bookmark/thumb-up/notifications/visibility/calendar-month/dashboard/insights/auto-awesome
+// x/y/w/h: 网格位置与大小（8 列网格，w 最大 8；h 单位约 88px）
+// href: 点击跳转链接（可选）；title/text: 卡片文字（可选）
+export const customCards = [
+	{
+		id: "custom-star",
+		icon: "star",
+		title: "收藏",
+		href: "https://example.com",
+		x: 0,
+		y: 13,
+		w: 2,
+		h: 2,
+	},
+] as const;
+
 // 评论区（utterances 基于 GitHub Issues）
 export const comments = {
 	// 评论仓库（owner/repo，需已安装 utterances App）

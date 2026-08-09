@@ -482,6 +482,17 @@ mdui-card[clickable].bento-card:hover,
 	cursor: grabbing;
 }
 
+/* ===== Custom cards ===== */
+.custom-card-img {
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	padding: 8px;
+	background: rgb(var(--mdui-color-surface-container-high));
+	object-fit: contain;
+	box-sizing: border-box;
+}
+
 /* ===== Gallery stack card ===== */
 .gallery-stack {
 	position: relative;

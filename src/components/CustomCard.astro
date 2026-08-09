@@ -1,0 +1,46 @@
+---
+interface Card {
+	id: string;
+	icon?: string;
+	title?: string;
+	text?: string;
+	href?: string;
+}
+
+const { card } = Astro.props as { card: Card };
+
+const isImage = card.icon ? /^(\/|https?:)/.test(card.icon) : false;
+---
+
+<mdui-card
+	clickable
+	href={card.href ?? undefined}
+	variant="filled"
+	class="bento-card sq-card"
+>
+	<div class="sq-body">
+		{
+			isImage && card.icon ? (
+				<img src={card.icon} alt={card.title ?? "自定义卡片"} loading="lazy" class="custom-card-img" />
+			) : (
+				<>
+					{card.icon === "star" && <mdui-icon-star--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-star--outlined>}
+					{card.icon === "favorite" && <mdui-icon-favorite--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-favorite--outlined>}
+					{card.icon === "settings" && <mdui-icon-settings--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-settings--outlined>}
+					{card.icon === "info" && <mdui-icon-info--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-info--outlined>}
+					{card.icon === "link" && <mdui-icon-link--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-link--outlined>}
+					{card.icon === "bookmark" && <mdui-icon-bookmark--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-bookmark--outlined>}
+					{card.icon === "thumb-up" && <mdui-icon-thumb-up--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-thumb-up--outlined>}
+					{card.icon === "notifications" && <mdui-icon-notifications--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-notifications--outlined>}
+					{card.icon === "visibility" && <mdui-icon-visibility--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-visibility--outlined>}
+					{card.icon === "calendar-month" && <mdui-icon-calendar-month--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-calendar-month--outlined>}
+					{card.icon === "dashboard" && <mdui-icon-dashboard--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-dashboard--outlined>}
+					{card.icon === "insights" && <mdui-icon-insights--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-insights--outlined>}
+					{card.icon === "auto-awesome" && <mdui-icon-auto-awesome--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-auto-awesome--outlined>}
+					{!card.icon && <mdui-icon-star--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-star--outlined>}
+				</>
+			)
+		}
+		{card.title && <span>{card.title}</span>}
+	</div>
+</mdui-card>
