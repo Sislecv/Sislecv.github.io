@@ -84,6 +84,7 @@
 		}
 
 		if (trigger) trigger.addEventListener("click", open);
+		document.getElementById("footer-search-trigger")?.addEventListener("click", open);
 		if (closeBtn) closeBtn.addEventListener("click", close);
 		if (input) input.addEventListener("input", onInput);
 	})();

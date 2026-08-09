@@ -6,30 +6,34 @@ const { pathname } = Astro.url;
 
 <mdui-card variant="filled" class="nav-card">
 	{
-		NAV_LINKS.map((link) => (
-			<a
-				href={link.href}
-				class="nav-link"
-				aria-current={pathname === link.href || pathname.startsWith(link.href + "/") ? "page" : undefined}
-			>
-				{
-					link.icon === "home" && <mdui-icon-home--outlined></mdui-icon-home--outlined>
-				}
-				{
-					link.icon === "archive" && <mdui-icon-archive--outlined></mdui-icon-archive--outlined>
-				}
-				{
-					link.icon === "tag" && <mdui-icon-tag--outlined></mdui-icon-tag--outlined>
-				}
-				{
-					link.icon === "person" && <mdui-icon-person--outlined></mdui-icon-person--outlined>
-				}
-				{
-					link.icon === "search" && <mdui-icon-search--outlined></mdui-icon-search--outlined>
-				}
-				<span>{link.label}</span>
-			</a>
-		))
+		NAV_LINKS.map((link) =>
+			link.icon === "search" ? (
+				<button type="button" class="nav-link" id="footer-search-trigger">
+					<mdui-icon-search--outlined></mdui-icon-search--outlined>
+					<span>{link.label}</span>
+				</button>
+			) : (
+				<a
+					href={link.href}
+					class="nav-link"
+					aria-current={pathname === link.href || pathname.startsWith(link.href + "/") ? "page" : undefined}
+				>
+					{
+						link.icon === "home" && <mdui-icon-home--outlined></mdui-icon-home--outlined>
+					}
+					{
+						link.icon === "archive" && <mdui-icon-archive--outlined></mdui-icon-archive--outlined>
+					}
+					{
+						link.icon === "tag" && <mdui-icon-tag--outlined></mdui-icon-tag--outlined>
+					}
+					{
+						link.icon === "person" && <mdui-icon-person--outlined></mdui-icon-person--outlined>
+					}
+					<span>{link.label}</span>
+				</a>
+			),
+		)
 	}
 	<div style="flex: 1"></div>
 	<mdui-icon-button id="footer-theme-toggle" aria-label="切换主题" title="切换主题">
