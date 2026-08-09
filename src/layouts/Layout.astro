@@ -3,6 +3,7 @@ import { SITE } from "../consts";
 import Footer from "../components/Footer.astro";
 import FooterNav from "../components/FooterNav.astro";
 import SearchDialog from "../components/SearchDialog.astro";
+import AsciiGridBackground from "../components/AsciiGridBackground.astro";
 
 // MDUI global styles + KaTeX styles
 import "mdui/mdui.css";
@@ -67,6 +68,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 		</script>
 	</head>
 	<body>
+		<AsciiGridBackground />
 		<div class="blog-container">
 			<main>
 				<slot />

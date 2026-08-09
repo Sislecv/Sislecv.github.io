@@ -1,0 +1,119 @@
+---
+---
+
+<!-- Interactive pixel-grid background, base.org style:
+     sparse blocks fade out near the cursor. Canvas-drawn, theme-aware. -->
+<canvas id="ascii-bg" aria-hidden="true"></canvas>
+
+<script is:inline>
+	(function () {
+		const canvas = document.getElementById("ascii-bg");
+		if (!canvas) return;
+		const ctx = canvas.getContext("2d");
+
+		const CELL = 34; // grid cell size
+		const BLOCK = 9; // block size within a cell
+		const FADE_RADIUS = 130; // cursor influence radius
+		const MAX_ALPHA = 0.22;
+
+		let width = 0;
+		let height = 0;
+		let cols = 0;
+		let rows = 0;
+		const blocks = []; // { x, y, ox, oy, alpha, target }
+
+		let mouseX = -9999;
+		let mouseY = -9999;
+		let primary = [11, 87, 208];
+		let reduced = false;
+
+		function readThemeColor() {
+			const cs = getComputedStyle(document.documentElement);
+			const raw = cs.getPropertyValue("--mdui-color-primary").trim();
+			const m = raw.match(/^([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+			if (m) primary = [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
+		}
+
+		function resize() {
+			const dpr = Math.min(window.devicePixelRatio || 1, 2);
+			width = window.innerWidth;
+			height = window.innerHeight;
+			canvas.width = Math.round(width * dpr);
+			canvas.height = Math.round(height * dpr);
+			canvas.style.width = width + "px";
+			canvas.style.height = height + "px";
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+			cols = Math.ceil(width / CELL) + 1;
+			rows = Math.ceil(height / CELL) + 1;
+			blocks.length = 0;
+			// deterministic pseudo-random per cell
+			let seed = 42;
+			const rand = () => {
+				seed = (seed * 16807) % 2147483647;
+				return seed / 2147483647;
+			};
+			for (let r = 0; r < rows; r++) {
+				for (let c = 0; c < cols; c++) {
+					// ~55% sparse
+					if (rand() < 0.45) continue;
+					const jx = (rand() - 0.5) * (CELL - BLOCK);
+					const jy = (rand() - 0.5) * (CELL - BLOCK);
+					blocks.push({
+						x: c * CELL + CELL / 2 + jx,
+						y: r * CELL + CELL / 2 + jy,
+						alpha: 0.35 + rand() * 0.65,
+						cur: 0,
+					});
+				}
+			}
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, width, height);
+			const dx = mouseX;
+			const dy = mouseY;
+			const r2 = FADE_RADIUS * FADE_RADIUS;
+			for (const b of blocks) {
+				const dist2 = (b.x - dx) * (b.x - dx) + (b.y - dy) * (b.y - dy);
+				const target = dist2 < r2 ? 0 : b.alpha * MAX_ALPHA;
+				b.cur += (target - b.cur) * 0.12;
+				if (b.cur < 0.004) continue;
+				ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${b.cur})`;
+				ctx.fillRect(b.x - BLOCK / 2, b.y - BLOCK / 2, BLOCK, BLOCK);
+			}
+		}
+
+		function loop() {
+			draw();
+			requestAnimationFrame(loop);
+		}
+
+		window.addEventListener("mousemove", (e) => {
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+		});
+		window.addEventListener("mouseleave", () => {
+			mouseX = -9999;
+			mouseY = -9999;
+		});
+		window.addEventListener("resize", resize);
+
+		reduced =
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		// theme-aware color (also covers dynamic color scheme changes)
+		readThemeColor();
+		const observer = new MutationObserver(() => readThemeColor());
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class", "style"],
+		});
+
+		resize();
+		if (!reduced) {
+			requestAnimationFrame(loop);
+		} else {
+			draw();
+		}
+	})();
+</script>
