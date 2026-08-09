@@ -1,8 +1,10 @@
 ---
 ---
 
-<!-- base.org style interactive background: sparse blocks ATTRACT toward the cursor,
-     forming a cluster near it, and relax back when the cursor leaves. -->
+<!-- Minimal ASCII dot-grid background:
+     - uniform gray dots (quiet, no scattered clutter)
+     - cursor lights up nearby dots with a soft radial falloff (halo, not cluster)
+     - glowing dots along the cursor trail decay slowly (1.5s afterglow) -->
 <canvas id="ascii-bg" aria-hidden="true"></canvas>
 
 <script is:inline>
@@ -11,28 +13,34 @@
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d");
 
-		const CELL = 38; // base grid spacing
-		const BLOCK = 10; // block size
-		const RADIUS = 280; // attract radius
-		const MAX_ALPHA = 0.5;
+		const SPACING = 30; // dot grid spacing
+		const DOT = 3; // dot size
+		const RADIUS = 180; // light radius
+		const FALLOFF = 0.96; // afterglow decay per frame (~1.5s)
+		const GRAY_ALPHA = 0.2; // resting dot opacity
+		const LIT_ALPHA = 0.75; // max lit opacity
 
 		let width = 0;
 		let height = 0;
 		let cols = 0;
 		let rows = 0;
-		const blocks = []; // { bx, by, x, y, alpha, bright }
+		const dots = []; // { x, y, glow }
 
 		let mouseX = -9999;
 		let mouseY = -9999;
 		let mouseActive = false;
 		let primary = [11, 87, 208];
+		let gray = [27, 27, 31];
 		let reduced = false;
 
-		function readThemeColor() {
+		function readThemeColors() {
 			const cs = getComputedStyle(document.documentElement);
-			const raw = cs.getPropertyValue("--mdui-color-primary").trim();
-			const m = raw.match(/^([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+			const primaryRaw = cs.getPropertyValue("--mdui-color-primary").trim();
+			const m = primaryRaw.match(/^([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
 			if (m) primary = [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
+			const onSurfaceRaw = cs.getPropertyValue("--mdui-color-on-surface").trim();
+			const g = onSurfaceRaw.match(/^([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+			if (g) gray = [parseFloat(g[1]), parseFloat(g[2]), parseFloat(g[3])];
 		}
 
 		function resize() {
@@ -45,29 +53,12 @@
 			canvas.style.height = height + "px";
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-			cols = Math.ceil(width / CELL) + 1;
-			rows = Math.ceil(height / CELL) + 1;
-			blocks.length = 0;
-			let seed = 42;
-			const rand = () => {
-				seed = (seed * 16807) % 2147483647;
-				return seed / 2147483647;
-			};
+			cols = Math.ceil(width / SPACING) + 1;
+			rows = Math.ceil(height / SPACING) + 1;
+			dots.length = 0;
 			for (let r = 0; r < rows; r++) {
 				for (let c = 0; c < cols; c++) {
-					if (rand() < 0.3) continue; // ~70% sparse
-					const jx = (rand() - 0.5) * (CELL - BLOCK);
-					const jy = (rand() - 0.5) * (CELL - BLOCK);
-					const bx = c * CELL + CELL / 2 + jx;
-					const by = r * CELL + CELL / 2 + jy;
-					blocks.push({
-						bx,
-						by,
-						x: bx,
-						y: by,
-						alpha: 0.35 + rand() * 0.65,
-						bright: 0, // extra alpha while attracted
-					});
+					dots.push({ x: c * SPACING + SPACING / 2, y: r * SPACING + SPACING / 2, glow: 0 });
 				}
 			}
 		}
@@ -75,33 +66,34 @@
 		function draw() {
 			ctx.clearRect(0, 0, width, height);
 			const r2 = RADIUS * RADIUS;
-			for (const b of blocks) {
-				const dx = b.x - mouseX;
-				const dy = b.y - mouseY;
-				const dist2 = dx * dx + dy * dy;
-				let tx = b.bx;
-				let ty = b.by;
-				let targetBright = 0;
-				if (mouseActive && dist2 < r2) {
-					const dist = Math.sqrt(dist2) || 1;
-					const t = 1 - dist / RADIUS;
-					// strong converge: near-cursor blocks collapse onto the cursor
-					const shrink = 1 - t * 0.88;
-					tx = mouseX + dx * shrink;
-					ty = mouseY + dy * shrink;
-					targetBright = t * 0.85; // glow while clustered
+			for (const d of dots) {
+				// afterglow decay
+				d.glow *= FALLOFF;
+
+				let lit = false;
+				if (mouseActive) {
+					const dx = d.x - mouseX;
+					const dy = d.y - mouseY;
+					const dist2 = dx * dx + dy * dy;
+					if (dist2 < r2) {
+						const t = 1 - Math.sqrt(dist2) / RADIUS;
+						if (t > d.glow) {
+							d.glow = t;
+							lit = true;
+						}
+					}
 				}
-				const ease = 0.1;
-				b.x += (tx - b.x) * ease;
-				b.y += (ty - b.y) * ease;
-				b.bright += (targetBright - b.bright) * ease;
-				const a = Math.min(b.alpha * MAX_ALPHA + b.bright, 0.9);
-				if (a < 0.004) continue;
-				// blocks grow while clustered
-				const grow = 1 + (b.bright / 0.7) * 1.2;
-				const s = BLOCK * grow;
-				ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${a})`;
-				ctx.fillRect(b.x - s / 2, b.y - s / 2, s, s);
+
+				if (d.glow < 0.02) {
+					ctx.fillStyle = `rgba(${gray[0]}, ${gray[1]}, ${gray[2]}, ${GRAY_ALPHA})`;
+					ctx.fillRect(d.x - DOT / 2, d.y - DOT / 2, DOT, DOT);
+				} else {
+					const a = Math.min(d.glow * LIT_ALPHA, 0.85);
+					ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${a})`;
+					// lit dots glow slightly larger
+					const s = DOT + d.glow * 2.5;
+					ctx.fillRect(d.x - s / 2, d.y - s / 2, s, s);
+				}
 			}
 		}
 
@@ -121,8 +113,8 @@
 		window.addEventListener("resize", resize);
 
 		reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		readThemeColor();
-		const observer = new MutationObserver(() => readThemeColor());
+		readThemeColors();
+		const observer = new MutationObserver(() => readThemeColors());
 		observer.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ["class", "style"],
