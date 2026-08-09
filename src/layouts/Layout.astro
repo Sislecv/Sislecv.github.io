@@ -69,6 +69,10 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	</head>
 	<body>
 		<AsciiGridBackground />
+		<div class="progress-bar" aria-hidden="true"></div>
+		<mdui-fab id="back-top" aria-label="回到顶部" title="回到顶部">
+			<mdui-icon-keyboard-arrow-up--outlined slot="icon"></mdui-icon-keyboard-arrow-up--outlined>
+		</mdui-fab>
 		<div class="blog-container">
 			<main>
 				<slot />
@@ -77,6 +81,35 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 			<Footer />
 		</div>
 		<SearchDialog />
+		<script is:inline>
+			// Back-to-top FAB visibility + reading progress bar (IntersectionObserver + rAF, no scroll listeners)
+			(function () {
+				const fab = document.getElementById("back-top");
+				if (fab) {
+					const sentinel = document.createElement("div");
+					sentinel.style.cssText =
+						"position:absolute;top:0;left:0;height:2px;width:1px;pointer-events:none";
+					document.body.prepend(sentinel);
+					const io = new IntersectionObserver((entries) => {
+						fab.classList.toggle("visible", !entries[0].isIntersecting);
+					});
+					io.observe(sentinel);
+					fab.addEventListener("click", () =>
+						window.scrollTo({ top: 0, behavior: "smooth" }),
+					);
+				}
+				const bar = document.querySelector(".progress-bar");
+				if (bar && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+					const update = () => {
+						const max = document.documentElement.scrollHeight - window.innerHeight;
+						const p = max > 0 ? window.scrollY / max : 0;
+						bar.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+						requestAnimationFrame(update);
+					};
+					requestAnimationFrame(update);
+				}
+			})();
+		</script>
 	</body>
 </html>
 
@@ -97,6 +130,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	import "mdui/components/switch.js";
 	import "mdui/components/circular-progress.js";
 	import "mdui/components/linear-progress.js";
+	import "mdui/components/fab.js";
 
 	// Material Design 3 blue color scheme (default), restore persisted pick
 	import { setColorScheme } from "mdui";
@@ -125,4 +159,5 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	import "@mdui/icons/history--outlined.js";
 	import "@mdui/icons/edit--outlined.js";
 	import "@mdui/icons/rss-feed--outlined.js";
+	import "@mdui/icons/keyboard-arrow-up--outlined.js";
 </script>

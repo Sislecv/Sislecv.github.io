@@ -13,11 +13,11 @@ draft: false
 
 ## 技术栈
 
-- **Astro 7** — 内容优先的静态站点框架
-- **MDUI** — Material Design 3 (Material You) Web Components 组件库
-- **Bento 布局** — 首页卡片式模块化设计
-- **Pagefind** — 全文搜索
-- **utterances** — GitHub Issue 驱动的评论
+- **Astro 7**：内容优先的静态站点框架
+- **MDUI**：Material Design 3 (Material You) Web Components 组件库
+- **Bento 布局**：首页卡片式模块化设计
+- **Pagefind**：全文搜索
+- **utterances**：GitHub Issue 驱动的评论
 
 ## 使用说明
 

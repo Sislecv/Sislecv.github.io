@@ -32,6 +32,106 @@ a {
 	color: inherit;
 }
 
+/* ===== Motion system (Material Design 3 easing) ===== */
+:root {
+	--md-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+	--md-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+	--md-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+	--md-duration-short: 150ms;
+	--md-duration-medium: 250ms;
+	--md-duration-long: 400ms;
+}
+
+/* Scroll-driven reveal (no JS): cards fade+rise as they enter the viewport */
+.reveal {
+	animation: reveal-up var(--md-duration-long) var(--md-easing-emphasized-decelerate) both;
+	animation-timeline: view();
+	animation-range: entry 0% entry 45%;
+}
+
+@keyframes reveal-up {
+	from {
+		opacity: 0;
+		transform: translateY(26px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* Reading progress bar (rAF-driven, browser-agnostic) */
+.progress-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	z-index: 60;
+	pointer-events: none;
+	transform-origin: left;
+	transform: scaleX(0);
+	background: var(--mdui-color-primary);
+}
+
+/* Back-to-top FAB */
+#back-top {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 50;
+	opacity: 0;
+	transform: scale(0.6) translateY(12px);
+	pointer-events: none;
+	transition:
+		opacity var(--md-duration-medium) var(--md-easing-standard),
+		transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
+}
+
+#back-top.visible {
+	opacity: 1;
+	transform: none;
+	pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		animation: none;
+		opacity: 1;
+	}
+	.progress-bar {
+		display: none;
+	}
+}
+
+/* Cross-document view transition: content panel morphs between pages */
+.blog-container {
+	view-transition-name: blog-content;
+}
+
+/* Tactile press feedback */
+.bento-card[clickable]:active,
+mdui-card[clickable].bento-card:active,
+button.nav-link:active,
+.mdui-btn:active {
+	transform: scale(0.98);
+}
+
+/* Card hover: rise + subtle glow (state layer handled by mdui clickable) */
+.bento-card[clickable]:hover,
+mdui-card[clickable].bento-card:hover {
+	transform: translateY(-5px);
+	filter: brightness(1.02);
+}
+
+.masonry-card {
+	transition: transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
+}
+
+.masonry-card:hover {
+	transform: translateY(-4px);
+}
+
 /* ===== Interactive dot-grid background ===== */
 #ascii-bg {
 	position: fixed;
@@ -61,6 +161,7 @@ html.mdui-theme-dark mdui-card {
 }
 
 body {
+	position: relative;
 	background: var(--mdui-color-surface);
 }
 

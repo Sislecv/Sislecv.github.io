@@ -9,7 +9,7 @@ const { post } = Astro.props;
 const url = `/posts/${post.id.replace(/\.(md|mdx)$/i, "")}/`;
 ---
 
-<mdui-card clickable href={url} variant="filled" class="masonry-card">
+<mdui-card clickable href={url} variant="filled" class="masonry-card reveal">
 	<div class="card-body">
 		<h3 class="masonry-title">{post.data.title}</h3>
 		<div class="post-meta">

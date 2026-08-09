@@ -11,7 +11,7 @@ const tags = [...getTags(posts).entries()];
 		{
 			tags.map(([tag, count]) => (
 				<div class="col-3">
-					<mdui-card clickable href={`/tags/${encodeURIComponent(tag)}/`} variant="filled" class="bento-card">
+					<mdui-card clickable href={`/tags/${encodeURIComponent(tag)}/`} variant="filled" class="bento-card reveal">
 						<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px; padding: 20px 12px">
 							<mdui-icon-tag--outlined style="font-size: 30px; color: var(--mdui-color-primary)"></mdui-icon-tag--outlined>
 							<div style="font-weight: 600">{tag}</div>
