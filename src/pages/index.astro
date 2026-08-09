@@ -16,6 +16,12 @@ const categories = [...getCategories(posts).entries()];
 ---
 
 <Layout showFooterNav={false}>
+	<div class="grid-toolbar">
+		<mdui-icon-button id="layout-lock" aria-label="锁定布局" title="锁定布局">
+			<mdui-icon-lock-open--outlined id="lock-open-icon" style="display: none"></mdui-icon-lock-open--outlined>
+			<mdui-icon-lock--outlined id="lock-icon"></mdui-icon-lock--outlined>
+		</mdui-icon-button>
+	</div>
 	<div class="grid-stack" id="home-grid">
 		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="3" gs-h="3">
 			<div class="grid-stack-item-content"><ProfileCard /></div>
@@ -127,6 +133,35 @@ const categories = [...getCategories(posts).entries()];
 	const applyCellHeight = () => grid.cellHeight(mqSmall.matches ? 56 : 88);
 	applyCellHeight();
 	mqSmall.addEventListener("change", applyCellHeight);
+
+	// Layout lock: prevents dragging/reordering while locked
+	const LOCK_KEY = "gridLocked";
+	const lockBtn = document.getElementById("layout-lock");
+	const lockIcon = document.getElementById("lock-icon");
+	const lockOpenIcon = document.getElementById("lock-open-icon");
+	const syncLockUI = (locked) => {
+		if (lockIcon) lockIcon.style.display = locked ? "" : "none";
+		if (lockOpenIcon) lockOpenIcon.style.display = locked ? "none" : "";
+		if (lockBtn) {
+			lockBtn.setAttribute("aria-label", locked ? "解锁布局" : "锁定布局");
+			lockBtn.setAttribute("title", locked ? "解锁布局" : "锁定布局");
+		}
+	};
+	const setLocked = (value) => {
+		locked = value;
+		grid.enableMove(!value);
+		grid.enableResize(false); // resize stays off always
+		try {
+			localStorage.setItem(LOCK_KEY, locked ? "1" : "0");
+		} catch { /* ignore */ }
+		syncLockUI(locked);
+	};
+	let locked = false;
+	try {
+		locked = localStorage.getItem(LOCK_KEY) === "1";
+	} catch { /* ignore */ }
+	setLocked(locked);
+	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
 	// Restore persisted layout, merging in tiles added since it was saved.
 	// Keep user positions (x/y) but enforce current default sizes (w/h).

@@ -451,6 +451,12 @@ mdui-card[clickable].bento-card:hover,
 }
 
 /* ===== Magnet tile grid (GridStack) ===== */
+.grid-toolbar {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 8px;
+}
+
 .grid-stack {
 	margin-bottom: var(--blog-gap);
 }
