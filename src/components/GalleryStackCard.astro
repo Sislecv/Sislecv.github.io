@@ -1,0 +1,30 @@
+---
+const IMAGES = [
+	{ src: "https://picsum.photos/seed/sislecv-1/320/224", alt: "图集 1" },
+	{ src: "https://picsum.photos/seed/sislecv-2/320/224", alt: "图集 2" },
+	{ src: "https://picsum.photos/seed/sislecv-3/320/224", alt: "图集 3" },
+	{ src: "https://picsum.photos/seed/sislecv-4/320/224", alt: "图集 4" },
+];
+---
+
+<mdui-card clickable href="/gallery/" variant="elevated" class="bento-card">
+	<div class="card-body" style="position: relative; overflow: hidden">
+		<div class="gallery-stack">
+			{
+				IMAGES.map((img, i) => (
+					<img
+						src={img.src}
+						alt={img.alt}
+						loading="lazy"
+						class="gallery-stack-img"
+						style={`--gi: ${i}`}
+					/>
+				))
+			}
+		</div>
+		<div class="gallery-hint">
+			<mdui-icon-collections--outlined style="font-size: 16px"></mdui-icon-collections--outlined>
+			图集
+		</div>
+	</div>
+</mdui-card>

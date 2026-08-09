@@ -476,6 +476,63 @@ mdui-card[clickable].bento-card:hover,
 	cursor: grabbing;
 }
 
+/* ===== Gallery stack card ===== */
+.gallery-stack {
+	position: relative;
+	height: 100%;
+	min-height: 180px;
+}
+
+.gallery-stack-img {
+	position: absolute;
+	width: 168px;
+	height: 118px;
+	object-fit: cover;
+	border-radius: 10px;
+	box-shadow:
+		0 4px 12px rgba(0, 0, 0, 0.18),
+		0 1px 3px rgba(0, 0, 0, 0.12);
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	transition: transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
+}
+
+.gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 64px), calc(-50% + 14px)) rotate(-7deg); }
+.gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 22px), calc(-50% - 10px)) rotate(-3deg); }
+.gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 20px), calc(-50% + 6px)) rotate(3deg); }
+.gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 62px), calc(-50% - 14px)) rotate(7deg); }
+
+.gallery-stack:hover .gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 72px), calc(-50% + 18px)) rotate(-9deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 24px), calc(-50% - 12px)) rotate(-4deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 24px), calc(-50% + 12px)) rotate(4deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 72px), calc(-50% - 18px)) rotate(9deg); }
+
+.gallery-hint {
+	position: absolute;
+	right: 12px;
+	bottom: 10px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: rgb(var(--mdui-color-primary));
+}
+
+/* Gallery page */
+.gallery-img {
+	width: 100%;
+	height: auto;
+	border-radius: 10px;
+	object-fit: cover;
+	transition: transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
+}
+
+.gallery-cell mdui-card:hover .gallery-img {
+	transform: scale(1.03);
+}
+
 /* ===== Masonry waterfall ===== */
 .masonry {
 	columns: 3;

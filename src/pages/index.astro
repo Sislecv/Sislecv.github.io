@@ -8,6 +8,7 @@ import EmojiCard from "../components/EmojiCard.astro";
 import SearchCard from "../components/SearchCard.astro";
 import TagCloudCard from "../components/TagCloudCard.astro";
 import TechStackCard from "../components/TechStackCard.astro";
+import GalleryStackCard from "../components/GalleryStackCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
 
 const posts = await getAllPosts();
@@ -64,6 +65,9 @@ const categories = [...getCategories(posts).entries()];
 		<div class="grid-stack-item" gs-id="techstack" gs-x="4" gs-y="9" gs-w="4" gs-h="2">
 			<div class="grid-stack-item-content"><TechStackCard /></div>
 		</div>
+		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="11" gs-w="8" gs-h="3">
+			<div class="grid-stack-item-content"><GalleryStackCard /></div>
+		</div>
 	</div>
 
 	{
@@ -86,7 +90,7 @@ const categories = [...getCategories(posts).entries()];
 	const grid = GridStack.init({
 		column: 8,
 		cellHeight: 88,
-		margin: "20px 12px 20px 12px", // vertical 40px gap, horizontal 24px gap
+		margin: 12, // uniform 24px gap (gridstack insets content)
 		float: false,
 		animate: true,
 		columnOpts: {
