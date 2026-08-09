@@ -17,10 +17,11 @@ const categories = [...getCategories(posts).entries()];
 
 <Layout showFooterNav={false}>
 	<div class="grid-toolbar">
-		<mdui-icon-button id="layout-lock" aria-label="锁定布局" title="锁定布局">
-			<mdui-icon-lock-open--outlined id="lock-open-icon" style="display: none"></mdui-icon-lock-open--outlined>
-			<mdui-icon-lock--outlined id="lock-icon"></mdui-icon-lock--outlined>
-		</mdui-icon-button>
+		<mdui-button id="layout-lock" variant="tonal">
+			<mdui-icon-lock-open--outlined slot="icon" id="lock-open-icon" style="display: none"></mdui-icon-lock-open--outlined>
+			<mdui-icon-lock--outlined slot="icon" id="lock-icon"></mdui-icon-lock--outlined>
+			<span id="lock-label">锁定布局</span>
+		</mdui-button>
 	</div>
 	<div class="grid-stack" id="home-grid">
 		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="3" gs-h="3">
@@ -115,7 +116,6 @@ const categories = [...getCategories(posts).entries()];
 		margin: 12, // uniform 24px gap (gridstack insets content)
 		float: false,
 		animate: true,
-		disableResize: true,
 		columnOpts: {
 			// breakpoint.w = width UPPER bound: below w -> c columns
 			breakpoints: [
@@ -139,9 +139,11 @@ const categories = [...getCategories(posts).entries()];
 	const lockBtn = document.getElementById("layout-lock");
 	const lockIcon = document.getElementById("lock-icon");
 	const lockOpenIcon = document.getElementById("lock-open-icon");
+	const lockLabel = document.getElementById("lock-label");
 	const syncLockUI = (locked) => {
 		if (lockIcon) lockIcon.style.display = locked ? "" : "none";
 		if (lockOpenIcon) lockOpenIcon.style.display = locked ? "none" : "";
+		if (lockLabel) lockLabel.textContent = locked ? "已锁定" : "锁定布局";
 		if (lockBtn) {
 			lockBtn.setAttribute("aria-label", locked ? "解锁布局" : "锁定布局");
 			lockBtn.setAttribute("title", locked ? "解锁布局" : "锁定布局");
@@ -150,7 +152,7 @@ const categories = [...getCategories(posts).entries()];
 	const setLocked = (value) => {
 		locked = value;
 		grid.enableMove(!value);
-		grid.enableResize(false); // resize stays off always
+		grid.enableResize(!value); // resize follows lock too
 		try {
 			localStorage.setItem(LOCK_KEY, locked ? "1" : "0");
 		} catch { /* ignore */ }
@@ -164,19 +166,11 @@ const categories = [...getCategories(posts).entries()];
 	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
 	// Restore persisted layout, merging in tiles added since it was saved.
-	// Keep user positions (x/y) but enforce current default sizes (w/h).
+	// User positions AND sizes are kept; only missing tiles are added.
 	try {
 		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
 		if (Array.isArray(saved) && saved.length > 0) {
 			const savedIds = new Set(saved.map((n) => n.id));
-			const defById = new Map(DEFAULT_LAYOUT.map((n) => [n.id, n]));
-			for (const s of saved) {
-				const d = defById.get(s.id);
-				if (d) {
-					s.w = d.w;
-					s.h = d.h;
-				}
-			}
 			for (const d of DEFAULT_LAYOUT) {
 				if (!savedIds.has(d.id)) saved.push(d);
 			}
