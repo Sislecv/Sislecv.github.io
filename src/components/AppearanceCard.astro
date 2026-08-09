@@ -1,15 +1,6 @@
 ---
-
-const SCHEMES = [
-	{ name: "蓝", color: "#0b57d0" },
-	{ name: "靛蓝", color: "#2f3aa8" },
-	{ name: "紫", color: "#9334e6" },
-	{ name: "粉", color: "#c2185b" },
-	{ name: "红", color: "#b3261e" },
-	{ name: "橙", color: "#b25000" },
-	{ name: "绿", color: "#1b873b" },
-	{ name: "青", color: "#006a6a" },
-];
+import { theme } from "../site.config";
+const SCHEMES = theme.schemes;
 ---
 
 <mdui-card clickable variant="elevated" class="bento-card">

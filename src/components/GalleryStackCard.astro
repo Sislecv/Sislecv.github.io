@@ -1,10 +1,6 @@
 ---
-const IMAGES = [
-	{ src: "https://picsum.photos/seed/sislecv-1/320/224", alt: "图集 1" },
-	{ src: "https://picsum.photos/seed/sislecv-2/320/224", alt: "图集 2" },
-	{ src: "https://picsum.photos/seed/sislecv-3/320/224", alt: "图集 3" },
-	{ src: "https://picsum.photos/seed/sislecv-4/320/224", alt: "图集 4" },
-];
+import { gallery } from "../site.config";
+const IMAGES = gallery.stackImages;
 ---
 
 <mdui-card clickable href="/gallery/" variant="elevated" class="bento-card">

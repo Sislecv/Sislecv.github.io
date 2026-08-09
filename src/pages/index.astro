@@ -10,6 +10,7 @@ import TagCloudCard from "../components/TagCloudCard.astro";
 import TechStackCard from "../components/TechStackCard.astro";
 import GalleryStackCard from "../components/GalleryStackCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
+import { homeTiles } from "../site.config";
 
 const posts = await getAllPosts();
 const categories = [...getCategories(posts).entries()];
@@ -24,21 +25,32 @@ const categories = [...getCategories(posts).entries()];
 		</mdui-button>
 	</div>
 	<div class="grid-stack" id="home-grid">
+		{homeTiles.includes("profile") && (
 		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="3" gs-h="3">
 			<div class="grid-stack-item-content"><ProfileCard /></div>
 		</div>
+		)}
+		{homeTiles.includes("appearance") && (
 		<div class="grid-stack-item" gs-id="appearance" gs-x="3" gs-y="0" gs-w="3" gs-h="3">
 			<div class="grid-stack-item-content"><AppearanceCard /></div>
 		</div>
+		)}
+		{homeTiles.includes("emoji") && (
 		<div class="grid-stack-item" gs-id="emoji" gs-x="6" gs-y="0" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content"><EmojiCard /></div>
 		</div>
+		)}
+		{homeTiles.includes("contribution") && (
 		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="3" gs-w="8" gs-h="2">
 			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
 		</div>
+		)}
+		{homeTiles.includes("search") && (
 		<div class="grid-stack-item" gs-id="search" gs-x="0" gs-y="6" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content"><SearchCard /></div>
 		</div>
+		)}
+		{homeTiles.includes("archive") && (
 		<div class="grid-stack-item" gs-id="archive" gs-x="2" gs-y="6" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
@@ -48,6 +60,8 @@ const categories = [...getCategories(posts).entries()];
 				</mdui-card>
 			</div>
 		</div>
+		)}
+		{homeTiles.includes("category") && (
 		<div class="grid-stack-item" gs-id="category" gs-x="4" gs-y="6" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
@@ -57,6 +71,8 @@ const categories = [...getCategories(posts).entries()];
 				</mdui-card>
 			</div>
 		</div>
+		)}
+		{homeTiles.includes("tags") && (
 		<div class="grid-stack-item" gs-id="tags" gs-x="6" gs-y="6" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/tags/" variant="filled" class="bento-card sq-card">
@@ -66,15 +82,22 @@ const categories = [...getCategories(posts).entries()];
 				</mdui-card>
 			</div>
 		</div>
+		)}
+		{homeTiles.includes("tagcloud") && (
 		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="9" gs-w="4" gs-h="2">
 			<div class="grid-stack-item-content"><TagCloudCard posts={posts} /></div>
 		</div>
+		)}
+		{homeTiles.includes("techstack") && (
 		<div class="grid-stack-item" gs-id="techstack" gs-x="4" gs-y="9" gs-w="4" gs-h="2">
 			<div class="grid-stack-item-content"><TechStackCard /></div>
 		</div>
+		)}
+		{homeTiles.includes("gallery") && (
 		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="11" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GalleryStackCard /></div>
 		</div>
+		)}
 	</div>
 
 	{
@@ -108,7 +131,7 @@ const categories = [...getCategories(posts).entries()];
 		{ id: "tagcloud", x: 0, y: 9, w: 4, h: 2 },
 		{ id: "techstack", x: 4, y: 9, w: 4, h: 2 },
 		{ id: "gallery", x: 0, y: 11, w: 8, h: 3 },
-	];
+	].filter((t) => homeTiles.includes(t.id));
 
 	const grid = GridStack.init({
 		column: 8,

@@ -1,20 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
-const PHOTOS = [
-	{ seed: "sislecv-1", w: 600, h: 420 },
-	{ seed: "sislecv-2", w: 420, h: 560 },
-	{ seed: "sislecv-3", w: 560, h: 420 },
-	{ seed: "sislecv-4", w: 420, h: 420 },
-	{ seed: "sislecv-5", w: 600, h: 400 },
-	{ seed: "sislecv-6", w: 400, h: 600 },
-	{ seed: "sislecv-7", w: 560, h: 560 },
-	{ seed: "sislecv-8", w: 420, h: 320 },
-	{ seed: "sislecv-9", w: 600, h: 450 },
-	{ seed: "sislecv-10", w: 450, h: 450 },
-	{ seed: "sislecv-11", w: 520, h: 390 },
-	{ seed: "sislecv-12", w: 390, h: 520 },
-];
+import { gallery } from "../site.config";
+const PHOTOS = gallery.photos;
 ---
 
 <Layout title="图集" description="图片集">
@@ -37,21 +24,14 @@ const PHOTOS = [
 	<div class="masonry" style="margin-top: var(--blog-gap)">
 		{
 			PHOTOS.map((p) => (
-				<a
-					href={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`}
-					target="_blank"
-					rel="noreferrer"
-					style="display: block"
-				>
+				<a href={p.src} target="_blank" rel="noreferrer" style="display: block">
 					<mdui-card clickable variant="filled" class="masonry-card reveal" style="margin-bottom: var(--blog-gap)">
 						<div style="padding: 8px">
 							<img
-								src={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`}
-								alt={`图集 ${p.seed}`}
+								src={p.src}
+								alt={`图集 ${p.src.split("/").pop()}`}
 								loading="lazy"
 								class="gallery-img"
-								width={p.w}
-								height={p.h}
 							/>
 						</div>
 					</mdui-card>

@@ -132,13 +132,13 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 	import "mdui/components/linear-progress.js";
 	import "mdui/components/fab.js";
 
-	// Material Design 3 blue color scheme (default), restore persisted pick
 	import { setColorScheme } from "mdui";
+	import { theme as themeConfig } from "../site.config";
 	try {
 		const saved = localStorage.getItem("scheme");
-		setColorScheme(saved || "#0b57d0");
+		setColorScheme(saved || themeConfig.defaultColor);
 	} catch {
-		setColorScheme("#0b57d0");
+		setColorScheme(themeConfig.defaultColor);
 	}
 
 	// Icons
