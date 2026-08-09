@@ -14,11 +14,11 @@ for (const post of posts) {
 	postDates.set(iso, (postDates.get(iso) ?? 0) + 1);
 }
 
-// Last 52 weeks x 7 days, ending today; weeks oldest -> newest, days Sunday -> Saturday
+// Last 5 weeks x 7 days (about a month), ending today; weeks oldest -> newest
 const DAY_MS = 86400000;
 const today = new Date();
 today.setHours(0, 0, 0, 0);
-const WEEKS = 52;
+const WEEKS = 5;
 
 const weeks: { date: Date; count: number }[][] = [];
 for (let w = WEEKS - 1; w >= 0; w--) {
