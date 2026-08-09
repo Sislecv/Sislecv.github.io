@@ -441,6 +441,33 @@ mdui-card[clickable].bento-card:hover,
 	color: rgb(var(--mdui-color-primary));
 }
 
+/* ===== Magnet tile grid (GridStack) ===== */
+.grid-stack {
+	margin-bottom: var(--blog-gap);
+}
+
+.grid-stack-item-content {
+	height: 100%;
+	overflow: hidden;
+}
+
+.grid-stack-item-content > * {
+	height: 100%;
+}
+
+.grid-stack-item-content .bento-card {
+	height: 100%;
+}
+
+/* Drag cursor feedback */
+.grid-stack-item-content {
+	cursor: grab;
+}
+
+.grid-stack-item-content:active {
+	cursor: grabbing;
+}
+
 /* ===== Masonry waterfall ===== */
 .masonry {
 	columns: 3;

@@ -15,54 +15,54 @@ const categories = [...getCategories(posts).entries()];
 ---
 
 <Layout showFooterNav={false}>
-	<div class="bento-8">
-		<div class="span-3">
-			<ProfileCard />
+	<div class="grid-stack" id="home-grid">
+		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="3" gs-h="3">
+			<div class="grid-stack-item-content"><ProfileCard /></div>
 		</div>
-
-		<div class="span-3">
-			<AppearanceCard />
+		<div class="grid-stack-item" gs-id="appearance" gs-x="3" gs-y="0" gs-w="3" gs-h="3">
+			<div class="grid-stack-item-content"><AppearanceCard /></div>
 		</div>
-
-		<div class="span-2">
-			<EmojiCard />
+		<div class="grid-stack-item" gs-id="emoji" gs-x="6" gs-y="0" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content"><EmojiCard /></div>
 		</div>
-
-		<div class="span-8">
-			<ContributionCard posts={posts} />
+		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="3" gs-w="8" gs-h="3">
+			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
 		</div>
-
-		<div class="span-4">
-			<div class="sq-group">
-				<SearchCard />
-
+		<div class="grid-stack-item" gs-id="search" gs-x="0" gs-y="6" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content"><SearchCard /></div>
+		</div>
+		<div class="grid-stack-item" gs-id="archive" gs-x="2" gs-y="6" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
 					<div class="sq-body">
-						<mdui-icon-history--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-history--outlined>
+						<mdui-icon-history--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-history--outlined>
 					</div>
 				</mdui-card>
-
+			</div>
+		</div>
+		<div class="grid-stack-item" gs-id="category" gs-x="4" gs-y="6" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
 					<div class="sq-body">
-						<mdui-icon-folder--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-folder--outlined>
+						<mdui-icon-folder--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-folder--outlined>
 					</div>
 				</mdui-card>
-
+			</div>
+		</div>
+		<div class="grid-stack-item" gs-id="tags" gs-x="6" gs-y="6" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/tags/" variant="filled" class="bento-card sq-card">
 					<div class="sq-body">
-						<mdui-icon-tag--outlined style="font-size: 34px; color: var(--mdui-color-primary)"></mdui-icon-tag--outlined>
+						<mdui-icon-tag--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-tag--outlined>
 					</div>
 				</mdui-card>
 			</div>
 		</div>
-
-		<div class="span-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
-			<div style="flex: 1">
-				<TagCloudCard posts={posts} />
-			</div>
-			<div style="flex: 1">
-				<TechStackCard />
-			</div>
+		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="9" gs-w="4" gs-h="2">
+			<div class="grid-stack-item-content"><TagCloudCard posts={posts} /></div>
+		</div>
+		<div class="grid-stack-item" gs-id="techstack" gs-x="4" gs-y="9" gs-w="4" gs-h="2">
+			<div class="grid-stack-item-content"><TechStackCard /></div>
 		</div>
 	</div>
 
@@ -76,3 +76,44 @@ const categories = [...getCategories(posts).entries()];
 		)
 	}
 </Layout>
+
+<script>
+	import { GridStack } from "gridstack";
+	import "gridstack/dist/gridstack.min.css";
+
+	const KEY = "homeGridLayout";
+
+	const grid = GridStack.init({
+		column: 8,
+		cellHeight: 88,
+		margin: 8,
+		float: false,
+		animate: true,
+		columnOpts: {
+			breakpoints: [
+				{ w: 1024, c: 6 },
+				{ w: 768, c: 4 },
+				{ w: 0, c: 2 },
+			],
+			layout: "moveScale",
+		},
+	});
+
+	// Restore persisted layout (matches items by gs-id)
+	try {
+		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
+		if (Array.isArray(saved) && saved.length > 0) {
+			grid.load(saved);
+		}
+	} catch {
+		/* ignore corrupt layout */
+	}
+
+	grid.on("change", () => {
+		try {
+			localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
+		} catch {
+			/* ignore */
+		}
+	});
+</script>
