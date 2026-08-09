@@ -200,6 +200,12 @@ const categories = [...getCategories(posts).entries()];
 
 	// Restore persisted layout, merging in tiles added since it was saved.
 	// User positions AND sizes are kept; only missing tiles are added.
+	// Stale entries (tiles removed from config, e.g. commented-out custom
+	// cards) are dropped so they leave no empty placeholder on the grid.
+	const validTileIds = new Set([
+		...homeTiles,
+		...customCards.map((c) => c.id),
+	]);
 	try {
 		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
 		if (Array.isArray(saved) && saved.length > 0) {
@@ -207,7 +213,13 @@ const categories = [...getCategories(posts).entries()];
 			for (const d of DEFAULT_LAYOUT) {
 				if (!savedIds.has(d.id)) saved.push(d);
 			}
-			grid.load(saved);
+			grid.load(saved.filter((n) => validTileIds.has(n.id)));
+			// persist cleaned layout so stale ids don't linger
+			try {
+				localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
+			} catch {
+				/* ignore */
+			}
 		}
 	} catch {
 		/* ignore corrupt layout */
