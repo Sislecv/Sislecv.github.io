@@ -575,16 +575,26 @@ mdui-card[clickable].bento-card:hover,
 }
 
 /* ===== Contribution calendar ===== */
+.contrib-body {
+	padding: 0 !important;
+}
+
 .contrib-grid {
 	display: grid;
 	grid-template-columns: repeat(52, minmax(0, 1fr));
 	grid-auto-rows: 1fr;
 	gap: 2px;
+	height: 100%;
+	padding: 10px 16px;
+	box-sizing: border-box;
+	align-content: stretch;
 }
 
 .contrib-cell {
 	border-radius: 2px;
 	aspect-ratio: 1;
+	width: 100%;
+	height: 100%;
 	transition: transform 0.15s;
 }
 

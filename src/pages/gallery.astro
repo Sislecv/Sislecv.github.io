@@ -32,24 +32,30 @@ const PHOTOS = [
 				</div>
 			</mdui-card>
 		</div>
+	</div>
+
+	<div class="masonry" style="margin-top: var(--blog-gap)">
 		{
 			PHOTOS.map((p) => (
-				<div class="col-4 gallery-cell">
-					<a href={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`} target="_blank" rel="noreferrer" style="display: block; height: 100%">
-						<mdui-card clickable variant="filled" class="bento-card reveal">
-							<div class="card-body" style="padding: 8px">
-								<img
-									src={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`}
-									alt={`图集 ${p.seed}`}
-									loading="lazy"
-									class="gallery-img"
-									width={p.w}
-									height={p.h}
-								/>
-							</div>
-						</mdui-card>
-					</a>
-				</div>
+				<a
+					href={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`}
+					target="_blank"
+					rel="noreferrer"
+					style="display: block"
+				>
+					<mdui-card clickable variant="filled" class="masonry-card reveal" style="margin-bottom: var(--blog-gap)">
+						<div style="padding: 8px">
+							<img
+								src={`https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`}
+								alt={`图集 ${p.seed}`}
+								loading="lazy"
+								class="gallery-img"
+								width={p.w}
+								height={p.h}
+							/>
+						</div>
+					</mdui-card>
+				</a>
 			))
 		}
 	</div>
