@@ -112,18 +112,32 @@ export const homeTiles = [
 // 预置图标：star/favorite/settings/info/link/bookmark/thumb-up/notifications/visibility/calendar-month/dashboard/insights/auto-awesome
 // x/y/w/h: 网格位置与大小（8 列网格，w 最大 8；h 单位约 88px）
 // href: 点击跳转链接（可选）；title/text: 卡片文字（可选）
-export const customCards = [
-	{
-		id: "custom-star",
-		icon: "star",
-		title: "收藏",
-		href: "https://example.com",
-		x: 0,
-		y: 13,
-		w: 2,
-		h: 2,
-	},
-] as const;
+// 自定义卡片已注释（不显示）。如需启用，取消注释并按需修改：
+// export const customCards: readonly CustomCard[] = [
+// 	{
+// 		id: "custom-star",
+// 		icon: "star",
+// 		title: "收藏",
+// 		href: "https://example.com",
+// 		x: 0,
+// 		y: 13,
+// 		w: 2,
+// 		h: 2,
+// 	},
+// ] as const;
+// 空数组兜底：index.astro 会 import customCards，注释后仍需导出空数组
+export type CustomCard = {
+	id: string;
+	icon?: string;
+	title?: string;
+	text?: string;
+	href?: string;
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+};
+export const customCards: readonly CustomCard[] = [];
 
 // 评论区（utterances 基于 GitHub Issues）
 export const comments = {
