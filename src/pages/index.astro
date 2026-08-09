@@ -86,18 +86,26 @@ const categories = [...getCategories(posts).entries()];
 	const grid = GridStack.init({
 		column: 8,
 		cellHeight: 88,
-		margin: 8,
+		margin: 12,
 		float: false,
 		animate: true,
 		columnOpts: {
+			// breakpoint.w = width UPPER bound: below w -> c columns
 			breakpoints: [
+				{ w: 1200, c: 8 },
 				{ w: 1024, c: 6 },
 				{ w: 768, c: 4 },
-				{ w: 0, c: 2 },
+				{ w: 480, c: 2 },
 			],
 			layout: "moveScale",
 		},
 	});
+
+	// Compact cells on phones (gridstack has no cellHeight breakpoint)
+	const mqSmall = window.matchMedia("(max-width: 480px)");
+	const applyCellHeight = () => grid.cellHeight(mqSmall.matches ? 56 : 88);
+	applyCellHeight();
+	mqSmall.addEventListener("change", applyCellHeight);
 
 	// Restore persisted layout (matches items by gs-id)
 	try {

@@ -150,11 +150,20 @@ body {
 	background: var(--mdui-color-surface);
 }
 
-/* ===== Layout shell ===== */
 .blog-container {
 	max-width: var(--blog-max-width);
 	margin: 0 auto;
 	padding: 20px 20px 0;
+}
+
+@media (max-width: 640px) {
+	.blog-container {
+		padding: 12px 12px 0;
+	}
+	#back-top {
+		right: 16px;
+		bottom: 16px;
+	}
 }
 
 /* ===== Icon components ===== */
