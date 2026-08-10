@@ -142,7 +142,8 @@ export const customCards: readonly CustomCard[] = [];
 
 // 首页 GitHub 项目便签卡片（静态配置，手写维护）
 // name: 项目名；description: 一行简介；url: 仓库链接
-// lang: 主语言；stars: star 数；color: 便签底色（可选，默认纸黄）
+// lang: 主语言；stars: star 数
+// color: 可选，自定义便签底色（十六进制）；不填则用 MD3 表面色四档（深浅色自动适配）
 export type GithubProject = {
 	name: string;
 	description: string;
@@ -158,7 +159,6 @@ export const githubProjects: readonly GithubProject[] = [
 		url: "https://github.com/Sislecv/md2img",
 		lang: "TypeScript",
 		stars: 3,
-		color: "#f6e9b2",
 	},
 	{
 		name: "Sislecv.github.io",
@@ -166,7 +166,6 @@ export const githubProjects: readonly GithubProject[] = [
 		url: "https://github.com/Sislecv/Sislecv.github.io",
 		lang: "Astro",
 		stars: 0,
-		color: "#d8e8f5",
 	},
 	{
 		name: "droidCLI",
@@ -174,7 +173,6 @@ export const githubProjects: readonly GithubProject[] = [
 		url: "https://github.com/Sislecv/droidCLI",
 		lang: "Python",
 		stars: 1,
-		color: "#e6f0d4",
 	},
 	{
 		name: "ascii-blog",
@@ -182,7 +180,6 @@ export const githubProjects: readonly GithubProject[] = [
 		url: "https://github.com/Sislecv/ascii-blog",
 		lang: "JavaScript",
 		stars: 0,
-		color: "#f3e3d8",
 	},
 ] as const;
 
