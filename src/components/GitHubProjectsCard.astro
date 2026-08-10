@@ -1,0 +1,130 @@
+---
+import { githubProjects } from "../site.config";
+const PROJECTS = githubProjects;
+
+const langColor = (lang: string): string => {
+	const map: Record<string, string> = {
+		TypeScript: "#3178c6",
+		JavaScript: "#f1e05a",
+		Python: "#3572A5",
+		Astro: "#ff5d01",
+		Shell: "#89e051",
+		HTML: "#e34c26",
+		CSS: "#663399",
+	};
+	return map[lang] ?? "#8b949e";
+};
+---
+
+<mdui-card variant="elevated" class="bento-card">
+	<div class="card-body note-grid">
+		{
+			PROJECTS.map((p, i) => (
+				<a
+					class="note-item"
+					href={p.url}
+					target="_blank"
+					rel="noreferrer"
+					title={p.name}
+					style={`--note-bg: ${p.color ?? "#f6e9b2"}; --note-rot: ${i % 2 === 0 ? "-1.5deg" : "1deg"}`}
+				>
+					<span class="note-tape" aria-hidden="true"></span>
+					<span class="note-fold" aria-hidden="true"></span>
+					<span class="note-title">{p.name}</span>
+					<span class="note-desc">{p.description}</span>
+					<span class="note-meta">
+						<span class="note-lang-dot" style={`--lang-color: ${langColor(p.lang)}`}></span>
+						<span class="note-lang">{p.lang}</span>
+						<span class="note-stars">⭐ {p.stars}</span>
+					</span>
+				</a>
+			))
+		}
+	</div>
+</mdui-card>
+
+<style>
+	.note-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 12px;
+		padding: 14px;
+		height: 100%;
+	}
+	.note-item {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: 12px 12px 10px;
+		background: var(--note-bg, #f6e9b2);
+		border-radius: 3px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+		transform: rotate(var(--note-rot, 0deg));
+		transition:
+			transform var(--md-duration-medium, 200ms) var(--md-easing-emphasized-decelerate, ease),
+			box-shadow var(--md-duration-medium, 200ms) ease;
+		text-decoration: none;
+		overflow: hidden;
+	}
+	.note-item:hover {
+		transform: rotate(0deg) translateY(-3px);
+		box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+	}
+	.note-tape {
+		position: absolute;
+		top: -6px;
+		left: 50%;
+		transform: translateX(-50%) rotate(-2deg);
+		width: 56px;
+		height: 14px;
+		background: rgba(255, 255, 255, 0.55);
+		border-left: 1px dashed rgba(0, 0, 0, 0.08);
+		border-right: 1px dashed rgba(0, 0, 0, 0.08);
+	}
+	.note-fold {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 16px 16px 0;
+		border-color: transparent rgba(0, 0, 0, 0.14) transparent transparent;
+	}
+	.note-title {
+		font-family: "KaiTi", "STKaiti", "楷体", cursive;
+		font-size: 1.02rem;
+		font-weight: 700;
+		line-height: 1.3;
+		color: #3b3419;
+	}
+	.note-desc {
+		font-size: 0.72rem;
+		line-height: 1.5;
+		margin-top: 3px;
+		color: rgba(59, 52, 25, 0.72);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.note-meta {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		margin-top: auto;
+		padding-top: 6px;
+		font-size: 0.68rem;
+		color: rgba(59, 52, 25, 0.66);
+	}
+	.note-lang-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--lang-color, #3178c6);
+	}
+	.note-stars {
+		margin-left: auto;
+	}
+</style>
