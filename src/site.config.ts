@@ -105,6 +105,7 @@ export const homeTiles = [
 	"tagcloud",
 	"techstack",
 	"gallery",
+	"github",
 ] as const;
 
 // 自定义卡片（追加到首页磁贴网格，可随意增删）
@@ -138,6 +139,52 @@ export type CustomCard = {
 	h: number;
 };
 export const customCards: readonly CustomCard[] = [];
+
+// 首页 GitHub 项目便签卡片（静态配置，手写维护）
+// name: 项目名；description: 一行简介；url: 仓库链接
+// lang: 主语言；stars: star 数；color: 便签底色（可选，默认纸黄）
+export type GithubProject = {
+	name: string;
+	description: string;
+	url: string;
+	lang: string;
+	stars: number;
+	color?: string;
+};
+export const githubProjects: readonly GithubProject[] = [
+	{
+		name: "md2img",
+		description: "中文 Markdown 转图片工具：中英混排优化、5 套主题、一键导出社交分享图",
+		url: "https://github.com/Sislecv/md2img",
+		lang: "TypeScript",
+		stars: 3,
+		color: "#f6e9b2",
+	},
+	{
+		name: "Sislecv.github.io",
+		description: "基于 Astro + MDUI 的个人博客",
+		url: "https://github.com/Sislecv/Sislecv.github.io",
+		lang: "Astro",
+		stars: 0,
+		color: "#d8e8f5",
+	},
+	{
+		name: "droidCLI",
+		description: "Python 命令行小工具",
+		url: "https://github.com/Sislecv/droidCLI",
+		lang: "Python",
+		stars: 1,
+		color: "#e6f0d4",
+	},
+	{
+		name: "ascii-blog",
+		description: "ASCII 风格博客",
+		url: "https://github.com/Sislecv/ascii-blog",
+		lang: "JavaScript",
+		stars: 0,
+		color: "#f3e3d8",
+	},
+] as const;
 
 // 评论区（utterances 基于 GitHub Issues）
 export const comments = {
