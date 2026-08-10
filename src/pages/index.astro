@@ -9,6 +9,7 @@ import SearchCard from "../components/SearchCard.astro";
 import TagCloudCard from "../components/TagCloudCard.astro";
 import TechStackCard from "../components/TechStackCard.astro";
 import GalleryStackCard from "../components/GalleryStackCard.astro";
+import GitHubProjectsCard from "../components/GitHubProjectsCard.astro";
 import CustomCard from "../components/CustomCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
 import { homeTiles, customCards } from "../site.config";
@@ -99,6 +100,11 @@ const categories = [...getCategories(posts).entries()];
 			<div class="grid-stack-item-content"><GalleryStackCard /></div>
 		</div>
 		)}
+		{homeTiles.includes("github") && (
+		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="13" gs-w="4" gs-h="4">
+			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
+		</div>
+		)}
 		{
 			customCards.map((card) => (
 				<div class="grid-stack-item" gs-id={card.id} gs-x={card.x} gs-y={card.y} gs-w={card.w} gs-h={card.h}>
@@ -140,6 +146,7 @@ const categories = [...getCategories(posts).entries()];
 		{ id: "tagcloud", x: 0, y: 9, w: 4, h: 2 },
 		{ id: "techstack", x: 4, y: 9, w: 4, h: 2 },
 		{ id: "gallery", x: 0, y: 11, w: 8, h: 3 },
+		{ id: "github", x: 0, y: 13, w: 4, h: 4 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 
@@ -159,7 +166,7 @@ const categories = [...getCategories(posts).entries()];
 			],
 			layout: "moveScale",
 		},
-	});
+	})!;
 
 	// Compact cells on phones (gridstack has no cellHeight breakpoint)
 	const mqSmall = window.matchMedia("(max-width: 480px)");
