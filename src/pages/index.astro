@@ -105,6 +105,17 @@ const categories = [...getCategories(posts).entries()];
 			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
 		</div>
 		)}
+		{homeTiles.includes("talks") && (
+		<div class="grid-stack-item" gs-id="talks" gs-x="4" gs-y="13" gs-w="4" gs-h="2">
+			<div class="grid-stack-item-content">
+				<mdui-card clickable href="/talks/" variant="filled" class="bento-card sq-card">
+					<div class="sq-body">
+						<mdui-icon-mode-comment--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-mode-comment--outlined>
+					</div>
+				</mdui-card>
+			</div>
+		</div>
+		)}
 		{
 			customCards.map((card) => (
 				<div class="grid-stack-item" gs-id={card.id} gs-x={card.x} gs-y={card.y} gs-w={card.w} gs-h={card.h}>
@@ -147,6 +158,7 @@ const categories = [...getCategories(posts).entries()];
 		{ id: "techstack", x: 4, y: 9, w: 4, h: 2 },
 		{ id: "gallery", x: 0, y: 11, w: 8, h: 3 },
 		{ id: "github", x: 0, y: 13, w: 4, h: 4 },
+		{ id: "talks", x: 4, y: 13, w: 4, h: 2 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 

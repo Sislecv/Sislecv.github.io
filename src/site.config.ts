@@ -106,6 +106,7 @@ export const homeTiles = [
 	"techstack",
 	"gallery",
 	"github",
+	"talks",
 ] as const;
 
 // 自定义卡片（追加到首页磁贴网格，可随意增删）
