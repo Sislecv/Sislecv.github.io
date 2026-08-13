@@ -1,0 +1,209 @@
+/* ============================================================
+   Decap CMS — MDUI (Material Design 3) 皮肤
+   覆盖层:在 decap-cms.js 之后加载,用结构化选择器覆盖 CSS-in-JS 样式
+   主色与博客一致:rgb(var(--mdui-color-primary)) → #0b57d0
+   ============================================================ */
+
+:root {
+	--md3-primary: #0b57d0;
+	--md3-primary-container: #d8e2ff;
+	--md3-on-primary: #fff;
+	--md3-surface: #fdfcff;
+	--md3-surface-dim: #dad9de;
+	--md3-surface-container: #f3f0f4;
+	--md3-surface-container-high: #edeaf0;
+	--md3-on-surface: #1a1b20;
+	--md3-on-surface-variant: #44474f;
+	--md3-outline: #74777f;
+	--md3-radius-s: 8px;
+	--md3-radius-m: 12px;
+	--md3-radius-l: 16px;
+	--md3-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+	--md3-elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+	--md3-font: "Noto Sans SC", Roboto, system-ui, -apple-system, "Segoe UI",
+		"PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ---------- 全局字体与背景 ---------- */
+html,
+body,
+#root {
+	font-family: var(--md3-font) !important;
+	background: var(--md3-surface) !important;
+	color: var(--md3-on-surface) !important;
+}
+
+/* ---------- 登录页 ---------- */
+[class*="StyledAuthenticationPage"] {
+	background: var(--md3-surface) !important;
+	font-family: var(--md3-font) !important;
+}
+
+/* 登录卡片 */
+[class*="StyledAuthenticationPage"] > div {
+	background: var(--md3-surface-container) !important;
+	border-radius: var(--md3-radius-l) !important;
+	box-shadow: var(--md3-elevation-2) !important;
+	padding: 40px 48px !important;
+	max-width: 420px !important;
+	width: calc(100vw - 48px) !important;
+	margin: auto !important;
+}
+
+/* 登录按钮 */
+[class*="StyledLoginButton"],
+button[class*="LoginButton"] {
+	background: var(--md3-primary) !important;
+	color: var(--md3-on-primary) !important;
+	border-radius: 999px !important;
+	font-weight: 500 !important;
+	letter-spacing: 0.01em !important;
+	box-shadow: var(--md3-elevation-1) !important;
+	transition: box-shadow 0.2s ease, filter 0.2s ease !important;
+	text-transform: none !important;
+}
+[class*="StyledLoginButton"]:hover,
+button[class*="LoginButton"]:hover {
+	box-shadow: var(--md3-elevation-2) !important;
+	filter: brightness(1.06) !important;
+}
+
+/* 返回主页链接 */
+[class*="GoBackButton"] {
+	color: var(--md3-primary) !important;
+	border-radius: 999px !important;
+	padding: 8px 16px !important;
+	transition: background 0.2s ease !important;
+	text-decoration: none !important;
+}
+[class*="GoBackButton"]:hover {
+	background: color-mix(in srgb, var(--md3-primary) 10%, transparent) !important;
+}
+
+/* 登录页标题/说明文字 */
+[class*="StyledAuthenticationPage"] h1,
+[class*="StyledAuthenticationPage"] h2,
+[class*="StyledAuthenticationPage"] p {
+	color: var(--md3-on-surface) !important;
+	font-family: var(--md3-font) !important;
+}
+
+/* ---------- 侧边栏 ---------- */
+[class*="StyledSidebar"] {
+	background: var(--md3-surface-container) !important;
+	border-right: 1px solid var(--md3-outline) !important;
+	font-family: var(--md3-font) !important;
+}
+[class*="StyledSidebar"] a,
+[class*="StyledSidebar"] button,
+[class*="SidebarLink"] {
+	color: var(--md3-on-surface-variant) !important;
+	border-radius: var(--md3-radius-s) !important;
+	margin: 2px 8px !important;
+	padding: 10px 14px !important;
+	transition: background 0.2s ease, color 0.2s ease !important;
+	font-weight: 500 !important;
+}
+[class*="StyledSidebar"] a:hover,
+[class*="SidebarLink"]:hover {
+	background: color-mix(in srgb, var(--md3-primary) 10%, transparent) !important;
+	color: var(--md3-primary) !important;
+}
+[class*="StyledSidebar"] a[class*="active"],
+[class*="SidebarLink"][class*="active"] {
+	background: var(--md3-primary-container) !important;
+	color: var(--md3-primary) !important;
+	font-weight: 600 !important;
+}
+
+/* ---------- 顶栏 ---------- */
+[class*="StyledTopBar"] {
+	background: var(--md3-surface-container-high) !important;
+	border-bottom: 1px solid var(--md3-outline) !important;
+	font-family: var(--md3-font) !important;
+}
+
+/* ---------- 按钮(通用) ---------- */
+[class*="StyledToolbarButton"],
+[class*="StyledSettingsButton"],
+button[class*="Button"] {
+	border-radius: 999px !important;
+	font-family: var(--md3-font) !important;
+	transition: background 0.2s ease, box-shadow 0.2s ease !important;
+}
+button[class*="Button"]:hover {
+	box-shadow: var(--md3-elevation-1) !important;
+}
+
+/* ---------- 卡片 ---------- */
+[class*="StyledCard"],
+[class*="StyledEntryCard"] {
+	border-radius: var(--md3-radius-m) !important;
+	box-shadow: var(--md3-elevation-1) !important;
+	background: var(--md3-surface-container) !important;
+	border: 1px solid var(--md3-outline) !important;
+	font-family: var(--md3-font) !important;
+	transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+[class*="StyledCard"]:hover,
+[class*="StyledEntryCard"]:hover {
+	box-shadow: var(--md3-elevation-2) !important;
+}
+
+/* ---------- 编辑器输入区 ---------- */
+[class*="StyledEditor"],
+[class*="StyledMarkdownEditor"],
+[class*="StyledTextArea"],
+textarea,
+input[type="text"],
+input[type="search"] {
+	font-family: var(--md3-font) !important;
+	border-radius: var(--md3-radius-s) !important;
+}
+textarea:focus,
+input:focus {
+	outline: 2px solid var(--md3-primary) !important;
+	outline-offset: -1px !important;
+}
+
+/* ---------- 编辑器预览/工具栏 ---------- */
+[class*="StyledToolbar"] {
+	background: var(--md3-surface-container) !important;
+	border-radius: var(--md3-radius-s) !important;
+}
+
+/* ---------- 通知 Toast ---------- */
+.Toastify__toast {
+	border-radius: var(--md3-radius-m) !important;
+	font-family: var(--md3-font) !important;
+	box-shadow: var(--md3-elevation-2) !important;
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--md3-outline);
+	border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* ---------- 深色模式 ---------- */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--md3-primary: #a8c7fa;
+		--md3-primary-container: #1e3353;
+		--md3-on-primary: #061533;
+		--md3-surface: #131318;
+		--md3-surface-dim: #131318;
+		--md3-surface-container: #1f1e24;
+		--md3-surface-container-high: #2a2930;
+		--md3-on-surface: #e4e1e9;
+		--md3-on-surface-variant: #c7c5d0;
+		--md3-outline: #908f99;
+	}
+}
