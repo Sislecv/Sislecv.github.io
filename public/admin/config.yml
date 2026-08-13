@@ -46,3 +46,17 @@ collections:
       - { label: 分类, name: category, widget: string, required: false }
       - { label: 语言, name: lang, widget: string, required: false }
       - { label: 正文, name: body, widget: markdown }
+
+  - name: talks
+    label: 说说
+    label_singular: 说说
+    folder: src/content/talks
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [published]
+    fields:
+      - { label: 时间, name: published, widget: datetime, date_format: "YYYY-MM-DD", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:ssZZ" }
+      - { label: 内容, name: body, widget: markdown }
