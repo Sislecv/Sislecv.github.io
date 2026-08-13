@@ -13,7 +13,7 @@
 浏览器 /admin (Decap CMS SPA,静态文件,托管于博客)
   │  登录弹窗 → base_url/auth
   ▼
-CF Worker OAuth 代理 (cms.nx.kg 自定义子域名)
+CF Worker OAuth 代理 (cms.whoami.nx.kg 自定义子域名)
   │  /auth      → 302 跳 GitHub /login/oauth/authorize
   │  /callback  → 换 token → postMessage 回 Decap 弹窗
   ▼
@@ -35,7 +35,7 @@ backend:
   name: github
   repo: Sislecv/sislecv.github.io
   branch: main
-  base_url: https://cms.nx.kg
+  base_url: https://cms.whoami.nx.kg
   auth_endpoint: /auth
 site_url: https://whoami.nx.kg
 display_url: https://whoami.nx.kg
@@ -50,15 +50,15 @@ collections:
 fields 严格对应 `src/content.config.ts` 的 posts schema(published 用 datetime widget,输出 ISO 与 z.date() 兼容;draft 用 boolean widget;tags 用 list widget)。
 
 ### 3. CF Worker `decap-proxy`(独立项目目录 `~/decap-proxy/`)
-- `wrangler.toml`:name=decap-proxy,route=cms.nx.kg(custom_domain)
+- `wrangler.toml`:name=decap-proxy,route=cms.whoami.nx.kg(custom_domain)
 - secrets:`GITHUB_OAUTH_ID`、`GITHUB_OAUTH_SECRET`(用户注册 OAuth App 后提供)
 - 处理 `/auth`、`/callback`,其他路径返回 Hello
 
 ## 部署步骤(用户操作,写入 README)
 
-1. GitHub 注册 OAuth App:Homepage URL = `https://cms.nx.kg`,Callback URL = `https://cms.nx.kg/callback`
+1. GitHub 注册 OAuth App:Homepage URL = `https://cms.whoami.nx.kg`,Callback URL = `https://cms.whoami.nx.kg/callback`
 2. 提供 Client ID / Secret → 配置到 Worker secrets
-3. `wrangler deploy` 部署 Worker 到 cms.nx.kg
+3. `wrangler deploy` 部署 Worker 到 cms.whoami.nx.kg
 4. 推送博客 admin 文件 → 访问 `https://whoami.nx.kg/admin` 登录
 
 ## 验证
