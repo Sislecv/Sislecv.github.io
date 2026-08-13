@@ -1,0 +1,48 @@
+# Decap CMS 配置
+# 字段定义与 src/content.config.ts 的 posts schema 一一对应
+
+backend:
+  name: github
+  repo: Sislecv/sislecv.github.io
+  branch: main
+  base_url: https://cms.nx.kg
+  auth_endpoint: /auth
+
+# 站点地址（用于预览链接与显示）
+site_url: https://whoami.nx.kg
+display_url: https://whoami.nx.kg
+locale: zh_Hans
+
+# 图片上传位置：仓库 public/images/，页面引用 /images/...
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: src/content/posts
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    sortable_fields: [published, title]
+    view_filters:
+      - label: 已发布
+        field: draft
+        pattern: false
+      - label: 草稿
+        field: draft
+        pattern: true
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 发布日期, name: published, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: 更新日期, name: updated, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
+      - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
+      - { label: 描述, name: description, widget: text, required: false }
+      - { label: 封面图, name: image, widget: image, required: false }
+      - { label: 标签, name: tags, widget: list, required: false, default: [] }
+      - { label: 分类, name: category, widget: string, required: false }
+      - { label: 语言, name: lang, widget: string, required: false }
+      - { label: 正文, name: body, widget: markdown }
