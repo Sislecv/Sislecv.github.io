@@ -16,4 +16,11 @@ const posts = defineCollection({
 	}),
 });
 
-export const collections = { posts };
+const talks = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/talks" }),
+	schema: z.object({
+		published: z.date(),
+	}),
+});
+
+export const collections = { posts, talks };
