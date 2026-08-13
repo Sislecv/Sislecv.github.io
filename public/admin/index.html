@@ -5,10 +5,34 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="noindex" />
 		<title>内容管理 | Sislecv 博客</title>
-		<link href="custom.css?v=1" type="text/css" rel="stylesheet" />
+		<link href="custom.css?v=2" type="text/css" rel="stylesheet" />
 		<link href="config.yml?v=2" type="text/yaml" rel="cms-config-url" />
 	</head>
 	<body>
+		<script>
+			// 同步博客配色:读取首页外观卡片写入的 localStorage(同源 whoami.nx.kg)
+			// scheme = 主题色 hex(如 #0b57d0 / 自定义色);theme = light|dark
+			(function () {
+				try {
+					var scheme = localStorage.getItem("scheme");
+					var theme = localStorage.getItem("theme");
+					var root = document.documentElement;
+
+					if (scheme && /^#[0-9a-f]{6}$/i.test(scheme)) {
+						root.style.setProperty("--md3-primary", scheme);
+						// on-primary:主色偏亮时用深色文字,否则白色(对比度)
+						var r = parseInt(scheme.slice(1, 3), 16);
+						var g = parseInt(scheme.slice(3, 5), 16);
+						var b = parseInt(scheme.slice(5, 7), 16);
+						var lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+						root.style.setProperty("--md3-on-primary", lum > 0.6 ? "#1a1b20" : "#ffffff");
+					}
+
+					if (theme === "dark") root.classList.add("md3-dark");
+					else if (theme === "light") root.classList.add("md3-light");
+				} catch (e) {}
+			})();
+		</script>
 		<script>
 			// 清除旧版 config 缓存（base_url 曾指向已废弃域名），防止浏览器/Decap 复用旧配置
 			try {
