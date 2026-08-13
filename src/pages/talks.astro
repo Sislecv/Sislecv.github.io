@@ -1,0 +1,158 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getAllTalks, formatTalkDate } from "../lib/talks";
+import { render } from "astro:content";
+
+const talks = await getAllTalks();
+const rendered = await Promise.all(talks.map((talk) => render(talk)));
+---
+
+<Layout title="说说" description={`共 ${talks.length} 条说说`}>
+	<div class="talks-wrap">
+		{
+			rendered.map(({ Content }, i) => (
+				<div class="talk-item reveal">
+					<div class="talk-rail">
+						<span class={`talk-dot${i === 0 ? " latest" : ""}`} aria-hidden="true"></span>
+					</div>
+					<div class="talk-content">
+						<mdui-card variant={i === 0 ? "elevated" : "filled"} class="bento-card">
+							<div class="card-body talk-body">
+								<div class="talk-meta">
+									<i class="talk-calendar"></i>
+									<span>{formatTalkDate(talks[i].data.published)}</span>
+									{i === 0 && <mdui-chip size="small" style="margin-left: auto">最新</mdui-chip>}
+								</div>
+								<div class="talk-text"><Content /></div>
+							</div>
+						</mdui-card>
+					</div>
+				</div>
+			))
+		}
+		{
+			talks.length === 0 && (
+				<mdui-card variant="filled">
+					<div class="card-body" style="align-items: center; text-align: center; padding: 48px 20px">
+						<div style="font-weight: 600">还没有说说</div>
+						<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant); margin-top: 4px">
+							去 <a href="/admin/" style="color: var(--mdui-color-primary)">后台</a> 发一条吧
+						</div>
+					</div>
+				</mdui-card>
+			)
+		}
+	</div>
+</Layout>
+
+<style>
+	.talks-wrap {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 8px 0 var(--blog-gap);
+	}
+
+	.talk-item {
+		display: flex;
+		gap: 16px;
+	}
+
+	/* 时间轴竖线 */
+	.talk-rail {
+		position: relative;
+		width: 16px;
+		flex: none;
+	}
+	.talk-item:not(:last-child) .talk-rail::after {
+		content: "";
+		position: absolute;
+		top: 20px;
+		bottom: -8px;
+		left: 50%;
+		width: 2px;
+		transform: translateX(-50%);
+		background: var(--mdui-color-outline-variant);
+	}
+
+	.talk-dot {
+		position: absolute;
+		top: 6px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--mdui-color-outline-variant);
+		box-sizing: border-box;
+	}
+	.talk-dot.latest {
+		width: 14px;
+		height: 14px;
+		background: var(--mdui-color-primary);
+		box-shadow: 0 0 0 4px color-mix(in srgb, rgb(var(--mdui-color-primary)) 20%, transparent);
+	}
+
+	.talk-content {
+		flex: 1;
+		min-width: 0;
+		padding-bottom: 24px;
+	}
+
+	.talk-body {
+		padding: 16px 18px;
+	}
+
+	.talk-meta {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 0.78rem;
+		color: var(--mdui-color-on-surface-variant);
+		margin-bottom: 8px;
+	}
+
+	.talk-calendar {
+		display: inline-block;
+		width: 14px;
+		height: 14px;
+		border: 1.5px solid currentColor;
+		border-radius: 3px;
+		position: relative;
+	}
+	.talk-calendar::before {
+		content: "";
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		right: 2px;
+		height: 1.5px;
+		background: currentColor;
+	}
+
+	.talk-text {
+		font-size: 0.95rem;
+		line-height: 1.75;
+		color: var(--mdui-color-on-surface);
+		word-break: break-word;
+	}
+	.talk-text :global(p) {
+		margin: 0 0 8px;
+	}
+	.talk-text :global(p:last-child) {
+		margin-bottom: 0;
+	}
+	.talk-text :global(ul) {
+		margin: 4px 0 8px;
+		padding-left: 20px;
+	}
+	.talk-text :global(li) {
+		margin: 2px 0;
+	}
+	.talk-text :global(a) {
+		color: var(--mdui-color-primary);
+		text-decoration: none;
+	}
+	.talk-text :global(a:hover) {
+		text-decoration: underline;
+	}
+</style>
