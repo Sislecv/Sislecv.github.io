@@ -5,7 +5,7 @@ backend:
   name: github
   repo: Sislecv/sislecv.github.io
   branch: main
-  base_url: https://cms.whoami.nx.kg
+  base_url: https://decap-proxy.sislecv2.workers.dev
   auth_endpoint: /auth
 
 # 站点地址（用于预览链接与显示）

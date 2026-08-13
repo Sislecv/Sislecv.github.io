@@ -214,7 +214,7 @@ export const comments = {
 访问 `https://whoami.nx.kg/admin`（或 `https://sislecv.github.io/admin`），用 GitHub 账号登录后即可在网页上写文章：
 新建、编辑、删除、切换草稿/发布，图片自动上传到 `public/images/`。保存即提交到 `main` 并触发自动部署。
 
-后台认证走 GitHub OAuth（`public/admin/config.yml` 中的 `base_url` 指向 Cloudflare Worker OAuth 代理 `cms.whoami.nx.kg`），代理代码见独立项目 `decap-proxy`（部署步骤见其 README）。
+后台认证走 GitHub OAuth（`public/admin/config.yml` 中的 `base_url` 指向 Cloudflare Worker OAuth 代理 `decap-proxy.sislecv2.workers.dev`），代理代码见独立项目 `decap-proxy`（部署步骤见其 README）。
 
 ## 写文章
 
