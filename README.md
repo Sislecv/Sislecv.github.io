@@ -16,6 +16,7 @@
 - **瀑布流文章列表**：卡片高度随文章长度自适应
 - **全文搜索**：点击搜索磁贴弹出悬浮搜索框（Pagefind），不跳转页面
 - **评论**：utterances（GitHub Issues 驱动）
+- **Decap CMS 后台**：`/admin` 网页界面管理文章，保存即提交部署
 - **RSS / Sitemap / OG 标签 / KaTeX 数学公式 / 阅读进度条 / 回到顶部 FAB**
 
 ## 快速开始
@@ -207,6 +208,13 @@ export const comments = {
 	repo: "Sislecv/sislecv.github.io", // 评论仓库（需已安装 utterances App）
 };
 ```
+
+## 使用 Decap CMS 后台
+
+访问 `https://whoami.nx.kg/admin`（或 `https://sislecv.github.io/admin`），用 GitHub 账号登录后即可在网页上写文章：
+新建、编辑、删除、切换草稿/发布，图片自动上传到 `public/images/`。保存即提交到 `main` 并触发自动部署。
+
+后台认证走 GitHub OAuth（`public/admin/config.yml` 中的 `base_url` 指向 Cloudflare Worker OAuth 代理 `cms.nx.kg`），代理代码见独立项目 `decap-proxy`（部署步骤见其 README）。
 
 ## 写文章
 
