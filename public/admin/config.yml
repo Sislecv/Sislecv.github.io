@@ -60,3 +60,19 @@ collections:
     fields:
       - { label: 时间, name: published, widget: datetime, date_format: "YYYY-MM-DD", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:ssZ" }
       - { label: 内容, name: body, widget: markdown }
+
+  - name: gallery
+    label: 图集
+    label_singular: 图片
+    folder: src/content/gallery
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{order}}"
+    sortable_fields: [order]
+    fields:
+      - { label: 图片, name: src, widget: image, required: true }
+      - { label: 描述, name: alt, widget: string, required: false }
+      - { label: 排序, name: order, widget: number, value_type: int, default: 1, required: false }
+      - { label: 首页堆叠展示, name: featured, widget: boolean, default: false, required: false }
