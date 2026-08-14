@@ -19,7 +19,8 @@ const posts = defineCollection({
 const talks = defineCollection({
 	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/talks" }),
 	schema: z.object({
-		published: z.date(),
+		// coerce:兼容 Decap 输出的多种日期字符串(含 +0800 无冒号时区)
+		published: z.coerce.date(),
 	}),
 });
 
