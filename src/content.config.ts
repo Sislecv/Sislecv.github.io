@@ -24,4 +24,14 @@ const talks = defineCollection({
 	}),
 });
 
-export const collections = { posts, talks };
+const gallery = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/gallery" }),
+	schema: z.object({
+		src: z.string(),
+		alt: z.string().optional().default(""),
+		order: z.number().optional().default(0),
+		featured: z.boolean().optional().default(false),
+	}),
+});
+
+export const collections = { posts, talks, gallery };
