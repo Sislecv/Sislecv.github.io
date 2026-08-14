@@ -65,31 +65,8 @@ export const techStack = [
 	{ name: "OMP", icon: "/stack/omp.png", url: "https://opencode.ai/" },
 ] as const;
 
-// 图集
-export const gallery = {
-	// 首页堆叠图集卡显示的图片（最多 4 张，src 支持外链或本地路径）
-	stackImages: [
-		{ src: "https://picsum.photos/seed/sislecv-1/320/224", alt: "图集 1" },
-		{ src: "https://picsum.photos/seed/sislecv-2/320/224", alt: "图集 2" },
-		{ src: "https://picsum.photos/seed/sislecv-3/320/224", alt: "图集 3" },
-		{ src: "https://picsum.photos/seed/sislecv-4/320/224", alt: "图集 4" },
-	],
-	// /gallery 页面图片墙（src 支持外链或本地路径）
-	photos: [
-		{ src: "https://picsum.photos/seed/sislecv-1/600/420" },
-		{ src: "https://picsum.photos/seed/sislecv-2/420/560" },
-		{ src: "https://picsum.photos/seed/sislecv-3/560/420" },
-		{ src: "https://picsum.photos/seed/sislecv-4/420/420" },
-		{ src: "https://picsum.photos/seed/sislecv-5/600/400" },
-		{ src: "https://picsum.photos/seed/sislecv-6/400/600" },
-		{ src: "https://picsum.photos/seed/sislecv-7/560/560" },
-		{ src: "https://picsum.photos/seed/sislecv-8/420/320" },
-		{ src: "https://picsum.photos/seed/sislecv-9/600/450" },
-		{ src: "https://picsum.photos/seed/sislecv-10/450/450" },
-		{ src: "https://picsum.photos/seed/sislecv-11/520/390" },
-		{ src: "https://picsum.photos/seed/sislecv-12/390/520" },
-	],
-} as const;
+// 图集已迁移到 src/content/gallery/ (可通过 Decap CMS /admin 管理)
+// 每张图一个 .md 文件:src/alt/order/featured,见 src/lib/gallery.ts
 
 // 首页磁贴（可拖动的卡片）
 // 在此增删磁贴 id 控制首页显示哪些卡片

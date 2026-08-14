@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { gallery } from "../site.config";
-const PHOTOS = gallery.photos;
+import { getAllGalleryImages } from "../lib/gallery";
+const PHOTOS = await getAllGalleryImages();
 ---
 
 <Layout title="图集" description="图片集">
@@ -24,12 +24,12 @@ const PHOTOS = gallery.photos;
 	<div class="masonry" style="margin-top: var(--blog-gap)">
 		{
 			PHOTOS.map((p) => (
-				<a href={p.src} target="_blank" rel="noreferrer" style="display: block">
+				<a href={p.data.src} target="_blank" rel="noreferrer" style="display: block">
 					<mdui-card clickable variant="filled" class="masonry-card reveal" style="margin-bottom: var(--blog-gap)">
 						<div style="padding: 8px">
 							<img
-								src={p.src}
-								alt={`图集 ${p.src.split("/").pop()}`}
+								src={p.data.src}
+								alt={p.data.alt || `图集 ${p.data.order}`}
 								loading="lazy"
 								class="gallery-img"
 							/>

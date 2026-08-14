@@ -1,6 +1,6 @@
 ---
-import { gallery } from "../site.config";
-const IMAGES = gallery.stackImages;
+import { getFeaturedGalleryImages } from "../lib/gallery";
+const IMAGES = await getFeaturedGalleryImages();
 ---
 
 <mdui-card clickable href="/gallery/" variant="elevated" class="bento-card">
@@ -9,8 +9,8 @@ const IMAGES = gallery.stackImages;
 			{
 				IMAGES.map((img, i) => (
 					<img
-						src={img.src}
-						alt={img.alt}
+						src={img.data.src}
+						alt={img.data.alt}
 						loading="lazy"
 						class="gallery-stack-img"
 						style={`--gi: ${i}`}
