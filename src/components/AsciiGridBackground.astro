@@ -13,12 +13,12 @@
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d");
 
-		const SPACING = 34; // dot grid spacing
-		const DOT_RADIUS = 1.4; // resting dot radius
-		const RADIUS = 180; // light radius
-		const FALLOFF = 0.95; // afterglow decay per frame (~1.5s)
-		const GRAY_ALPHA = 0.18; // resting dot opacity
-		const LIT_ALPHA = 0.85; // max lit opacity
+		const SPACING = 36; // dot grid spacing
+		const DOT_RADIUS = 1.2; // resting dot radius
+		const RADIUS = 160; // light radius
+		const FALLOFF = 0.94; // gentle decay per frame
+		const GRAY_ALPHA = 0.12; // resting dot opacity
+		const LIT_ALPHA = 0.6; // max lit opacity
 
 		let width = 0;
 		let height = 0;

@@ -80,28 +80,17 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 		top: 6px;
 		left: 50%;
 		transform: translateX(-50%);
-		width: 12px;
-		height: 12px;
+		width: 10px;
+		height: 10px;
 		border-radius: 50%;
 		background: var(--mdui-color-outline-variant);
 		box-sizing: border-box;
-		transition: transform 0.25s ease;
 	}
 	.talk-dot.latest {
-		width: 14px;
-		height: 14px;
+		width: 12px;
+		height: 12px;
 		background: rgb(var(--mdui-color-primary));
-		box-shadow: 0 0 0 4px color-mix(in srgb, rgb(var(--mdui-color-primary)) 25%, transparent);
-		animation: pulse-dot 2.5s infinite ease-in-out;
-	}
-
-	@keyframes pulse-dot {
-		0%, 100% {
-			box-shadow: 0 0 0 3px color-mix(in srgb, rgb(var(--mdui-color-primary)) 30%, transparent);
-		}
-		50% {
-			box-shadow: 0 0 0 8px color-mix(in srgb, rgb(var(--mdui-color-primary)) 8%, transparent);
-		}
+		outline: 3px solid color-mix(in srgb, rgb(var(--mdui-color-primary)) 20%, transparent);
 	}
 
 	.talk-content {

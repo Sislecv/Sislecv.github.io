@@ -90,7 +90,7 @@ a {
 	}
 }
 
-/* Reading progress bar with glowing accent */
+/* /* Reading progress bar */
 .progress-bar {
 	position: fixed;
 	top: 0;
@@ -101,22 +101,21 @@ a {
 	pointer-events: none;
 	transform-origin: left;
 	transform: scaleX(0);
-	background: linear-gradient(90deg, rgb(var(--mdui-color-primary)), color-mix(in srgb, rgb(var(--mdui-color-primary)) 70%, #9334e6));
-	box-shadow: 0 0 10px rgba(var(--mdui-color-primary), 0.5);
+	background: rgb(var(--mdui-color-primary));
 }
 
-/* Back-to-top FAB with spring scale */
+/* Back-to-top FAB */
 #back-top {
 	position: fixed;
 	right: 24px;
 	bottom: 24px;
 	z-index: 50;
 	opacity: 0;
-	transform: scale(0.7) translateY(14px);
+	transform: scale(0.8) translateY(12px);
 	pointer-events: none;
 	transition:
 		opacity var(--md-duration-medium) var(--md-easing-standard),
-		transform var(--md-duration-long) var(--md-easing-spring);
+		transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
 }
 
 #back-top.visible {
@@ -126,7 +125,7 @@ a {
 }
 
 #back-top:hover {
-	transform: scale(1.08) translateY(-2px);
+	transform: scale(1.05) translateY(-1px);
 }
 
 #back-top:active {
@@ -193,19 +192,19 @@ button.nav-link:active,
 	transform: scale(0.98);
 }
 
-/* Card hover: rise + subtle glow (state layer handled natively by mdui) */
+/* Card hover: rise (state layer handled natively by mdui) */
 .bento-card[clickable]:hover,
 mdui-card[clickable].bento-card:hover,
 .bento-card.clickable:hover {
-	transform: translateY(-4px);
+	transform: translateY(-2px);
 }
 
 .masonry-card {
-	transition: transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .masonry-card:hover {
-	transform: translateY(-4px);
+	transform: translateY(-2px);
 }
 
 /* ===== Icon components ===== */
@@ -275,14 +274,14 @@ mdui-icon-mode-comment {
 	align-items: center;
 	gap: 8px;
 	padding: 8px 14px;
-	border-radius: 9999px;
+	border-radius: 999px;
 	font-size: 0.9rem;
 	font-weight: 500;
 	color: rgb(var(--mdui-color-on-surface-variant));
 	transition:
 		background-color 0.2s ease,
 		color 0.2s ease,
-		transform 0.2s var(--md-easing-spring);
+		transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 button.nav-link {
@@ -302,7 +301,6 @@ button.nav-link {
 	background-color: rgb(var(--mdui-color-secondary-container));
 	color: rgb(var(--mdui-color-on-secondary-container));
 	font-weight: 600;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .nav-spacer {
@@ -332,29 +330,29 @@ button.nav-link {
 
 /* Staggered entrance animation */
 .bento > * {
-	animation: bento-in 0.45s var(--md-easing-smooth) both;
+	animation: bento-in 0.35s var(--md-easing-emphasized-decelerate) both;
 }
 .bento > *:nth-child(1) { animation-delay: 0.02s; }
-.bento > *:nth-child(2) { animation-delay: 0.05s; }
-.bento > *:nth-child(3) { animation-delay: 0.09s; }
-.bento > *:nth-child(4) { animation-delay: 0.13s; }
-.bento > *:nth-child(5) { animation-delay: 0.17s; }
-.bento > *:nth-child(6) { animation-delay: 0.21s; }
-.bento > *:nth-child(7) { animation-delay: 0.25s; }
-.bento > *:nth-child(8) { animation-delay: 0.29s; }
-.bento > *:nth-child(9) { animation-delay: 0.33s; }
-.bento > *:nth-child(10) { animation-delay: 0.37s; }
-.bento > *:nth-child(11) { animation-delay: 0.41s; }
-.bento > *:nth-child(12) { animation-delay: 0.45s; }
+.bento > *:nth-child(2) { animation-delay: 0.04s; }
+.bento > *:nth-child(3) { animation-delay: 0.06s; }
+.bento > *:nth-child(4) { animation-delay: 0.08s; }
+.bento > *:nth-child(5) { animation-delay: 0.10s; }
+.bento > *:nth-child(6) { animation-delay: 0.12s; }
+.bento > *:nth-child(7) { animation-delay: 0.14s; }
+.bento > *:nth-child(8) { animation-delay: 0.16s; }
+.bento > *:nth-child(9) { animation-delay: 0.18s; }
+.bento > *:nth-child(10) { animation-delay: 0.20s; }
+.bento > *:nth-child(11) { animation-delay: 0.22s; }
+.bento > *:nth-child(12) { animation-delay: 0.24s; }
 
 @keyframes bento-in {
 	from {
 		opacity: 0;
-		transform: translateY(14px) scale(0.99);
+		transform: translateY(10px);
 	}
 	to {
 		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: translateY(0);
 	}
 }
 
@@ -376,17 +374,17 @@ button.nav-link {
 
 .bento-8 > * {
 	min-width: 0;
-	animation: bento-in 0.45s var(--md-easing-smooth) both;
+	animation: bento-in 0.35s var(--md-easing-emphasized-decelerate) both;
 }
 .bento-8 > *:nth-child(1) { animation-delay: 0.02s; }
-.bento-8 > *:nth-child(2) { animation-delay: 0.05s; }
-.bento-8 > *:nth-child(3) { animation-delay: 0.09s; }
-.bento-8 > *:nth-child(4) { animation-delay: 0.13s; }
-.bento-8 > *:nth-child(5) { animation-delay: 0.17s; }
-.bento-8 > *:nth-child(6) { animation-delay: 0.21s; }
-.bento-8 > *:nth-child(7) { animation-delay: 0.25s; }
-.bento-8 > *:nth-child(8) { animation-delay: 0.29s; }
-.bento-8 > *:nth-child(9) { animation-delay: 0.33s; }
+.bento-8 > *:nth-child(2) { animation-delay: 0.04s; }
+.bento-8 > *:nth-child(3) { animation-delay: 0.06s; }
+.bento-8 > *:nth-child(4) { animation-delay: 0.08s; }
+.bento-8 > *:nth-child(5) { animation-delay: 0.10s; }
+.bento-8 > *:nth-child(6) { animation-delay: 0.12s; }
+.bento-8 > *:nth-child(7) { animation-delay: 0.14s; }
+.bento-8 > *:nth-child(8) { animation-delay: 0.16s; }
+.bento-8 > *:nth-child(9) { animation-delay: 0.18s; }
 
 .span-2 { grid-column: span 2; }
 .span-3 { grid-column: span 3; }
@@ -428,7 +426,7 @@ button.nav-link {
 .sq-body mdui-icon-tag,
 .sq-body mdui-icon-search,
 .sq-body mdui-icon-mode-comment {
-	transition: transform 0.3s var(--md-easing-spring), filter 0.3s ease;
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .sq-card:hover .sq-body [class^="mdui-icon-"],
@@ -437,8 +435,7 @@ button.nav-link {
 .sq-card:hover .sq-body mdui-icon-tag,
 .sq-card:hover .sq-body mdui-icon-search,
 .sq-card:hover .sq-body mdui-icon-mode-comment {
-	transform: scale(1.18);
-	filter: drop-shadow(0 4px 10px rgba(var(--mdui-color-primary), 0.35));
+	transform: scale(1.08);
 }
 
 .emoji-card {
@@ -452,13 +449,12 @@ button.nav-link {
 }
 
 .emoji-hero {
-	transition: transform 0.45s var(--md-easing-spring), filter 0.3s ease;
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .emoji-card:hover .emoji-hero,
 .emoji-hero:hover {
-	transform: scale(1.16) rotate(-7deg);
-	filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15));
+	transform: scale(1.06);
 }
 
 @media (max-width: 1024px) {
@@ -561,27 +557,21 @@ button.nav-link {
 	height: 118px;
 	object-fit: cover;
 	border-radius: 12px;
-	box-shadow:
-		0 6px 18px rgba(0, 0, 0, 0.18),
-		0 2px 4px rgba(0, 0, 0, 0.1);
-	border: 2px solid rgba(255, 255, 255, 0.2);
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	transition:
-		transform 0.4s var(--md-easing-smooth),
-		box-shadow 0.4s ease;
+	transition: transform var(--md-duration-medium) var(--md-easing-emphasized-decelerate);
 }
 
-.gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 64px), calc(-50% + 14px)) rotate(-7deg); }
-.gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 22px), calc(-50% - 10px)) rotate(-3deg); }
-.gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 20px), calc(-50% + 6px)) rotate(3deg); }
-.gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 62px), calc(-50% - 14px)) rotate(7deg); }
+.gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 54px), calc(-50% + 10px)) rotate(-4deg); }
+.gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 18px), calc(-50% - 6px)) rotate(-1.5deg); }
+.gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 18px), calc(-50% + 6px)) rotate(1.5deg); }
+.gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 54px), calc(-50% - 10px)) rotate(4deg); }
 
-.gallery-stack:hover .gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 74px), calc(-50% + 18px)) rotate(-9.5deg) scale(1.02); }
-.gallery-stack:hover .gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 25px), calc(-50% - 12px)) rotate(-4deg) scale(1.02); }
-.gallery-stack:hover .gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 25px), calc(-50% + 12px)) rotate(4deg) scale(1.02); }
-.gallery-stack:hover .gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 74px), calc(-50% - 18px)) rotate(9.5deg) scale(1.02); }
+.gallery-stack:hover .gallery-stack-img:nth-child(1) { transform: translate(calc(-50% - 62px), calc(-50% + 12px)) rotate(-6deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(2) { transform: translate(calc(-50% - 20px), calc(-50% - 8px)) rotate(-2deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(3) { transform: translate(calc(-50% + 20px), calc(-50% + 8px)) rotate(2deg); }
+.gallery-stack:hover .gallery-stack-img:nth-child(4) { transform: translate(calc(-50% + 62px), calc(-50% - 12px)) rotate(6deg); }
 
 .gallery-hint {
 	position: absolute;
@@ -601,13 +591,12 @@ button.nav-link {
 	height: auto;
 	border-radius: 10px;
 	object-fit: cover;
-	transition: transform 0.35s var(--md-easing-smooth), filter 0.3s ease;
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .gallery-trigger:hover .gallery-img,
 .gallery-cell mdui-card:hover .gallery-img {
-	transform: scale(1.03);
-	filter: brightness(1.02);
+	transform: scale(1.02);
 }
 
 /* ===== Masonry waterfall ===== */
@@ -674,17 +663,12 @@ button.nav-link {
 	border-radius: 4px;
 	width: 22px;
 	height: 22px;
-	transition:
-		transform 0.22s var(--md-easing-spring),
-		box-shadow 0.2s ease,
-		filter 0.2s ease;
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .contrib-cell:hover {
-	transform: scale(1.28);
+	transform: scale(1.15);
 	z-index: 2;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-	filter: brightness(1.1);
 }
 
 .contrib-legend {
@@ -737,11 +721,11 @@ button.nav-link {
 	display: flex;
 	align-items: center;
 	margin-right: 18px;
-	transition: transform 0.25s var(--md-easing-spring);
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .stack-item:hover {
-	transform: translateY(-4px) scale(1.05);
+	transform: translateY(-2px);
 }
 
 .stack-icon {
@@ -755,12 +739,12 @@ button.nav-link {
 }
 
 .emoji-img {
-	transition: transform 0.35s var(--md-easing-spring);
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 	cursor: default;
 }
 
 .emoji-img:hover {
-	transform: scale(1.25) rotate(-6deg);
+	transform: scale(1.08);
 }
 
 /* Compact post card (bento blocks, used on tag pages) */
