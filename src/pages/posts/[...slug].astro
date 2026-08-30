@@ -68,10 +68,10 @@ const { Content, headings } = await render(post);
 			<div style="display: flex; gap: 16px; margin-top: 16px">
 				{
 					prev ? (
-						<mdui-card clickable href={getPostUrl(getPostSlug(prev))} variant="filled" style="flex: 1">
+						<mdui-card clickable href={getPostUrl(getPostSlug(prev))} variant="filled" class="post-nav-card prev-card" style="flex: 1">
 							<div class="card-body" style="padding: 16px 20px">
-								<div style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; gap: 4px">
-									<mdui-icon-chevron-left--outlined></mdui-icon-chevron-left--outlined>
+								<div class="nav-direction" style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; gap: 4px">
+									<mdui-icon-chevron-left--outlined class="nav-arrow"></mdui-icon-chevron-left--outlined>
 									上一篇
 								</div>
 								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
@@ -85,11 +85,11 @@ const { Content, headings } = await render(post);
 				}
 				{
 					next ? (
-						<mdui-card clickable href={getPostUrl(getPostSlug(next))} variant="filled" style="flex: 1">
+						<mdui-card clickable href={getPostUrl(getPostSlug(next))} variant="filled" class="post-nav-card next-card" style="flex: 1">
 							<div class="card-body" style="padding: 16px 20px; text-align: right">
-								<div style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
+								<div class="nav-direction" style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); display: flex; align-items: center; justify-content: flex-end; gap: 4px">
 									下一篇
-									<mdui-icon-chevron-right--outlined></mdui-icon-chevron-right--outlined>
+									<mdui-icon-chevron-right--outlined class="nav-arrow"></mdui-icon-chevron-right--outlined>
 								</div>
 								<div style="font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
 									{next.data.title}
@@ -108,3 +108,18 @@ const { Content, headings } = await render(post);
 		</aside>
 	</div>
 </Layout>
+
+<style>
+	.post-nav-card {
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+	}
+	.nav-arrow {
+		transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+	.prev-card:hover .nav-arrow {
+		transform: translateX(-4px);
+	}
+	.next-card:hover .nav-arrow {
+		transform: translateX(4px);
+	}
+</style>

@@ -82,7 +82,9 @@ const PHOTOS = await getAllGalleryImages();
 		--mdui-dialog-width: 100vw;
 		--mdui-dialog-height: 100vh;
 		--mdui-dialog-border-radius: 0;
-		background: rgba(0, 0, 0, 0.88);
+		background: rgba(0, 0, 0, 0.82);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
 	}
 	.lightbox-stage {
 		display: flex;
@@ -95,12 +97,13 @@ const PHOTOS = await getAllGalleryImages();
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 12px 20px;
+		padding: 14px 24px;
 		flex: none;
 	}
 	.lightbox-title {
-		font-size: 0.9rem;
-		color: rgba(255, 255, 255, 0.85);
+		font-size: 0.95rem;
+		font-weight: 500;
+		color: rgba(255, 255, 255, 0.9);
 	}
 	.lightbox-actions {
 		display: flex;
@@ -111,10 +114,12 @@ const PHOTOS = await getAllGalleryImages();
 		color: rgba(255, 255, 255, 0.75);
 		display: inline-flex;
 		padding: 6px;
-		transition: color 0.2s ease;
+		border-radius: 50%;
+		transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 	.lightbox-actions a:hover {
 		color: #fff;
+		transform: scale(1.1);
 	}
 	.lightbox-close {
 		background: none;
@@ -123,10 +128,12 @@ const PHOTOS = await getAllGalleryImages();
 		cursor: pointer;
 		padding: 6px;
 		display: inline-flex;
-		transition: color 0.2s ease;
+		border-radius: 50%;
+		transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 	.lightbox-close:hover {
 		color: #fff;
+		transform: scale(1.1);
 	}
 	.lightbox-content {
 		flex: 1;
@@ -150,13 +157,14 @@ const PHOTOS = await getAllGalleryImages();
 		max-width: 100%;
 		max-height: calc(100vh - 180px);
 		object-fit: contain;
-		border-radius: 8px;
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+		border-radius: 12px;
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.lightbox-caption {
-		margin-top: 12px;
-		font-size: 0.85rem;
-		color: rgba(255, 255, 255, 0.75);
+		margin-top: 14px;
+		font-size: 0.88rem;
+		color: rgba(255, 255, 255, 0.85);
 		text-align: center;
 	}
 	.lightbox-nav {
@@ -165,24 +173,26 @@ const PHOTOS = await getAllGalleryImages();
 		height: 48px;
 		border-radius: 50%;
 		border: none;
-		background: rgba(255, 255, 255, 0.1);
-		color: rgba(255, 255, 255, 0.85);
+		background: rgba(255, 255, 255, 0.12);
+		color: rgba(255, 255, 255, 0.9);
 		cursor: pointer;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		transition: background 0.2s ease, color 0.2s ease;
+		transition: background 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 	.lightbox-nav:hover {
-		background: rgba(255, 255, 255, 0.22);
+		background: rgba(255, 255, 255, 0.25);
 		color: #fff;
+		transform: scale(1.08);
 	}
 	.lightbox-counter {
 		flex: none;
 		text-align: center;
-		padding: 10px;
-		font-size: 0.8rem;
-		color: rgba(255, 255, 255, 0.6);
+		padding: 12px;
+		font-size: 0.82rem;
+		color: rgba(255, 255, 255, 0.65);
+		letter-spacing: 0.05em;
 	}
 
 	@media (max-width: 640px) {

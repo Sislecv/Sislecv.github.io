@@ -28,6 +28,9 @@ const { pathname } = Astro.url;
 						link.icon === "tag" && <mdui-icon-tag--outlined></mdui-icon-tag--outlined>
 					}
 					{
+						link.icon === "collections" && <mdui-icon-collections--outlined></mdui-icon-collections--outlined>
+					}
+					{
 						link.icon === "person" && <mdui-icon-person--outlined></mdui-icon-person--outlined>
 					}
 					<span>{link.label}</span>

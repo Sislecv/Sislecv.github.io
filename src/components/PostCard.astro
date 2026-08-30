@@ -43,3 +43,14 @@ const url = getPostUrl(getPostSlug(post));
 		)
 	}
 </mdui-card>
+
+<style>
+	.post-title,
+	.post-title-featured {
+		transition: color 0.2s ease;
+	}
+	.bento-card:hover .post-title,
+	.bento-card:hover .post-title-featured {
+		color: rgb(var(--mdui-color-primary));
+	}
+</style>

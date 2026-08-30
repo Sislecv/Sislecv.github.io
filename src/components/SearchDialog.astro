@@ -87,5 +87,17 @@
 		document.getElementById("footer-search-trigger")?.addEventListener("click", open);
 		if (closeBtn) closeBtn.addEventListener("click", close);
 		if (input) input.addEventListener("input", onInput);
+
+		// Global keyboard shortcut: Ctrl+K / Cmd+K
+		window.addEventListener("keydown", (e) => {
+			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+				e.preventDefault();
+				if (dialog?.open) {
+					close();
+				} else {
+					open();
+				}
+			}
+		});
 	})();
 </script>

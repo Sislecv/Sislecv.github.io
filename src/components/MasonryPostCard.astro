@@ -15,7 +15,20 @@ const url = `/posts/${post.id.replace(/\.(md|mdx)$/i, "")}/`;
 		<div class="post-meta">
 			<mdui-icon-event--outlined style="font-size: 13px"></mdui-icon-event--outlined>
 			<span>{formatDate(post.data.published)}</span>
+			{post.data.category && (
+				<span>·</span>
+				<span>{post.data.category}</span>
+			)}
 		</div>
 		{post.data.description && <p class="masonry-desc">{post.data.description}</p>}
 	</div>
 </mdui-card>
+
+<style>
+	.masonry-title {
+		transition: color 0.2s ease;
+	}
+	.masonry-card:hover .masonry-title {
+		color: rgb(var(--mdui-color-primary));
+	}
+</style>

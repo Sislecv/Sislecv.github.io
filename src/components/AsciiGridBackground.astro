@@ -14,11 +14,11 @@
 		const ctx = canvas.getContext("2d");
 
 		const SPACING = 34; // dot grid spacing
-		const DOT = 5; // dot size
+		const DOT_RADIUS = 1.4; // resting dot radius
 		const RADIUS = 180; // light radius
-		const FALLOFF = 0.96; // afterglow decay per frame (~1.5s)
-		const GRAY_ALPHA = 0.2; // resting dot opacity
-		const LIT_ALPHA = 0.75; // max lit opacity
+		const FALLOFF = 0.95; // afterglow decay per frame (~1.5s)
+		const GRAY_ALPHA = 0.18; // resting dot opacity
+		const LIT_ALPHA = 0.85; // max lit opacity
 
 		let width = 0;
 		let height = 0;
@@ -70,7 +70,6 @@
 				// afterglow decay
 				d.glow *= FALLOFF;
 
-				let lit = false;
 				if (mouseActive) {
 					const dx = d.x - mouseX;
 					const dy = d.y - mouseY;
@@ -79,20 +78,22 @@
 						const t = 1 - Math.sqrt(dist2) / RADIUS;
 						if (t > d.glow) {
 							d.glow = t;
-							lit = true;
 						}
 					}
 				}
 
 				if (d.glow < 0.02) {
 					ctx.fillStyle = `rgba(${gray[0]}, ${gray[1]}, ${gray[2]}, ${GRAY_ALPHA})`;
-					ctx.fillRect(d.x - DOT / 2, d.y - DOT / 2, DOT, DOT);
+					ctx.beginPath();
+					ctx.arc(d.x, d.y, DOT_RADIUS, 0, Math.PI * 2);
+					ctx.fill();
 				} else {
-					const a = Math.min(d.glow * LIT_ALPHA, 0.85);
+					const a = Math.min(d.glow * LIT_ALPHA, 0.9);
 					ctx.fillStyle = `rgba(${primary[0]}, ${primary[1]}, ${primary[2]}, ${a})`;
-					// lit dots glow slightly larger
-					const s = DOT + d.glow * 2.5;
-					ctx.fillRect(d.x - s / 2, d.y - s / 2, s, s);
+					const r = DOT_RADIUS + d.glow * 1.8;
+					ctx.beginPath();
+					ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+					ctx.fill();
 				}
 			}
 		}

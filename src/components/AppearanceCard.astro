@@ -29,6 +29,7 @@ const SCHEMES = theme.schemes;
 
 <script>
 	import { setColorScheme } from "mdui";
+	import { theme as themeConfig } from "../site.config";
 
 	const darkSwitch = document.getElementById("dark-switch") as HTMLInputElement | null;
 
@@ -40,6 +41,24 @@ const SCHEMES = theme.schemes;
 	const syncSwitch = () => {
 		if (darkSwitch) darkSwitch.checked = isDark();
 	};
+
+	const syncActiveDot = (currentColor: string) => {
+		document.querySelectorAll<HTMLElement>(".scheme-dot").forEach((dot) => {
+			if (dot.dataset.color?.toLowerCase() === currentColor.toLowerCase()) {
+				dot.classList.add("is-active");
+			} else {
+				dot.classList.remove("is-active");
+			}
+		});
+	};
+
+	let savedColor = themeConfig.defaultColor;
+	try {
+		savedColor = localStorage.getItem("scheme") || themeConfig.defaultColor;
+	} catch {
+		/* ignore */
+	}
+	syncActiveDot(savedColor);
 
 	darkSwitch?.addEventListener("change", () => {
 		const html = document.documentElement;
@@ -66,9 +85,19 @@ const SCHEMES = theme.schemes;
 			try {
 				setColorScheme(dot.dataset.color);
 				localStorage.setItem("scheme", dot.dataset.color);
+				syncActiveDot(dot.dataset.color);
 			} catch {
 				/* ignore */
 			}
 		}
 	});
 </script>
+
+<style>
+	.scheme-dot.is-active {
+		outline: 2px solid rgb(var(--mdui-color-primary));
+		outline-offset: 2px;
+		transform: scale(1.15);
+		box-shadow: 0 0 10px rgba(var(--mdui-color-primary), 0.5);
+	}
+</style>

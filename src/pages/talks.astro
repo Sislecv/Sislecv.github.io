@@ -72,6 +72,7 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 		width: 2px;
 		transform: translateX(-50%);
 		background: var(--mdui-color-outline-variant);
+		opacity: 0.6;
 	}
 
 	.talk-dot {
@@ -84,12 +85,23 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 		border-radius: 50%;
 		background: var(--mdui-color-outline-variant);
 		box-sizing: border-box;
+		transition: transform 0.25s ease;
 	}
 	.talk-dot.latest {
 		width: 14px;
 		height: 14px;
-		background: var(--mdui-color-primary);
-		box-shadow: 0 0 0 4px color-mix(in srgb, rgb(var(--mdui-color-primary)) 20%, transparent);
+		background: rgb(var(--mdui-color-primary));
+		box-shadow: 0 0 0 4px color-mix(in srgb, rgb(var(--mdui-color-primary)) 25%, transparent);
+		animation: pulse-dot 2.5s infinite ease-in-out;
+	}
+
+	@keyframes pulse-dot {
+		0%, 100% {
+			box-shadow: 0 0 0 3px color-mix(in srgb, rgb(var(--mdui-color-primary)) 30%, transparent);
+		}
+		50% {
+			box-shadow: 0 0 0 8px color-mix(in srgb, rgb(var(--mdui-color-primary)) 8%, transparent);
+		}
 	}
 
 	.talk-content {
@@ -99,7 +111,7 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 	}
 
 	.talk-body {
-		padding: 16px 18px;
+		padding: 18px 20px;
 	}
 
 	.talk-meta {
@@ -107,8 +119,8 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 		align-items: center;
 		gap: 6px;
 		font-size: 0.78rem;
-		color: var(--mdui-color-on-surface-variant);
-		margin-bottom: 8px;
+		color: rgb(var(--mdui-color-on-surface-variant));
+		margin-bottom: 10px;
 	}
 
 	.talk-calendar {
@@ -132,7 +144,7 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 	.talk-text {
 		font-size: 0.95rem;
 		line-height: 1.75;
-		color: var(--mdui-color-on-surface);
+		color: rgb(var(--mdui-color-on-surface));
 		word-break: break-word;
 	}
 	.talk-text :global(p) {
@@ -149,10 +161,12 @@ const rendered = await Promise.all(talks.map((talk) => render(talk)));
 		margin: 2px 0;
 	}
 	.talk-text :global(a) {
-		color: var(--mdui-color-primary);
+		color: rgb(var(--mdui-color-primary));
 		text-decoration: none;
+		border-bottom: 1px dashed rgba(var(--mdui-color-primary), 0.4);
+		transition: border-color 0.2s;
 	}
 	.talk-text :global(a:hover) {
-		text-decoration: underline;
+		border-bottom-color: rgb(var(--mdui-color-primary));
 	}
 </style>
