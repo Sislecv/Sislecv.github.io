@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { SITE, SOCIAL_LINKS } from "../consts";
+import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 ---
 
 <Layout title="关于" description="关于我">
@@ -48,7 +48,7 @@ import { SITE, SOCIAL_LINKS } from "../consts";
 			<mdui-card clickable variant="filled" class="bento-card">
 				<div class="card-body" style="align-items: center; text-align: center; padding: 24px 16px; gap: 10px">
 					<img
-						src="/favicon/favicon-light-192.png"
+						src={AVATAR}
 						alt={SITE.author}
 						width="80"
 						height="80"

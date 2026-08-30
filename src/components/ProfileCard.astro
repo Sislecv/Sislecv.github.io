@@ -1,12 +1,12 @@
 ---
-import { SITE, SOCIAL_LINKS } from "../consts";
+import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 ---
 
 <mdui-card clickable variant="elevated" class="bento-card">
 	<div class="card-body">
 		<div style="display: flex; align-items: center; gap: 14px; margin: 4px 0">
 			<img
-				src="/favicon/favicon-light-192.png"
+				src={AVATAR}
 				alt={SITE.author}
 				width="56"
 				height="56"
