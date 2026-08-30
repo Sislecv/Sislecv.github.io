@@ -76,3 +76,66 @@ collections:
       - { label: 描述, name: alt, widget: string, required: false }
       - { label: 排序, name: order, widget: number, value_type: int, default: 1, required: false }
       - { label: 首页堆叠展示, name: featured, widget: boolean, default: false, required: false }
+
+  - name: settings
+    label: 站点配置
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: site
+        label: 基础信息与个人资料
+        file: src/data/site.json
+        format: json
+        fields:
+          - { label: 站点标题, name: title, widget: string }
+          - { label: 一句话简介, name: description, widget: string }
+          - { label: 部署地址, name: url, widget: string }
+          - { label: 作者名, name: author, widget: string }
+          - { label: 头像路径, name: avatar, widget: string }
+          - { label: 默认主题色, name: defaultColor, widget: string, default: "#0b57d0" }
+
+      - name: social
+        label: 社交链接
+        file: src/data/social.json
+        format: json
+        fields:
+          - label: 社交链接列表
+            name: links
+            widget: list
+            summary: "{{fields.label}} - {{fields.url}}"
+            fields:
+              - { label: 平台名称, name: label, widget: string }
+              - { label: 链接地址, name: url, widget: string }
+
+      - name: techstack
+        label: 技术栈卡片
+        file: src/data/techstack.json
+        format: json
+        fields:
+          - label: 技术栈列表
+            name: items
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: 技术名称, name: name, widget: string }
+              - { label: 图标路径, name: icon, widget: string }
+              - { label: 官网链接, name: url, widget: string }
+
+      - name: projects
+        label: GitHub 项目便签
+        file: src/data/projects.json
+        format: json
+        fields:
+          - label: 项目列表
+            name: items
+            widget: list
+            summary: "{{fields.name}} ({{fields.lang}})"
+            fields:
+              - { label: 项目名称, name: name, widget: string }
+              - { label: 项目简介, name: description, widget: string }
+              - { label: 仓库链接, name: url, widget: string }
+              - { label: 主语言, name: lang, widget: string }
+              - { label: Star 数, name: stars, widget: number, value_type: int, default: 0 }
+              - { label: 自定义底色, name: color, widget: string, required: false }
+

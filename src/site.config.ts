@@ -4,19 +4,24 @@
 // 改完保存后推送到 main 分支即可自动部署。
 // ============================================================
 
+import siteData from "./data/site.json";
+import socialData from "./data/social.json";
+import techStackData from "./data/techstack.json";
+import projectsData from "./data/projects.json";
+
 export const site = {
 	// 站点名称（导航栏、页脚显示）
-	title: "ø",
+	title: siteData.title ?? "ø",
 	// 一句话简介（个人卡片显示）
-	description: "ø 的个人博客",
+	description: siteData.description ?? "ø 的个人博客",
 	// 部署地址（不要以 / 结尾）
-	url: "https://sislecv.github.io",
+	url: siteData.url ?? "https://sislecv.github.io",
 	// 页面语言
-	lang: "zh-CN",
+	lang: siteData.lang ?? "zh-CN",
 	// 作者名（页脚版权）
-	author: "ø",
+	author: siteData.author ?? "ø",
 	// 头像路径（放 public/ 下的文件，或外链）
-	avatar: "/favicon/favicon-light-192.png",
+	avatar: siteData.avatar ?? "/favicon/favicon-light-192.png",
 } as const;
 
 // 导航栏菜单（页面底部导航卡）
@@ -32,15 +37,15 @@ export const nav = [
 ] as const;
 
 // 社交链接（个人卡片与页脚的按钮）
-export const social = [
+export const social = (socialData.links ?? [
 	{ label: "GitHub", url: "https://github.com/Sislecv" },
 	{ label: "RSS", url: "/rss.xml" },
-] as const;
+]) as readonly { label: string; url: string }[];
 
 // 主题外观
 export const theme = {
 	// 默认主题色（Material Design 3 主色）
-	defaultColor: "#0b57d0",
+	defaultColor: siteData.defaultColor ?? "#0b57d0",
 	// 首页"外观"卡片中的色板（可增删改）
 	// name: 色点提示文字；color: 十六进制颜色
 	schemes: [
@@ -58,12 +63,12 @@ export const theme = {
 // 首页技术栈卡片（自动横向滚动）
 // icon: 图片路径（放 public/stack/ 下，推荐 128x128 的 SVG/PNG）
 // url: 点击跳转链接
-export const techStack = [
+export const techStack = (techStackData.items ?? [
 	{ name: "Python", icon: "/stack/python.svg", url: "https://www.python.org/" },
 	{ name: "Node.js", icon: "/stack/nodedotjs.svg", url: "https://nodejs.org/" },
 	{ name: "Astro", icon: "/stack/astro.svg", url: "https://astro.build/" },
 	{ name: "OMP", icon: "/stack/omp.png", url: "https://opencode.ai/" },
-] as const;
+]) as readonly { name: string; icon: string; url: string }[];
 
 // 图集已迁移到 src/content/gallery/ (可通过 Decap CMS /admin 管理)
 // 每张图一个 .md 文件:src/alt/order/featured,见 src/lib/gallery.ts
@@ -130,7 +135,7 @@ export type GithubProject = {
 	stars: number;
 	color?: string;
 };
-export const githubProjects: readonly GithubProject[] = [
+export const githubProjects = (projectsData.items ?? [
 	{
 		name: "md2img",
 		description: "中文 Markdown 转图片工具：中英混排优化、5 套主题、一键导出社交分享图",
@@ -159,7 +164,7 @@ export const githubProjects: readonly GithubProject[] = [
 		lang: "JavaScript",
 		stars: 0,
 	},
-] as const;
+]) as readonly GithubProject[];
 
 // 评论区（utterances 基于 GitHub Issues）
 export const comments = {

@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "name": "md2img",
+      "description": "中文 Markdown 转图片工具：中英混排优化、5 套主题、一键导出社交分享图",
+      "url": "https://github.com/Sislecv/md2img",
+      "lang": "TypeScript",
+      "stars": 3
+    },
+    {
+      "name": "Sislecv.github.io",
+      "description": "基于 Astro + MDUI 的个人博客",
+      "url": "https://github.com/Sislecv/Sislecv.github.io",
+      "lang": "Astro",
+      "stars": 0
+    },
+    {
+      "name": "droidCLI",
+      "description": "Python 命令行小工具",
+      "url": "https://github.com/Sislecv/droidCLI",
+      "lang": "Python",
+      "stars": 1
+    },
+    {
+      "name": "ascii-blog",
+      "description": "ASCII 风格博客",
+      "url": "https://github.com/Sislecv/ascii-blog",
+      "lang": "JavaScript",
+      "stars": 0
+    }
+  ]
+}

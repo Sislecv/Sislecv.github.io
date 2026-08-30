@@ -177,6 +177,14 @@ a {
 	pointer-events: none;
 }
 
+/* Frosted glass effect */
+mdui-card,
+.bento-card,
+.masonry-card {
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
 /* Tactile press feedback */
 .bento-card[clickable]:active,
 mdui-card[clickable].bento-card:active,
@@ -258,6 +266,8 @@ mdui-icon-mode-comment {
 	gap: 4px;
 	padding: 6px;
 	margin-top: 24px;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
 }
 
 .nav-link {
