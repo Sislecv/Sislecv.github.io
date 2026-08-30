@@ -21,7 +21,7 @@ export const site = {
 	// 作者名（页脚版权）
 	author: siteData.author ?? "ø",
 	// 头像路径（放 public/ 下的文件，或外链）
-	avatar: siteData.avatar ?? "/favicon/favicon-light-192.png",
+	avatar: siteData.avatar ?? "/images/1782407132055.jpeg",
 } as const;
 
 // 导航栏菜单（页面底部导航卡）
