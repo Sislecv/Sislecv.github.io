@@ -1,4 +1,4 @@
-# Sislecv 博客
+# ø 博客
 
 基于 [Astro](https://astro.build) + [MDUI](https://www.mdui.org/zh-cn/)（Material Design 3 Web Components）的个人博客，磁贴式可拖动首页，部署于 GitHub Pages。
 
@@ -88,11 +88,11 @@ pnpm check          # 类型检查
 
 ```ts
 export const site = {
-	title: "Sislecv",                    // 站点名（导航/页脚/标题）
-	description: "Sislecv 的个人博客",     // 一句话简介
+	title: "ø",  // 站点名（导航/页脚/标题）
+	description: "ø 的个人博客",  // 一句话简介
 	url: "https://sislecv.github.io",    // 部署地址
 	lang: "zh-CN",                       // 页面语言
-	author: "Sislecv",                   // 版权署名
+	author: "ø",  // 版权署名
 	avatar: "/favicon/favicon-light-192.png", // 头像（public 下路径或外链）
 };
 ```

@@ -6,15 +6,15 @@
 
 export const site = {
 	// 站点名称（导航栏、页脚显示）
-	title: "Sislecv",
+	title: "ø",
 	// 一句话简介（个人卡片显示）
-	description: "Sislecv 的个人博客",
+	description: "ø 的个人博客",
 	// 部署地址（不要以 / 结尾）
 	url: "https://sislecv.github.io",
 	// 页面语言
 	lang: "zh-CN",
 	// 作者名（页脚版权）
-	author: "Sislecv",
+	author: "ø",
 	// 头像路径（放 public/ 下的文件，或外链）
 	avatar: "/favicon/favicon-light-192.png",
 } as const;
