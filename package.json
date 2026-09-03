@@ -19,8 +19,8 @@
     "@astrojs/sitemap": "^3.7.3",
     "@mdui/icons": "^1.0.4",
     "astro": "7.2.0",
-    "gridstack": "^13.0.2",
-    "katex": "^0.16.27",
+    "gridstack": "^13.2.0",
+    "katex": "^0.18.5",
     "mdui": "^2.1.5",
     "pagefind": "^1.4.0",
     "reading-time": "^1.5.0",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
-    "@astrojs/markdown-remark": "^7.2.2",
+    "@astrojs/markdown-remark": "^7.3.0",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@9.14.4"
