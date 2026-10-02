@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import readingTime from "reading-time";
+import { resolveMediaUrl } from "./media";
 
 export type Post = CollectionEntry<"posts">;
 
@@ -7,6 +8,13 @@ export async function getAllPosts(): Promise<Post[]> {
 	const posts = await getCollection("posts");
 	return posts
 		.filter((post) => !post.data.draft)
+		.map((post) => ({
+			...post,
+			data: {
+				...post.data,
+				image: post.data.image ? resolveMediaUrl(post.data.image) : "",
+			},
+		}))
 		.sort(
 			(a, b) =>
 				new Date(b.data.published).getTime() - new Date(a.data.published).getTime(),

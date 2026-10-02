@@ -975,15 +975,55 @@ button.nav-link {
 .mdui-prose {
 	line-height: 1.8;
 	font-size: 1rem;
+	overflow-wrap: break-word;
+	word-break: break-word;
 }
 
 .mdui-prose img {
-	border-radius: var(--mdui-shape-corner-large);
-	transition: transform 0.3s var(--md-easing-smooth);
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 20px auto;
+	border-radius: var(--mdui-shape-corner-medium, 12px);
+	box-sizing: border-box;
+	transition: transform var(--md-duration-short) var(--md-easing-standard);
 }
 
 .mdui-prose img:hover {
 	transform: scale(1.01);
+}
+
+.mdui-prose figure {
+	margin: 24px 0;
+	text-align: center;
+	max-width: 100%;
+}
+
+.mdui-prose figure img {
+	margin: 0 auto 8px;
+}
+
+.mdui-prose figcaption {
+	font-size: 0.85rem;
+	color: rgb(var(--mdui-color-on-surface-variant));
+	text-align: center;
+}
+
+.mdui-prose p:has(> img) {
+	text-align: center;
+}
+
+.mdui-prose a:has(img) {
+	display: inline-block;
+	max-width: 100%;
+}
+
+.talk-body img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 12px 0;
+	border-radius: var(--mdui-shape-corner-small, 8px);
 }
 
 .mdui-prose code:not(pre code) {

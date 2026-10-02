@@ -1,5 +1,6 @@
 ---
 import { formatDate, getPostSlug, getPostUrl, getReadingTime, type Post } from "../lib/posts";
+import { resolveMediaUrl } from "../lib/media";
 
 interface Props {
 	post: Post;
@@ -9,9 +10,17 @@ interface Props {
 const { post } = Astro.props;
 const featured = Astro.props.featured ?? false;
 const url = getPostUrl(getPostSlug(post));
+const cover = resolveMediaUrl(post.data.image);
 ---
 
 <mdui-card clickable href={url} variant={featured ? "elevated" : "filled"} class:list={["bento-card", { "post-featured": featured, "post-card": !featured }]}>
+	{
+		cover && (
+			<div class="post-cover-wrap">
+				<img src={cover} alt={post.data.title} loading="lazy" class="post-cover-img" />
+			</div>
+		)
+	}
 	{
 		featured ? (
 			<div class="card-body">
@@ -45,6 +54,24 @@ const url = getPostUrl(getPostSlug(post));
 </mdui-card>
 
 <style>
+	.post-cover-wrap {
+		width: 100%;
+		overflow: hidden;
+		aspect-ratio: 16 / 9;
+		background: rgba(var(--mdui-color-surface-container-highest), 0.35);
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
+	}
+	.post-cover-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform var(--md-duration-medium, 250ms) var(--md-easing-emphasized-decelerate, ease);
+	}
+	.bento-card:hover .post-cover-img {
+		transform: scale(1.03);
+	}
 	.post-title,
 	.post-title-featured {
 		transition: color 0.2s ease;

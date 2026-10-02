@@ -1,4 +1,6 @@
 ---
+import { resolveMediaUrl } from "../lib/media";
+
 interface Card {
 	id: string;
 	icon?: string;
@@ -9,7 +11,8 @@ interface Card {
 
 const { card } = Astro.props as { card: Card };
 
-const isImage = card.icon ? /^(\/|https?:)/.test(card.icon) : false;
+const iconSrc = card.icon ? resolveMediaUrl(card.icon) : "";
+const isImage = iconSrc ? /^(\/|https?:|data:)/.test(iconSrc) : false;
 ---
 
 <mdui-card
@@ -20,8 +23,8 @@ const isImage = card.icon ? /^(\/|https?:)/.test(card.icon) : false;
 >
 	<div class="sq-body">
 		{
-			isImage && card.icon ? (
-				<img src={card.icon} alt={card.title ?? "自定义卡片"} loading="lazy" class="custom-card-img" />
+			isImage && iconSrc ? (
+				<img src={iconSrc} alt={card.title ?? "自定义卡片"} loading="lazy" class="custom-card-img" />
 			) : (
 				<>
 					{card.icon === "star" && <mdui-icon-star--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-star--outlined>}

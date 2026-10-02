@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Toc from "../../components/Toc.astro";
 import Utterances from "../../components/Utterances.astro";
 import { getAllPosts, formatDate, getPostSlug, getPostUrl, getReadingTime } from "../../lib/posts";
+import { resolveMediaUrl } from "../../lib/media";
 
 export async function getStaticPaths() {
 	const posts = await getAllPosts();
@@ -19,12 +20,20 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props;
 const { Content, headings } = await render(post);
+const coverImage = resolveMediaUrl(post.data.image);
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
 	<div class="article-grid">
 		<article>
-			<mdui-card variant="elevated">
+			<mdui-card variant="elevated" class="article-card">
+				{
+					coverImage && (
+						<div class="article-cover-wrap">
+							<img src={coverImage} alt={post.data.title} class="article-cover" />
+						</div>
+					)
+				}
 				<div class="article-body">
 					<header class="article-header">
 						<div class="post-meta" style="margin-bottom: 12px">
@@ -110,6 +119,30 @@ const { Content, headings } = await render(post);
 </Layout>
 
 <style>
+	.article-card {
+		overflow: hidden;
+	}
+	.article-cover-wrap {
+		width: 100%;
+		max-height: 400px;
+		overflow: hidden;
+		background: rgba(var(--mdui-color-surface-container-highest), 0.35);
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
+	}
+	.article-cover {
+		width: 100%;
+		height: 100%;
+		max-height: 400px;
+		object-fit: cover;
+		display: block;
+	}
+	@media (max-width: 640px) {
+		.article-cover-wrap,
+		.article-cover {
+			max-height: 240px;
+		}
+	}
 	.nav-arrow {
 		transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}

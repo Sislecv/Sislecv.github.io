@@ -8,6 +8,7 @@ import siteData from "./data/site.json";
 import socialData from "./data/social.json";
 import techStackData from "./data/techstack.json";
 import projectsData from "./data/projects.json";
+import { resolveMediaUrl } from "./lib/media";
 
 export const site = {
 	// 站点名称（导航栏、页脚显示）
@@ -21,7 +22,7 @@ export const site = {
 	// 作者名（页脚版权）
 	author: siteData.author ?? "ø",
 	// 头像路径（放 public/ 下的文件，或外链）
-	avatar: siteData.avatar ?? "/images/1782407132055.jpeg",
+	avatar: resolveMediaUrl(siteData.avatar) || "/images/1782407132055.jpeg",
 } as const;
 
 // 导航栏菜单（页面底部导航卡）
@@ -68,7 +69,10 @@ export const techStack = (techStackData.items ?? [
 	{ name: "Node.js", icon: "/stack/nodedotjs.svg", url: "https://nodejs.org/" },
 	{ name: "Astro", icon: "/stack/astro.svg", url: "https://astro.build/" },
 	{ name: "OMP", icon: "/stack/omp.png", url: "https://opencode.ai/" },
-]) as readonly { name: string; icon: string; url: string }[];
+]).map((item) => ({
+	...item,
+	icon: resolveMediaUrl(item.icon),
+})) as readonly { name: string; icon: string; url: string }[];
 
 // 图集已迁移到 src/content/gallery/ (可通过 Decap CMS /admin 管理)
 // 每张图一个 .md 文件:src/alt/order/featured,见 src/lib/gallery.ts

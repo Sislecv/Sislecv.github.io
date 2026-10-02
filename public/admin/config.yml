@@ -41,7 +41,7 @@ collections:
       - { label: 更新日期, name: updated, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
       - { label: 草稿, name: draft, widget: boolean, default: false, required: false }
       - { label: 描述, name: description, widget: text, required: false }
-      - { label: 封面图, name: image, widget: image, required: false }
+      - { label: 封面图 (支持本地上传与外链), name: image, widget: image, choose_url: true, required: false }
       - { label: 标签, name: tags, widget: list, required: false, default: [] }
       - { label: 分类, name: category, widget: string, required: false }
       - { label: 语言, name: lang, widget: string, required: false }
@@ -72,7 +72,7 @@ collections:
     slug: "{{order}}"
     sortable_fields: [order]
     fields:
-      - { label: 图片, name: src, widget: image, required: true }
+      - { label: 图片 (支持本地上传与外链), name: src, widget: image, choose_url: true, required: true }
       - { label: 描述, name: alt, widget: string, required: false }
       - { label: 排序, name: order, widget: number, value_type: int, default: 1, required: false }
       - { label: 首页堆叠展示, name: featured, widget: boolean, default: false, required: false }
@@ -92,7 +92,7 @@ collections:
           - { label: 一句话简介, name: description, widget: string }
           - { label: 部署地址, name: url, widget: string }
           - { label: 作者名, name: author, widget: string }
-          - { label: 头像路径, name: avatar, widget: string }
+          - { label: 头像 (支持本地上传与外链), name: avatar, widget: image, choose_url: true, required: false }
           - { label: 默认主题色, name: defaultColor, widget: string, default: "#0b57d0" }
 
       - name: social
@@ -119,7 +119,7 @@ collections:
             summary: "{{fields.name}}"
             fields:
               - { label: 技术名称, name: name, widget: string }
-              - { label: 图标路径, name: icon, widget: string }
+              - { label: 图标 (支持本地上传与外链), name: icon, widget: image, choose_url: true }
               - { label: 官网链接, name: url, widget: string }
 
       - name: projects
