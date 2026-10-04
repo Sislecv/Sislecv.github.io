@@ -132,12 +132,12 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		</div>
 		)}
 		{homeTiles.includes("contribution") && (
-		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
+		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="10" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
 		</div>
 		)}
 		{homeTiles.includes("github") && (
-		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="12" gs-w="8" gs-h="3">
+		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="13" gs-w="8" gs-h="4">
 			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
 		</div>
 		)}
@@ -435,24 +435,42 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	.pixel-chart-widget:hover .chart-sub-icon {
 		transform: scale(1.15);
 	}
-	/* 电脑布局显著拉开贡献日历与项目展示的上下呼吸感间距 (50px+ 物理视觉隔离) */
-	@media (min-width: 641px) {
-		:global(.grid-stack-item[gs-id="github"] > .grid-stack-item-content) {
-			margin-top: 36px !important;
-			height: calc(100% - 36px) !important;
-		}
-		:global(.grid-stack-item[gs-id="contribution"] > .grid-stack-item-content) {
-			margin-bottom: 8px !important;
-			height: calc(100% - 8px) !important;
-		}
-	}
-
-	/* 手机端一列通栏微调，图表小部件与状态卡片横向自适应排开 */
+	/* 手机端纯天然单列流式布局 (100% 满宽顺滑单列浏览，杜绝挤成一条或定位计算重叠) */
 	@media (max-width: 640px) {
+		.grid-stack {
+			display: flex !important;
+			flex-direction: column !important;
+			gap: 14px !important;
+			height: auto !important;
+		}
+		.grid-stack > .grid-stack-item {
+			position: static !important;
+			width: 100% !important;
+			height: auto !important;
+			min-height: auto !important;
+			transform: none !important;
+			top: auto !important;
+			left: auto !important;
+			margin: 0 !important;
+		}
+		.grid-stack > .grid-stack-item > .grid-stack-item-content {
+			position: static !important;
+			width: 100% !important;
+			height: auto !important;
+			overflow: visible !important;
+			inset: auto !important;
+		}
 		.chart-widget-inner {
 			flex-direction: row !important;
 			gap: 28px !important;
 			justify-content: center !important;
+			padding: 14px !important;
+		}
+		.pixel-chart-widget {
+			min-height: 84px !important;
+		}
+		.pixel-clover-search-card {
+			min-height: 84px !important;
 		}
 	}
 </style>
@@ -462,9 +480,9 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout_v9";
+	const KEY = "homeGridLayout_v10";
 
-	// 桌面端 8 列黄金比例便当网格
+	// 桌面端 8 列黄金比例便当网格 (贡献日历 h:3，项目展示 h:4，间距与全局网格标准完全一致)
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 4, h: 3 },
 		{ id: "emoji", x: 4, y: 0, w: 2, h: 3 },
@@ -477,35 +495,17 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		{ id: "search", x: 6, y: 6, w: 2, h: 2 },
 		{ id: "techstack", x: 0, y: 8, w: 5, h: 2 },
 		{ id: "tagcloud", x: 5, y: 8, w: 3, h: 2 },
-		{ id: "contribution", x: 0, y: 10, w: 8, h: 2 },
-		{ id: "github", x: 0, y: 12, w: 8, h: 4 },
+		{ id: "contribution", x: 0, y: 10, w: 8, h: 3 },
+		{ id: "github", x: 0, y: 13, w: 8, h: 4 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 
-	// 手机移动端 100% 满宽纯单列流式布局 (Single Column Flow)
-	const MOBILE_LAYOUT = [
-		{ id: "profile", x: 0, y: 0, w: 1, h: 4 },
-		{ id: "talks", x: 0, y: 4, w: 1, h: 3 },
-		{ id: "emoji", x: 0, y: 7, w: 1, h: 2 },
-		{ id: "appearance", x: 0, y: 9, w: 1, h: 2 },
-		{ id: "search", x: 0, y: 11, w: 1, h: 2 },
-		{ id: "gallery", x: 0, y: 13, w: 1, h: 3 },
-		{ id: "archive", x: 0, y: 16, w: 1, h: 2 },
-		{ id: "category", x: 0, y: 18, w: 1, h: 2 },
-		{ id: "tags", x: 0, y: 20, w: 1, h: 2 },
-		{ id: "techstack", x: 0, y: 22, w: 1, h: 2 },
-		{ id: "tagcloud", x: 0, y: 24, w: 1, h: 2 },
-		{ id: "contribution", x: 0, y: 26, w: 1, h: 2 },
-		{ id: "github", x: 0, y: 28, w: 1, h: 5 },
-		...customCards.map((c) => ({ id: c.id, x: 0, y: 33, w: 1, h: c.h })),
-	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
-
-	const isMobileViewport = () => window.innerWidth < 640;
+	const isMobile = () => window.innerWidth < 640;
 
 	const grid = GridStack.init({
-		column: isMobileViewport() ? 1 : 8,
-		cellHeight: isMobileViewport() ? 84 : 88,
-		margin: isMobileViewport() ? 12 : 14,
+		column: 8,
+		cellHeight: 88,
+		margin: 14,
 		float: false,
 		animate: true,
 	})!;
@@ -531,8 +531,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	let locked = false;
 	const setLocked = (value: boolean) => {
 		locked = value;
-		// 移动端始终禁止拖拽以保障原生滑动浏览，桌面端听从锁状态
-		const allowMove = !isMobileViewport() && !value;
+		const allowMove = !isMobile() && !value;
 		grid.enableMove(allowMove);
 		grid.enableResize(allowMove);
 		try {
@@ -550,7 +549,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	// Safe layout persistence: ONLY save when in 8-column desktop mode and not locked!
 	let saveTimer: any = null;
 	const saveCurrentLayout = () => {
-		if (grid.getColumn() === 8 && !locked) {
+		if (!isMobile() && grid.getColumn() === 8 && !locked) {
 			const nodes = grid.engine.nodes;
 			if (!nodes || nodes.length === 0) return;
 			const layoutData = nodes
@@ -577,7 +576,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	grid.on("dragstop resizestop", scheduleSave);
 	grid.on("change", () => {
-		if (grid.getColumn() === 8 && !locked) {
+		if (!isMobile() && grid.getColumn() === 8 && !locked) {
 			scheduleSave();
 		}
 	});
@@ -604,13 +603,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		try {
 			localStorage.removeItem(KEY);
 		} catch { /* ignore */ }
-		applyLayout(isMobileViewport() ? MOBILE_LAYOUT : DEFAULT_LAYOUT);
+		applyLayout(DEFAULT_LAYOUT);
 	});
 
-	// Load initial layout based on current viewport
-	if (isMobileViewport()) {
-		applyLayout(MOBILE_LAYOUT);
-	} else {
+	// Load layout on desktop initialization
+	if (!isMobile()) {
 		try {
 			const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
 			if (Array.isArray(saved) && saved.length > 0) {
@@ -621,30 +618,21 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		} catch {
 			applyLayout(DEFAULT_LAYOUT);
 		}
+	} else {
+		// 手机端禁用网格手势拖动，由纯 CSS 顺滑单列滚动接管
+		grid.enableMove(false);
+		grid.enableResize(false);
 	}
 
-	// Handle window resize dynamically across breakpoints without losing desktop persistence
-	let currentMode: "mobile" | "desktop" = isMobileViewport() ? "mobile" : "desktop";
+	// Window resize sync
 	let resizeTimer: any = null;
 	window.addEventListener("resize", () => {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout(() => {
-			const mobile = isMobileViewport();
-			if (mobile && currentMode !== "mobile") {
-				currentMode = "mobile";
-				grid.column(1, "none");
-				grid.cellHeight(84);
-				grid.margin(12);
-				grid.enableMove(false);
-				grid.enableResize(false);
-				applyLayout(MOBILE_LAYOUT);
-			} else if (!mobile && currentMode !== "desktop") {
-				currentMode = "desktop";
-				grid.column(8, "none");
-				grid.cellHeight(88);
-				grid.margin(14);
-				grid.enableMove(!locked);
-				grid.enableResize(!locked);
+			const mobile = isMobile();
+			grid.enableMove(!mobile && !locked);
+			grid.enableResize(!mobile && !locked);
+			if (!mobile) {
 				try {
 					const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
 					applyLayout(Array.isArray(saved) && saved.length > 0 ? saved : DEFAULT_LAYOUT);
