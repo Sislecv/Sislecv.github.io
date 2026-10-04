@@ -437,6 +437,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	}
 	/* 手机端纯天然单列流式布局 (100% 满宽顺滑单列浏览，杜绝挤成一条或定位计算重叠) */
 	@media (max-width: 640px) {
+		/* 移动端禁用拖拽，彻底隐藏工具栏(锁定/重置按钮) */
+		:global(.grid-toolbar) {
+			display: none !important;
+		}
+
 		.grid-stack {
 			display: flex !important;
 			flex-direction: column !important;

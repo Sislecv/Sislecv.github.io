@@ -5,12 +5,9 @@ import { status } from "../site.config";
 
 <mdui-card
 	clickable
-	href={status.link}
-	target="_blank"
-	rel="noreferrer"
 	variant="elevated"
 	class="bento-card pixel-status-card"
-	title="查看状态"
+	title={status.text || "Status"}
 >
 	<div class="status-card-inner">
 		<!-- Top Row: Optional Status Badges -->
