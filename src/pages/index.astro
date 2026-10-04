@@ -22,9 +22,13 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 <Layout showFooterNav={false}>
 	<div class="grid-toolbar">
-		<mdui-button id="layout-lock" variant="tonal">
-			<mdui-icon-lock-open--outlined slot="icon" id="lock-open-icon" style="display: none"></mdui-icon-lock-open--outlined>
-			<mdui-icon-lock--outlined slot="icon" id="lock-icon"></mdui-icon-lock--outlined>
+		<mdui-button id="layout-reset" variant="text" size="small" title="恢复官方默认布局">
+			<mdui-icon-restart-alt--outlined slot="icon" style="font-size: 18px"></mdui-icon-restart-alt--outlined>
+			重置布局
+		</mdui-button>
+		<mdui-button id="layout-lock" variant="tonal" size="small">
+			<mdui-icon-lock-open--outlined slot="icon" id="lock-open-icon" style="display: none; font-size: 18px"></mdui-icon-lock-open--outlined>
+			<mdui-icon-lock--outlined slot="icon" id="lock-icon" style="font-size: 18px"></mdui-icon-lock--outlined>
 			<span id="lock-label">锁定布局</span>
 		</mdui-button>
 	</div>
@@ -158,12 +162,14 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 </Layout>
 
 <style>
-	/* Pure Solid Borderless Charts Widgets */
+	/* Frosted Glass Solid Tonal Charts Widgets */
 	.pixel-chart-widget {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
 		border: none !important;
 		outline: none !important;
+		backdrop-filter: blur(24px) saturate(180%);
+		-webkit-backdrop-filter: blur(24px) saturate(180%);
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
 		            background-color var(--md-duration-short, 200ms) ease !important;
 		overflow: hidden;
@@ -176,18 +182,18 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	/* Color 1: Coral / Peach Pink Tonal Container */
 	.chart-coral {
-		background: #ffd8d8 !important;
+		background: rgba(255, 216, 216, 0.82) !important;
 		color: #410002 !important;
 	}
 	:global(.mdui-theme-dark) .chart-coral {
-		background: #3b2222 !important;
+		background: rgba(59, 34, 34, 0.8) !important;
 		color: #ffdad5 !important;
 	}
 	.chart-coral:hover {
-		background: #ffcfcf !important;
+		background: rgba(255, 205, 205, 0.9) !important;
 	}
 	:global(.mdui-theme-dark) .chart-coral:hover {
-		background: #462929 !important;
+		background: rgba(70, 41, 41, 0.9) !important;
 	}
 	.ring-coral-fill {
 		stroke: #b3261e !important;
@@ -210,18 +216,18 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	/* Color 2: Mint Green Tonal Container */
 	.chart-mint {
-		background: #d3f8df !important;
+		background: rgba(211, 248, 223, 0.82) !important;
 		color: #00210c !important;
 	}
 	:global(.mdui-theme-dark) .chart-mint {
-		background: #193325 !important;
+		background: rgba(25, 51, 37, 0.8) !important;
 		color: #c4eed0 !important;
 	}
 	.chart-mint:hover {
-		background: #c5f5d4 !important;
+		background: rgba(197, 245, 212, 0.9) !important;
 	}
 	:global(.mdui-theme-dark) .chart-mint:hover {
-		background: #20402f !important;
+		background: rgba(32, 64, 47, 0.9) !important;
 	}
 	.mint-bar {
 		background: rgba(27, 135, 59, 0.4) !important;
@@ -250,18 +256,18 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	/* Color 3: Warm Amber / Honey Yellow Tonal Container */
 	.chart-amber {
-		background: #ffeab2 !important;
+		background: rgba(255, 234, 178, 0.82) !important;
 		color: #261900 !important;
 	}
 	:global(.mdui-theme-dark) .chart-amber {
-		background: #332814 !important;
+		background: rgba(51, 40, 20, 0.8) !important;
 		color: #ffe088 !important;
 	}
 	.chart-amber:hover {
-		background: #ffe39e !important;
+		background: rgba(255, 227, 158, 0.9) !important;
 	}
 	:global(.mdui-theme-dark) .chart-amber:hover {
-		background: #3d3018 !important;
+		background: rgba(61, 48, 24, 0.9) !important;
 	}
 	.tb-amber-1 {
 		background: rgba(178, 80, 0, 0.15) !important;
@@ -436,7 +442,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout_v5";
+	const KEY = "homeGridLayout_v6";
 
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 4, h: 3 },
@@ -477,20 +483,25 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	applyCellHeight();
 	mqSmall.addEventListener("change", applyCellHeight);
 
+	// Lock state management
 	const LOCK_KEY = "gridLocked";
 	const lockBtn = document.getElementById("layout-lock");
 	const lockIcon = document.getElementById("lock-icon");
 	const lockOpenIcon = document.getElementById("lock-open-icon");
 	const lockLabel = document.getElementById("lock-label");
-	const syncLockUI = (locked: boolean) => {
-		if (lockIcon) lockIcon.style.display = locked ? "" : "none";
-		if (lockOpenIcon) lockOpenIcon.style.display = locked ? "none" : "";
-		if (lockLabel) lockLabel.textContent = locked ? "已锁定" : "锁定布局";
+	const resetBtn = document.getElementById("layout-reset");
+
+	const syncLockUI = (isLocked: boolean) => {
+		if (lockIcon) lockIcon.style.display = isLocked ? "" : "none";
+		if (lockOpenIcon) lockOpenIcon.style.display = isLocked ? "none" : "";
+		if (lockLabel) lockLabel.textContent = isLocked ? "已锁定" : "锁定布局";
 		if (lockBtn) {
-			lockBtn.setAttribute("aria-label", locked ? "解锁布局" : "锁定布局");
-			lockBtn.setAttribute("title", locked ? "解锁布局" : "锁定布局");
+			lockBtn.setAttribute("aria-label", isLocked ? "解锁布局" : "锁定布局");
+			lockBtn.setAttribute("title", isLocked ? "解锁布局" : "锁定布局");
 		}
 	};
+
+	let locked = false;
 	const setLocked = (value: boolean) => {
 		locked = value;
 		grid.enableMove(!value);
@@ -500,13 +511,37 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		} catch { /* ignore */ }
 		syncLockUI(locked);
 	};
-	let locked = false;
+
 	try {
 		locked = localStorage.getItem(LOCK_KEY) === "1";
 	} catch { /* ignore */ }
 	setLocked(locked);
 	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
+	// Safe layout persistence: ONLY save when in 8-column desktop mode and not locked!
+	// This prevents mobile responsive re-orderings from corrupting the master desktop layout.
+	const saveCurrentLayout = () => {
+		if (grid.getColumn() === 8 && !locked) {
+			try {
+				localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
+			} catch {
+				/* ignore */
+			}
+		}
+	};
+
+	// Listen only to user interactions (drag & resize stop)
+	grid.on("dragstop resizestop", saveCurrentLayout);
+
+	// Reset layout button
+	resetBtn?.addEventListener("click", () => {
+		try {
+			localStorage.removeItem(KEY);
+		} catch { /* ignore */ }
+		grid.load(DEFAULT_LAYOUT);
+	});
+
+	// Load layout on initialization
 	const validTileIds = new Set([
 		...homeTiles,
 		...customCards.map((c) => c.id),
@@ -519,21 +554,8 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 				if (!savedIds.has(d.id)) saved.push(d);
 			}
 			grid.load(saved.filter((n: any) => validTileIds.has(n.id)));
-			try {
-				localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
-			} catch {
-				/* ignore */
-			}
 		}
 	} catch {
 		/* ignore corrupt layout */
 	}
-
-	grid.on("change", () => {
-		try {
-			localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
-		} catch {
-			/* ignore */
-		}
-	});
 </script>

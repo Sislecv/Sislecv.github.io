@@ -8,7 +8,17 @@ import siteData from "./data/site.json";
 import socialData from "./data/social.json";
 import techStackData from "./data/techstack.json";
 import projectsData from "./data/projects.json";
+import statusData from "./data/status.json";
 import { resolveMediaUrl } from "./lib/media";
+
+export const status = {
+	emoji: resolveMediaUrl(statusData.emoji) || "/emoji/partying-face.webp",
+	text: statusData.text ?? "Vibing 🥳",
+	showWeather: statusData.showWeather ?? true,
+	weatherText: statusData.weatherText ?? "72°",
+	showTime: statusData.showTime ?? false,
+	link: statusData.link ?? "https://googlefonts.github.io/noto-emoji-animation/",
+} as const;
 
 export const site = {
 	// 站点名称（导航栏、页脚显示）

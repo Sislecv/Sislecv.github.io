@@ -1,11 +1,12 @@
 ---
-// Google Material You Dynamic Theme-Color Mesh Gradient with Gaussian Blur
+// Google Material You Dynamic Theme-Color Mesh Gradient with Enhanced Gaussian Blur
 ---
 
 <div class="material-mesh-bg" aria-hidden="true">
 	<div class="mesh-blob blob-primary"></div>
 	<div class="mesh-blob blob-secondary"></div>
 	<div class="mesh-blob blob-tertiary"></div>
+	<div class="mesh-blob blob-accent"></div>
 </div>
 
 <style>
@@ -15,14 +16,16 @@
 		z-index: 0;
 		pointer-events: none;
 		overflow: hidden;
-		filter: blur(100px);
-		-webkit-filter: blur(100px);
-		opacity: 0.55;
+		filter: blur(90px) saturate(160%);
+		-webkit-filter: blur(90px) saturate(160%);
+		opacity: 0.72;
 		transition: opacity var(--md-duration-medium, 300ms) ease;
 	}
 
 	:global(.mdui-theme-dark) .material-mesh-bg {
-		opacity: 0.38;
+		opacity: 0.52;
+		filter: blur(100px) saturate(180%);
+		-webkit-filter: blur(100px) saturate(180%);
 	}
 
 	.mesh-blob {
@@ -31,43 +34,56 @@
 		will-change: transform;
 	}
 
-	/* Blob 1: Main Primary Color */
+	/* Blob 1: Main Primary Color Upper Left */
 	.blob-primary {
-		top: -8%;
-		left: 10%;
-		width: 58vw;
-		height: 58vw;
-		max-width: 650px;
-		max-height: 650px;
+		top: -6%;
+		left: 8%;
+		width: 60vw;
+		height: 60vw;
+		max-width: 680px;
+		max-height: 680px;
 		background: radial-gradient(circle, rgb(var(--mdui-color-primary)) 0%, transparent 68%);
-		opacity: 0.5;
+		opacity: 0.6;
 		animation: meshFloat1 22s ease-in-out infinite alternate;
 	}
 
-	/* Blob 2: Secondary / Tertiary Color */
+	/* Blob 2: Secondary / Tertiary Color Right Center */
 	.blob-secondary {
-		top: 35%;
-		right: -6%;
-		width: 52vw;
-		height: 52vw;
-		max-width: 580px;
-		max-height: 580px;
+		top: 32%;
+		right: -8%;
+		width: 55vw;
+		height: 55vw;
+		max-width: 620px;
+		max-height: 620px;
 		background: radial-gradient(circle, rgb(var(--mdui-color-tertiary, var(--mdui-color-secondary))) 0%, transparent 68%);
-		opacity: 0.42;
+		opacity: 0.52;
 		animation: meshFloat2 26s ease-in-out infinite alternate;
 	}
 
 	/* Blob 3: Lower Supporting Glow */
 	.blob-tertiary {
-		bottom: -12%;
-		left: 22%;
-		width: 62vw;
-		height: 62vw;
-		max-width: 680px;
-		max-height: 680px;
+		bottom: -10%;
+		left: 18%;
+		width: 65vw;
+		height: 65vw;
+		max-width: 720px;
+		max-height: 720px;
 		background: radial-gradient(circle, rgb(var(--mdui-color-secondary, var(--mdui-color-primary))) 0%, transparent 68%);
-		opacity: 0.35;
+		opacity: 0.45;
 		animation: meshFloat3 28s ease-in-out infinite alternate;
+	}
+
+	/* Blob 4: Soft Accent Glow Near Center */
+	.blob-accent {
+		top: 55%;
+		left: 45%;
+		width: 45vw;
+		height: 45vw;
+		max-width: 500px;
+		max-height: 500px;
+		background: radial-gradient(circle, rgb(var(--mdui-color-primary-container, var(--mdui-color-primary))) 0%, transparent 65%);
+		opacity: 0.38;
+		animation: meshFloat4 24s ease-in-out infinite alternate;
 	}
 
 	@keyframes meshFloat1 {
@@ -75,7 +91,7 @@
 			transform: translate(0, 0) scale(1);
 		}
 		100% {
-			transform: translate(50px, 40px) scale(1.08);
+			transform: translate(60px, 45px) scale(1.1);
 		}
 	}
 
@@ -84,7 +100,7 @@
 			transform: translate(0, 0) scale(1);
 		}
 		100% {
-			transform: translate(-45px, -50px) scale(1.05);
+			transform: translate(-50px, -55px) scale(1.06);
 		}
 	}
 
@@ -93,7 +109,16 @@
 			transform: translate(0, 0) scale(1);
 		}
 		100% {
-			transform: translate(35px, -35px) scale(1.1);
+			transform: translate(45px, -40px) scale(1.12);
+		}
+	}
+
+	@keyframes meshFloat4 {
+		0% {
+			transform: translate(0, 0) scale(1);
+		}
+		100% {
+			transform: translate(-30px, 35px) scale(1.08);
 		}
 	}
 

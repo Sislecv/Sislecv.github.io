@@ -3,7 +3,8 @@
 import { techStack } from "../site.config";
 const STACK = techStack;
 
-const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
+// Repeat 4x per track group to easily exceed any viewport width
+const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card pixel-tech-grid-card">
@@ -25,24 +26,42 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 			<span class="tech-label-code">&lt;stack/&gt;</span>
 		</div>
 
-		<!-- Smooth infinite tech icon track -->
+		<!-- True Seamless Infinite Tech Icon Marquee -->
 		<div class="stack-viewport">
-			<div class="stack-track">
-				{
-					TRACK_ITEMS.map((s, i) => (
-						<a
-							class="stack-item"
-							href={s.url}
-							target="_blank"
-							rel="noreferrer"
-							title={s.name}
-							aria-hidden={i >= STACK.length ? "true" : undefined}
-							tabindex={i >= STACK.length ? -1 : undefined}
-						>
-							<img src={s.icon} alt={i < STACK.length ? s.name : ""} loading="lazy" class="stack-icon" />
-						</a>
-					))
-				}
+			<div class="stack-marquee-slider">
+				<!-- Group 1 -->
+				<div class="track-group">
+					{
+						GROUP_A.map((s) => (
+							<a
+								class="stack-item"
+								href={s.url}
+								target="_blank"
+								rel="noreferrer"
+								title={s.name}
+							>
+								<img src={s.icon} alt={s.name} loading="lazy" class="stack-icon" />
+							</a>
+						))
+					}
+				</div>
+				<!-- Duplicate Group 2 for 100% Seamless Loop -->
+				<div class="track-group" aria-hidden="true">
+					{
+						GROUP_A.map((s) => (
+							<a
+								class="stack-item"
+								href={s.url}
+								target="_blank"
+								rel="noreferrer"
+								tabindex="-1"
+								title={s.name}
+							>
+								<img src={s.icon} alt="" loading="lazy" class="stack-icon" />
+							</a>
+						))
+					}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -52,12 +71,18 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 	.pixel-tech-grid-card {
 		position: relative;
 		overflow: hidden;
-		background: #18191b !important;
+		background: rgba(24, 25, 27, 0.85) !important;
+		backdrop-filter: blur(20px) saturate(180%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
 		color: #ffffff !important;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
 		border: none !important;
 		outline: none !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
+	}
+
+	:global(.mdui-theme-dark) .pixel-tech-grid-card {
+		background: rgba(20, 20, 24, 0.85) !important;
 	}
 
 	.pixel-tech-grid-card:hover {
@@ -184,48 +209,63 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 	.stack-viewport {
 		overflow: hidden;
 		width: 100%;
-		mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
-		-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+		mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
 		margin: auto 0;
 	}
 
-	.stack-track {
+	.stack-marquee-slider {
 		display: flex;
-		align-items: center;
-		gap: 16px;
 		width: max-content;
-		animation: stack-marquee 24s linear infinite;
+		animation: stack-infinite-slide 28s linear infinite;
 	}
 
-	.pixel-tech-grid-card:hover .stack-track {
+	.pixel-tech-grid-card:hover .stack-marquee-slider {
 		animation-play-state: paused;
 	}
 
+	.track-group {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding-right: 16px; /* equal gap between groups */
+		flex-shrink: 0;
+	}
+
+	/* Crisp, high-contrast icon pod container */
 	.stack-item {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		border-radius: 12px;
+		background: #ffffff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 6px;
-		border-radius: 12px;
-		background: rgba(255, 255, 255, 0.08);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 		transition: transform var(--md-duration-short, 150ms) ease,
-		            background var(--md-duration-short, 150ms) ease;
+		            box-shadow var(--md-duration-short, 150ms) ease;
 	}
 
 	.stack-item:hover {
 		transform: scale(1.15) translateY(-2px);
-		background: rgba(255, 255, 255, 0.16);
+		box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
 	}
 
 	.stack-icon {
-		width: 26px;
-		height: 26px;
+		width: 28px;
+		height: 28px;
 		object-fit: contain;
 		display: block;
 	}
 
-	@keyframes stack-marquee {
-		0% { transform: translateX(0); }
-		100% { transform: translateX(-50%); }
+	/* Continuous 100% seamless slide */
+	@keyframes stack-infinite-slide {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
 	}
 </style>

@@ -95,6 +95,18 @@ collections:
           - { label: 头像 (支持本地上传与外链), name: avatar, widget: image, choose_url: true, required: false }
           - { label: 默认主题色, name: defaultColor, widget: string, default: "#0b57d0" }
 
+      - name: status
+        label: 首页动态状态与表情 (Status)
+        file: src/data/status.json
+        format: json
+        fields:
+          - { label: 动态表情 (支持WebP动图与外链图片), name: emoji, widget: image, choose_url: true, default: "/emoji/partying-face.webp" }
+          - { label: 状态文字/心情标签, name: text, widget: string, default: "Vibing 🥳", required: false }
+          - { label: 显示天气状态标签, name: showWeather, widget: boolean, default: true, required: false }
+          - { label: 天气状态内容, name: weatherText, widget: string, default: "72°", required: false }
+          - { label: 显示实时时间标签, name: showTime, widget: boolean, default: false, required: false }
+          - { label: 点击跳转链接, name: link, widget: string, default: "https://googlefonts.github.io/noto-emoji-animation/", required: false }
+
       - name: social
         label: 社交链接
         file: src/data/social.json
