@@ -62,14 +62,17 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		{homeTiles.includes("archive") && (
 		<div class="grid-stack-item" gs-id="archive" gs-x="4" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-nav-widget">
-					<div class="widget-body">
-						<div class="widget-top-row">
-							<mdui-icon-history--outlined class="widget-icon"></mdui-icon-history--outlined>
-							<span class="widget-pill-badge">{posts.length} 篇</span>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget" title={`归档 · ${posts.length} 篇`}>
+					<div class="chart-widget-inner">
+						<div class="ring-chart-wrap">
+							<svg class="ring-svg" viewBox="0 0 64 64">
+								<circle class="ring-bg" cx="32" cy="32" r="26" />
+								<circle class="ring-fill" cx="32" cy="32" r="26" />
+							</svg>
+							<div class="ring-center-stat">{posts.length}</div>
 						</div>
-						<div class="widget-bottom-row">
-							<span class="widget-title">归档时光</span>
+						<div class="chart-sub-icon">
+							<mdui-icon-history--outlined></mdui-icon-history--outlined>
 						</div>
 					</div>
 				</mdui-card>
@@ -79,14 +82,16 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		{homeTiles.includes("category") && (
 		<div class="grid-stack-item" gs-id="category" gs-x="6" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-nav-widget">
-					<div class="widget-body">
-						<div class="widget-top-row">
-							<mdui-icon-folder--outlined class="widget-icon"></mdui-icon-folder--outlined>
-							<span class="widget-pill-badge">{categories.length} 个</span>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget" title={`分类 · ${categories.length} 个`}>
+					<div class="chart-widget-inner">
+						<div class="bars-chart-wrap">
+							<span class="bar-col b1"></span>
+							<span class="bar-col b2"></span>
+							<span class="bar-col b3"></span>
+							<div class="bars-center-stat">{categories.length}</div>
 						</div>
-						<div class="widget-bottom-row">
-							<span class="widget-title">分类专栏</span>
+						<div class="chart-sub-icon">
+							<mdui-icon-folder--outlined></mdui-icon-folder--outlined>
 						</div>
 					</div>
 				</mdui-card>
@@ -101,14 +106,16 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		{homeTiles.includes("tags") && (
 		<div class="grid-stack-item" gs-id="tags" gs-x="5" gs-y="8" gs-w="3" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-nav-widget">
-					<div class="widget-body">
-						<div class="widget-top-row">
-							<mdui-icon-tag--outlined class="widget-icon"></mdui-icon-tag--outlined>
-							<span class="widget-pill-badge">{uniqueTags.size} 话题</span>
+				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-chart-widget" title={`标签 · ${uniqueTags.size} 个`}>
+					<div class="chart-widget-inner flex-row">
+						<div class="dots-cluster-chart">
+							<span class="tag-bubble tb-1"></span>
+							<span class="tag-bubble tb-2"></span>
+							<span class="tag-bubble tb-3"></span>
+							<div class="tags-center-stat">{uniqueTags.size}</div>
 						</div>
-						<div class="widget-bottom-row">
-							<span class="widget-title">标签世界</span>
+						<div class="chart-sub-icon">
+							<mdui-icon-tag--outlined></mdui-icon-tag--outlined>
 						</div>
 					</div>
 				</mdui-card>
@@ -151,72 +158,170 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 </Layout>
 
 <style>
-	.pixel-nav-widget {
+	/* Pure Graphical Pixel Charts Widgets (No text clutter) */
+	.pixel-chart-widget {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.3) !important;
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25) !important;
 		background: rgb(var(--mdui-color-surface-container)) !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
 		            border-color var(--md-duration-short, 200ms) ease,
 		            background var(--md-duration-short, 200ms) ease !important;
+		overflow: hidden;
+		user-select: none;
 	}
 
-	.pixel-nav-widget:hover {
+	.pixel-chart-widget:hover {
 		transform: translateY(-2px);
 		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
 		background: rgb(var(--mdui-color-surface-container-high)) !important;
 	}
 
-	.widget-body {
+	.chart-widget-inner {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
-		padding: 16px 18px;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		padding: 12px;
 		box-sizing: border-box;
+		position: relative;
 	}
 
-	.widget-top-row {
+	.chart-widget-inner.flex-row {
+		flex-direction: row;
+		gap: 16px;
+	}
+
+	/* Circular Activity Ring Chart */
+	.ring-chart-wrap {
+		position: relative;
+		width: 58px;
+		height: 58px;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
+	}
+
+	.ring-svg {
 		width: 100%;
+		height: 100%;
+		transform: rotate(-90deg);
 	}
 
-	.widget-icon {
-		font-size: 26px;
-		color: rgb(var(--mdui-color-primary));
-		transition: transform var(--md-duration-short, 150ms) ease;
+	.ring-bg {
+		fill: none;
+		stroke: rgba(var(--mdui-color-outline-variant), 0.35);
+		stroke-width: 5.5;
 	}
 
-	.pixel-nav-widget:hover .widget-icon {
-		transform: scale(1.12);
+	.ring-fill {
+		fill: none;
+		stroke: rgb(var(--mdui-color-primary));
+		stroke-width: 5.5;
+		stroke-linecap: round;
+		stroke-dasharray: 163.36;
+		stroke-dashoffset: 45; /* around 72% ring fill */
+		transition: stroke-dashoffset var(--md-duration-medium, 300ms) ease;
 	}
 
-	.widget-pill-badge {
-		display: inline-flex;
-		align-items: center;
-		padding: 2px 9px;
-		border-radius: 9999px;
-		font-size: 0.72rem;
-		font-weight: 600;
-		background: rgb(var(--mdui-color-surface-container-highest));
-		color: rgb(var(--mdui-color-on-surface-variant));
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25);
+	.pixel-chart-widget:hover .ring-fill {
+		stroke-dashoffset: 20;
 	}
 
-	.widget-bottom-row {
-		margin-top: auto;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.widget-title {
-		font-size: 0.92rem;
-		font-weight: 600;
+	.ring-center-stat {
+		position: absolute;
+		font-size: 1.15rem;
+		font-weight: 800;
 		color: rgb(var(--mdui-color-on-surface));
-		letter-spacing: 0.2px;
+		letter-spacing: -0.5px;
+	}
+
+	/* Segmented Column Bars Chart */
+	.bars-chart-wrap {
+		position: relative;
+		width: 58px;
+		height: 58px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		gap: 4px;
+		padding-bottom: 2px;
+	}
+
+	.bar-col {
+		width: 7px;
+		border-radius: 9999px;
+		background: rgba(var(--mdui-color-primary), 0.4);
+		transition: height var(--md-duration-short, 200ms) ease,
+		            background-color var(--md-duration-short, 200ms) ease;
+	}
+
+	.b1 { height: 28px; }
+	.b2 { height: 46px; background: rgb(var(--mdui-color-primary)); }
+	.b3 { height: 34px; }
+
+	.pixel-chart-widget:hover .bar-col {
+		background: rgb(var(--mdui-color-primary));
+	}
+
+	.bars-center-stat {
+		position: absolute;
+		top: 2px;
+		font-size: 1.15rem;
+		font-weight: 800;
+		color: rgb(var(--mdui-color-on-surface));
+		letter-spacing: -0.5px;
+	}
+
+	/* Dot matrix / bubble cluster chart */
+	.dots-cluster-chart {
+		position: relative;
+		width: 60px;
+		height: 58px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.tag-bubble {
+		position: absolute;
+		border-radius: 50%;
+		background: rgba(var(--mdui-color-tertiary, var(--mdui-color-primary)), 0.25);
+		transition: transform var(--md-duration-short, 200ms) ease;
+	}
+
+	.tb-1 { width: 44px; height: 44px; background: rgba(var(--mdui-color-primary), 0.15); }
+	.tb-2 { width: 14px; height: 14px; top: 2px; right: 2px; background: #ea4335; opacity: 0.8; }
+	.tb-3 { width: 10px; height: 10px; bottom: 4px; left: 4px; background: #34a853; opacity: 0.8; }
+
+	.pixel-chart-widget:hover .tag-bubble {
+		transform: scale(1.08);
+	}
+
+	.tags-center-stat {
+		position: relative;
+		z-index: 2;
+		font-size: 1.15rem;
+		font-weight: 800;
+		color: rgb(var(--mdui-color-on-surface));
+		letter-spacing: -0.5px;
+	}
+
+	/* Sub-icon at bottom/corner */
+	.chart-sub-icon {
+		font-size: 18px;
+		color: rgb(var(--mdui-color-on-surface-variant));
+		opacity: 0.8;
+		transition: transform var(--md-duration-short, 150ms) ease,
+		            color var(--md-duration-short, 150ms) ease;
+	}
+
+	.pixel-chart-widget:hover .chart-sub-icon {
+		transform: scale(1.15);
+		color: rgb(var(--mdui-color-primary));
 	}
 </style>
 
@@ -225,10 +330,8 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	// Layout version key to upgrade users to the Google Pixel Widget Bento layout
-	const KEY = "homeGridLayout_v3";
+	const KEY = "homeGridLayout_v4";
 
-	// Dynamic Google Material You / Pixel Widget Bento Layout
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 3, h: 3 },
 		{ id: "emoji", x: 3, y: 0, w: 3, h: 3 },
@@ -263,13 +366,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		},
 	})!;
 
-	// Compact cells on phones
 	const mqSmall = window.matchMedia("(max-width: 480px)");
 	const applyCellHeight = () => grid.cellHeight(mqSmall.matches ? 56 : 88);
 	applyCellHeight();
 	mqSmall.addEventListener("change", applyCellHeight);
 
-	// Layout lock
 	const LOCK_KEY = "gridLocked";
 	const lockBtn = document.getElementById("layout-lock");
 	const lockIcon = document.getElementById("lock-icon");
@@ -300,7 +401,6 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	setLocked(locked);
 	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
-	// Restore persisted layout, merging in tiles added since it was saved.
 	const validTileIds = new Set([
 		...homeTiles,
 		...customCards.map((c) => c.id),

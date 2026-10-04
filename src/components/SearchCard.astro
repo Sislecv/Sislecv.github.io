@@ -1,162 +1,155 @@
 ---
-// Google Pixel Material You Stadium Pill Search Widget
+// Google Material You Clover (四叶草) Icon Search Widget
 ---
 
-<mdui-card clickable id="search-trigger" variant="filled" class="bento-card pixel-search-pill-card">
-	<div class="pill-bar-wrapper">
-		<!-- Left circular action badges -->
-		<div class="pill-left-actions">
-			<div class="pill-circle-btn p-btn-primary" title="搜索">
-				<mdui-icon-search--outlined class="p-btn-icon"></mdui-icon-search--outlined>
-			</div>
-			<div class="pill-circle-btn p-btn-secondary" title="探索">
-				<mdui-icon-auto-awesome--outlined class="p-btn-icon"></mdui-icon-auto-awesome--outlined>
+<mdui-card
+	clickable
+	id="search-trigger"
+	variant="filled"
+	class="bento-card pixel-clover-search-card"
+	title="搜索 (⌘K)"
+>
+	<div class="clover-search-wrap">
+		<!-- MD3 4-Leaf Clover (四叶草) Graphic Container -->
+		<div class="clover-shape-badge">
+			<svg class="clover-svg" viewBox="0 0 100 100" aria-hidden="true">
+				<!-- Smooth 4-leaf clover path -->
+				<path
+					class="clover-path"
+					d="M 50.00 4.00 C 62.00 4.00, 72.00 14.00, 72.00 26.00 C 72.00 34.00, 66.00 40.00, 60.00 44.00 C 66.00 40.00, 74.00 34.00, 86.00 34.00 C 94.00 34.00, 96.00 42.00, 96.00 50.00 C 96.00 58.00, 94.00 66.00, 86.00 66.00 C 74.00 66.00, 66.00 60.00, 60.00 56.00 C 66.00 60.00, 72.00 66.00, 72.00 74.00 C 72.00 86.00, 62.00 96.00, 50.00 96.00 C 38.00 96.00, 28.00 86.00, 28.00 74.00 C 28.00 66.00, 34.00 60.00, 40.00 56.00 C 34.00 60.00, 26.00 66.00, 14.00 66.00 C 6.00 66.00, 4.00 58.00, 4.00 50.00 C 4.00 42.00, 6.00 34.00, 14.00 34.00 C 26.00 34.00, 34.00 40.00, 40.00 44.00 C 34.00 40.00, 28.00 34.00, 28.00 26.00 C 28.00 14.00, 38.00 4.00, 50.00 4.00 Z"
+				/>
+			</svg>
+			<!-- Icon Centered in Clover -->
+			<div class="clover-center-icon">
+				<mdui-icon-search--outlined class="search-symbol"></mdui-icon-search--outlined>
 			</div>
 		</div>
 
-		<!-- Center inset pill input field -->
-		<div class="pill-inset-field">
-			<span class="pill-placeholder">搜索文章、想法与灵感...</span>
-			<span class="pill-emoji-accent">✨</span>
-		</div>
-
-		<!-- Right shortcut pill -->
-		<div class="pill-right-badge">
-			<span class="shortcut-text">⌘K</span>
+		<!-- Minimal shortcut pill indicator (No bulky text) -->
+		<div class="clover-badge-pill">
+			<span class="clover-kbd">⌘K</span>
 		</div>
 	</div>
 </mdui-card>
 
 <style>
-	.pixel-search-pill-card {
+	.pixel-clover-search-card {
 		height: 100%;
-		border-radius: 9999px !important;
-		padding: 6px 10px !important;
+		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
+		padding: 0 !important;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		background: #f3edf7 !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.3) !important;
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25) !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
 		            background-color var(--md-duration-short, 200ms) ease,
 		            border-color var(--md-duration-short, 200ms) ease !important;
-		box-sizing: border-box;
 		overflow: hidden;
+		user-select: none;
 	}
 
-	:global(.mdui-theme-dark) .pixel-search-pill-card {
+	:global(.mdui-theme-dark) .pixel-clover-search-card {
 		background: #2b2930 !important;
 		border-color: rgba(255, 255, 255, 0.08) !important;
 	}
 
-	.pixel-search-pill-card:hover {
+	.pixel-clover-search-card:hover {
 		transform: translateY(-2px);
 		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
-		background: #ece6f0 !important;
+		background: #ede6f5 !important;
 	}
 
-	:global(.mdui-theme-dark) .pixel-search-pill-card:hover {
-		background: #332f37 !important;
+	:global(.mdui-theme-dark) .pixel-clover-search-card:hover {
+		background: #332f38 !important;
 	}
 
-	.pill-bar-wrapper {
+	.clover-search-wrap {
 		width: 100%;
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.pill-left-actions {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		flex-shrink: 0;
-	}
-
-	.pill-circle-btn {
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: transform var(--md-duration-short, 150ms) ease;
+		position: relative;
+		padding: 12px;
+		box-sizing: border-box;
 	}
 
-	.p-btn-primary {
-		background: #6750a4;
-		color: #ffffff;
-	}
-
-	.p-btn-secondary {
-		background: #e8def8;
-		color: #4a4458;
-	}
-
-	:global(.mdui-theme-dark) .p-btn-secondary {
-		background: #4a4458;
-		color: #e8def8;
-	}
-
-	.pixel-search-pill-card:hover .pill-circle-btn {
-		transform: scale(1.08);
-	}
-
-	.p-btn-icon {
-		font-size: 16px;
-	}
-
-	.pill-inset-field {
-		flex: 1;
-		height: 36px;
-		border-radius: 9999px;
-		background: #ffffff;
+	.clover-shape-badge {
+		position: relative;
+		width: 82px;
+		height: 82px;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		padding: 0 14px;
-		box-sizing: border-box;
-		border: 1px solid rgba(0, 0, 0, 0.06);
-		transition: border-color var(--md-duration-short, 150ms) ease;
+		justify-content: center;
+		transition: transform var(--md-duration-medium, 300ms) var(--md-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
 	}
 
-	:global(.mdui-theme-dark) .pill-inset-field {
-		background: #1d1b20;
-		border-color: rgba(255, 255, 255, 0.08);
+	.pixel-clover-search-card:hover .clover-shape-badge {
+		transform: scale(1.1) rotate(8deg);
 	}
 
-	.pixel-search-pill-card:hover .pill-inset-field {
-		border-color: rgba(var(--mdui-color-primary), 0.3);
+	.clover-svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		filter: drop-shadow(0 4px 12px rgba(103, 80, 164, 0.22));
 	}
 
-	.pill-placeholder {
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: #49454f;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	:global(.mdui-theme-dark) .clover-svg {
+		filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
 	}
 
-	:global(.mdui-theme-dark) .pill-placeholder {
-		color: #cac4d0;
+	.clover-path {
+		fill: #6750a4;
+		transition: fill var(--md-duration-short, 200ms) ease;
 	}
 
-	.pill-emoji-accent {
-		font-size: 14px;
-		margin-left: 6px;
+	:global(.mdui-theme-dark) .clover-path {
+		fill: #4f378b;
 	}
 
-	.pill-right-badge {
-		flex-shrink: 0;
-		padding: 3px 8px;
+	.pixel-clover-search-card:hover .clover-path {
+		fill: #7d5260;
+	}
+
+	:global(.mdui-theme-dark) .pixel-clover-search-card:hover .clover-path {
+		fill: #633b48;
+	}
+
+	.clover-center-icon {
+		position: relative;
+		z-index: 2;
+		color: #ffffff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.search-symbol {
+		font-size: 32px;
+		transition: transform var(--md-duration-short, 200ms) ease;
+	}
+
+	.pixel-clover-search-card:hover .search-symbol {
+		transform: scale(1.12);
+	}
+
+	.clover-badge-pill {
+		position: absolute;
+		bottom: 10px;
+		right: 12px;
+		padding: 2px 7px;
 		border-radius: 9999px;
 		background: rgba(0, 0, 0, 0.06);
-		font-size: 0.72rem;
-		font-weight: 600;
+		font-size: 0.68rem;
+		font-weight: 700;
 		color: #49454f;
+		letter-spacing: 0.3px;
 	}
 
-	:global(.mdui-theme-dark) .pill-right-badge {
+	:global(.mdui-theme-dark) .clover-badge-pill {
 		background: rgba(255, 255, 255, 0.1);
 		color: #cac4d0;
 	}

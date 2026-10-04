@@ -1,19 +1,31 @@
 ---
+// Google I/O Perspective Grid & Tech Stack Widget
 import { techStack } from "../site.config";
 const STACK = techStack;
 
 const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
-<mdui-card clickable variant="filled" class="bento-card pixel-stack-card">
-	<div class="stack-card-content">
-		<div class="stack-header-row">
-			<span class="stack-pill-badge">
-				<span class="stack-status-dot"></span>
-				Tech Stack · 开发技术栈
-			</span>
+<mdui-card clickable variant="filled" class="bento-card pixel-tech-grid-card">
+	<!-- Google I/O 3D Horizon Perspective Grid -->
+	<div class="perspective-horizon" aria-hidden="true">
+		<div class="grid-plane grid-top"></div>
+		<div class="grid-plane grid-bottom"></div>
+		<!-- Floating Code Capsule < > -->
+		<div class="floating-code-capsule">
+			<span class="code-pill cp-red"></span>
+			<span class="code-pill cp-blue"></span>
+		</div>
+	</div>
+
+	<div class="tech-card-content">
+		<!-- Minimal top indicator -->
+		<div class="tech-top-indicator">
+			<span class="tech-status-dot"></span>
+			<span class="tech-label-code">&lt;stack/&gt;</span>
 		</div>
 
+		<!-- Smooth infinite tech icon track -->
 		<div class="stack-viewport">
 			<div class="stack-track">
 				{
@@ -37,55 +49,137 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 </mdui-card>
 
 <style>
-	.pixel-stack-card {
-		height: 100%;
+	.pixel-tech-grid-card {
+		position: relative;
+		overflow: hidden;
+		background: #18191b !important;
+		color: #ffffff !important;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.3) !important;
-		background: rgb(var(--mdui-color-surface-container)) !important;
+		border: 1px solid rgba(255, 255, 255, 0.08) !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            border-color var(--md-duration-short, 200ms) ease,
-		            background var(--md-duration-short, 200ms) ease !important;
+		            border-color var(--md-duration-short, 200ms) ease !important;
 	}
 
-	.pixel-stack-card:hover {
+	.pixel-tech-grid-card:hover {
 		transform: translateY(-2px);
-		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
-		background: rgb(var(--mdui-color-surface-container-high)) !important;
+		border-color: rgba(255, 255, 255, 0.22) !important;
 	}
 
-	.stack-card-content {
+	/* 3D Horizon Perspective Grid from Google I/O 2023 */
+	.perspective-horizon {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 55%;
+		pointer-events: none;
+		perspective: 260px;
+		overflow: hidden;
+		opacity: 0.4;
+		mask-image: linear-gradient(to right, transparent 0%, black 35%);
+		-webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
+		transition: opacity var(--md-duration-short, 200ms) ease;
+	}
+
+	.pixel-tech-grid-card:hover .perspective-horizon {
+		opacity: 0.6;
+	}
+
+	.grid-plane {
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 100%;
+		background-image:
+			linear-gradient(to right, rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+		background-size: 28px 20px;
+	}
+
+	.grid-bottom {
+		bottom: 0;
+		transform-origin: center bottom;
+		transform: rotateX(65deg);
+	}
+
+	.grid-top {
+		top: 0;
+		transform-origin: center top;
+		transform: rotateX(-65deg);
+	}
+
+	/* Floating colorful bracket < */
+	.floating-code-capsule {
+		position: absolute;
+		right: 24px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 28px;
+		height: 34px;
+		z-index: 2;
+		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+		transition: transform var(--md-duration-short, 200ms) ease;
+	}
+
+	.pixel-tech-grid-card:hover .floating-code-capsule {
+		transform: translateY(-50%) scale(1.1);
+	}
+
+	.code-pill {
+		position: absolute;
+		width: 9px;
+		height: 22px;
+		border-radius: 9999px;
+	}
+
+	.cp-red {
+		background: #ea4335;
+		top: 0;
+		right: 6px;
+		transform: rotate(-35deg);
+		transform-origin: bottom center;
+	}
+
+	.cp-blue {
+		background: #4285f4;
+		bottom: 0;
+		right: 6px;
+		transform: rotate(35deg);
+		transform-origin: top center;
+	}
+
+	/* Content Layer */
+	.tech-card-content {
+		position: relative;
+		z-index: 3;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 14px 18px;
+		padding: 12px 18px;
 		box-sizing: border-box;
 	}
 
-	.stack-header-row {
+	.tech-top-indicator {
 		display: flex;
 		align-items: center;
-	}
-
-	.stack-pill-badge {
-		display: inline-flex;
-		align-items: center;
 		gap: 6px;
-		padding: 3px 10px;
-		border-radius: 9999px;
-		background: rgb(var(--mdui-color-surface-container-highest));
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25);
-		font-size: 0.74rem;
-		font-weight: 600;
-		color: rgb(var(--mdui-color-on-surface-variant));
 	}
 
-	.stack-status-dot {
+	.tech-status-dot {
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background: #34a853; /* Google Green status */
-		box-shadow: 0 0 6px rgba(52, 168, 83, 0.6);
+		background: #34a853;
+		box-shadow: 0 0 6px #34a853;
+	}
+
+	.tech-label-code {
+		font-family: monospace;
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: rgba(255, 255, 255, 0.6);
+		letter-spacing: 0.5px;
 	}
 
 	.stack-viewport {
@@ -104,7 +198,7 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 		animation: stack-marquee 24s linear infinite;
 	}
 
-	.pixel-stack-card:hover .stack-track {
+	.pixel-tech-grid-card:hover .stack-track {
 		animation-play-state: paused;
 	}
 
@@ -114,20 +208,20 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 		justify-content: center;
 		padding: 6px;
 		border-radius: 12px;
-		background: rgb(var(--mdui-color-surface-container-lowest));
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.2);
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.12);
 		transition: transform var(--md-duration-short, 150ms) ease,
 		            background var(--md-duration-short, 150ms) ease;
 	}
 
 	.stack-item:hover {
 		transform: scale(1.15) translateY(-2px);
-		background: rgb(var(--mdui-color-surface-container-highest));
+		background: rgba(255, 255, 255, 0.16);
 	}
 
 	.stack-icon {
-		width: 28px;
-		height: 28px;
+		width: 26px;
+		height: 26px;
 		object-fit: contain;
 		display: block;
 	}
