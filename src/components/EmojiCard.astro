@@ -3,13 +3,8 @@
 import { status } from "../site.config";
 ---
 
-<mdui-card
-	clickable
-	variant="elevated"
-	class="bento-card pixel-status-card"
-	title={status.text || "Status"}
->
-	<div class="status-card-inner">
+<mdui-card clickable variant="elevated" class="bento-card">
+	<div class="card-body status-card-body">
 		<!-- Top Row: Optional Status Badges -->
 		<div class="status-badges-row">
 			{
@@ -23,7 +18,7 @@ import { status } from "../site.config";
 			{
 				status.showWeather && (
 					<span class="status-pill-weather">
-						<svg class="sun-icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="#fbbc04">
+						<svg class="sun-icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="#fbbc04">
 							<path d="M12 2l1.5 2.5 2.8-.8.5 2.9 2.9.7-.5 2.9 2.5 1.5-1.5 2.5.8 2.8-2.9.5-.7 2.9-2.9-.5-1.5 2.5-1.5-2.5-2.8.8-.5-2.9-2.9-.7.5-2.9-2.5-1.5 1.5-2.5-.8-2.8 2.9-.5.7-2.9 2.9.5z"/>
 						</svg>
 						<span>{status.weatherText}</span>
@@ -44,8 +39,8 @@ import { status } from "../site.config";
 			<img
 				src={status.emoji}
 				alt="Status Emoji"
-				width="72"
-				height="72"
+				width="68"
+				height="68"
 				loading="lazy"
 				class="material-noto-emoji"
 			/>
@@ -54,50 +49,25 @@ import { status } from "../site.config";
 </mdui-card>
 
 <style>
-	.pixel-status-card {
-		height: 100%;
-		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
-		border: none !important;
-		outline: none !important;
-		padding: 0 !important;
-		overflow: hidden;
-		background: rgba(235, 220, 249, 0.82) !important;
-		backdrop-filter: blur(24px) saturate(180%);
-		-webkit-backdrop-filter: blur(24px) saturate(180%);
-		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            box-shadow var(--md-duration-short, 200ms) ease !important;
-		user-select: none;
-	}
-
-	:global(.mdui-theme-dark) .pixel-status-card {
-		background: rgba(43, 38, 51, 0.8) !important;
-	}
-
-	.pixel-status-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 8px 24px rgba(103, 80, 164, 0.22);
-	}
-
-	.status-card-inner {
-		width: 100%;
+	.status-card-body {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 14px 16px;
 		box-sizing: border-box;
+		user-select: none;
 	}
 
 	@media (max-width: 640px) {
-		.status-card-inner {
+		.status-card-body {
 			flex-direction: row !important;
 			align-items: center !important;
 			justify-content: space-between !important;
-			padding: 16px 20px !important;
+			padding: 14px 18px !important;
 		}
 		.material-noto-emoji {
-			width: 62px !important;
-			height: 62px !important;
+			width: 58px !important;
+			height: 58px !important;
 		}
 	}
 
@@ -109,24 +79,18 @@ import { status } from "../site.config";
 		z-index: 2;
 	}
 
-	.status-pill-text {
+	.status-pill-text,
+	.status-pill-weather,
+	.status-pill-time {
 		display: inline-flex;
 		align-items: center;
 		gap: 5px;
 		padding: 3px 10px;
 		border-radius: 9999px;
-		background: rgba(255, 255, 255, 0.65);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
+		background: rgb(var(--mdui-color-surface-container-high));
+		color: rgb(var(--mdui-color-on-surface-variant));
 		font-size: 0.74rem;
-		font-weight: 600;
-		color: #4a2875;
-		letter-spacing: 0.1px;
-	}
-
-	:global(.mdui-theme-dark) .status-pill-text {
-		background: rgba(255, 255, 255, 0.12);
-		color: #e8def8;
+		font-weight: 500;
 	}
 
 	.status-live-dot {
@@ -137,25 +101,8 @@ import { status } from "../site.config";
 		box-shadow: 0 0 6px #34a853;
 	}
 
-	.status-pill-weather,
-	.status-pill-time {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-		padding: 3px 8px;
-		border-radius: 9999px;
-		background: rgba(255, 255, 255, 0.6);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
-		font-size: 0.72rem;
-		font-weight: 600;
-		color: #381e72;
-	}
-
-	:global(.mdui-theme-dark) .status-pill-weather,
-	:global(.mdui-theme-dark) .status-pill-time {
-		background: rgba(255, 255, 255, 0.1);
-		color: #e8def8;
+	.sun-icon-svg {
+		display: block;
 	}
 
 	.status-emoji-hero-wrap {
@@ -163,19 +110,19 @@ import { status } from "../site.config";
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-bottom: 4px;
+		padding-bottom: 2px;
 	}
 
 	.material-noto-emoji {
 		width: 68px;
 		height: 68px;
 		object-fit: contain;
-		filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15));
+		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
 	}
 
-	.pixel-status-card:hover .material-noto-emoji {
-		transform: scale(1.12) rotate(5deg);
+	.bento-card:hover .material-noto-emoji {
+		transform: scale(1.1) rotate(4deg);
 	}
 </style>
 
