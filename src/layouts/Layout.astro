@@ -51,19 +51,17 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 			media="(prefers-color-scheme: dark)"
 		/>
 		<script is:inline>
-			// Apply persisted theme before paint to avoid flash
+			// Apply persisted theme before paint to avoid flash and guarantee global harmony
 			(function () {
 				try {
 					var theme = localStorage.getItem("theme");
-					if (theme === "dark") {
-						document.documentElement.classList.add("mdui-theme-dark");
-					} else if (theme === "light") {
-						document.documentElement.classList.add("mdui-theme-light");
-					} else {
-						document.documentElement.classList.add("mdui-theme-auto");
-					}
+					var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+					var isDark = theme === "dark" || (!theme && prefersDark);
+					var html = document.documentElement;
+					html.classList.remove("mdui-theme-light", "mdui-theme-dark", "mdui-theme-auto");
+					html.classList.add(isDark ? "mdui-theme-dark" : "mdui-theme-light");
 				} catch (e) {
-					document.documentElement.classList.add("mdui-theme-auto");
+					document.documentElement.classList.add("mdui-theme-light");
 				}
 			})();
 		</script>

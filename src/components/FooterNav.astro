@@ -45,38 +45,30 @@ const { pathname } = Astro.url;
 	</mdui-icon-button>
 </mdui-card>
 
-<script is:inline>
+<script>
+	import { isDark, setAppTheme } from "../lib/theme";
+
 	const btn = document.getElementById("footer-theme-toggle");
 	if (btn) {
 		const iconDark = document.getElementById("footer-icon-dark");
 		const iconLight = document.getElementById("footer-icon-light");
 
-		const isDark = () =>
-			document.documentElement.classList.contains("mdui-theme-dark") ||
-			(!document.documentElement.classList.contains("mdui-theme-light") &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches);
-
 		const syncIcon = () => {
 			const dark = isDark();
-			iconDark.style.display = dark ? "" : "none";
-			iconLight.style.display = dark ? "none" : "";
+			if (iconDark) iconDark.style.display = dark ? "" : "none";
+			if (iconLight) iconLight.style.display = dark ? "none" : "";
 		};
 
 		btn.addEventListener("click", () => {
-			const html = document.documentElement;
-			if (isDark()) {
-				html.classList.remove("mdui-theme-dark");
-				html.classList.add("mdui-theme-light");
-				localStorage.setItem("theme", "light");
-			} else {
-				html.classList.remove("mdui-theme-light");
-				html.classList.add("mdui-theme-dark");
-				localStorage.setItem("theme", "dark");
-			}
-			syncIcon();
+			setAppTheme(isDark() ? "light" : "dark");
 		});
 
-		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncIcon);
+		window.addEventListener("app:theme-changed", syncIcon);
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+			if (!localStorage.getItem("theme")) {
+				syncIcon();
+			}
+		});
 		syncIcon();
 	}
 </script>

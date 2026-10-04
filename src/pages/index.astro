@@ -435,6 +435,15 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	.pixel-chart-widget:hover .chart-sub-icon {
 		transform: scale(1.15);
 	}
+	/* 电脑布局增加贡献日历与项目展示的上下呼吸感间距 */
+	@media (min-width: 641px) {
+		:global(.grid-stack-item[gs-id="github"]) {
+			padding-top: 14px !important;
+		}
+		:global(.grid-stack-item[gs-id="contribution"]) {
+			padding-bottom: 6px !important;
+		}
+	}
 </style>
 
 <script>
@@ -442,8 +451,9 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout_v7";
+	const KEY = "homeGridLayout_v8";
 
+	// 桌面端 8 列黄金比例布局
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 4, h: 3 },
 		{ id: "emoji", x: 4, y: 0, w: 2, h: 3 },
@@ -461,27 +471,33 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 
+	// 手机移动端 2 列精心编排布局：大卡通栏横展，微组件两两对称并排
+	const MOBILE_LAYOUT = [
+		{ id: "profile", x: 0, y: 0, w: 2, h: 3 },
+		{ id: "emoji", x: 0, y: 3, w: 1, h: 2 },
+		{ id: "appearance", x: 1, y: 3, w: 1, h: 2 },
+		{ id: "talks", x: 0, y: 5, w: 2, h: 3 },
+		{ id: "gallery", x: 0, y: 8, w: 2, h: 3 },
+		{ id: "archive", x: 0, y: 11, w: 1, h: 2 },
+		{ id: "category", x: 1, y: 11, w: 1, h: 2 },
+		{ id: "tags", x: 0, y: 13, w: 1, h: 2 },
+		{ id: "search", x: 1, y: 13, w: 1, h: 2 },
+		{ id: "techstack", x: 0, y: 15, w: 2, h: 2 },
+		{ id: "tagcloud", x: 0, y: 17, w: 2, h: 2 },
+		{ id: "contribution", x: 0, y: 19, w: 2, h: 2 },
+		{ id: "github", x: 0, y: 21, w: 2, h: 4 },
+		...customCards.map((c) => ({ id: c.id, x: 0, y: 25, w: 2, h: c.h })),
+	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
+
+	const isMobileViewport = () => window.innerWidth < 640;
+
 	const grid = GridStack.init({
-		column: 8,
-		cellHeight: 88,
-		margin: 12,
+		column: isMobileViewport() ? 2 : 8,
+		cellHeight: isMobileViewport() ? 74 : 88,
+		margin: isMobileViewport() ? 10 : 14,
 		float: false,
 		animate: true,
-		columnOpts: {
-			breakpointForWindow: true,
-			breakpoints: [
-				{ w: 840, c: 8 },
-				{ w: 500, c: 4 },
-				{ w: 0, c: 2 },
-			],
-			layout: "moveScale",
-		},
 	})!;
-
-	const mqSmall = window.matchMedia("(max-width: 480px)");
-	const applyCellHeight = () => grid.cellHeight(mqSmall.matches ? 56 : 88);
-	applyCellHeight();
-	mqSmall.addEventListener("change", applyCellHeight);
 
 	// Lock state management
 	const LOCK_KEY = "gridLocked";
@@ -570,21 +586,55 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		grid.batchUpdate(false);
 	};
 
-	// Reset layout button: restore default layout cleanly
+	// Reset layout button: restore desktop default layout cleanly
 	resetBtn?.addEventListener("click", () => {
 		try {
 			localStorage.removeItem(KEY);
 		} catch { /* ignore */ }
-		applyLayout(DEFAULT_LAYOUT);
+		applyLayout(isMobileViewport() ? MOBILE_LAYOUT : DEFAULT_LAYOUT);
 	});
 
-	// Load layout on initialization
-	try {
-		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
-		if (Array.isArray(saved) && saved.length > 0 && grid.getColumn() === 8) {
-			applyLayout(saved);
+	// Load initial layout based on current viewport
+	if (isMobileViewport()) {
+		applyLayout(MOBILE_LAYOUT);
+	} else {
+		try {
+			const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
+			if (Array.isArray(saved) && saved.length > 0) {
+				applyLayout(saved);
+			} else {
+				applyLayout(DEFAULT_LAYOUT);
+			}
+		} catch {
+			applyLayout(DEFAULT_LAYOUT);
 		}
-	} catch {
-		/* ignore corrupt layout */
 	}
+
+	// Handle window resize dynamically across breakpoints without losing desktop persistence
+	let currentMode: "mobile" | "desktop" = isMobileViewport() ? "mobile" : "desktop";
+	let resizeTimer: any = null;
+	window.addEventListener("resize", () => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(() => {
+			const mobile = isMobileViewport();
+			if (mobile && currentMode !== "mobile") {
+				currentMode = "mobile";
+				grid.column(2, "none");
+				grid.cellHeight(74);
+				grid.margin(10);
+				applyLayout(MOBILE_LAYOUT);
+			} else if (!mobile && currentMode !== "desktop") {
+				currentMode = "desktop";
+				grid.column(8, "none");
+				grid.cellHeight(88);
+				grid.margin(14);
+				try {
+					const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
+					applyLayout(Array.isArray(saved) && saved.length > 0 ? saved : DEFAULT_LAYOUT);
+				} catch {
+					applyLayout(DEFAULT_LAYOUT);
+				}
+			}
+		}, 120);
+	});
 </script>

@@ -30,13 +30,9 @@ const SCHEMES = theme.schemes;
 <script>
 	import { setColorScheme } from "mdui";
 	import { theme as themeConfig } from "../site.config";
+	import { isDark, setAppTheme } from "../lib/theme";
 
 	const darkSwitch = document.getElementById("dark-switch") as HTMLInputElement | null;
-
-	const isDark = () =>
-		document.documentElement.classList.contains("mdui-theme-dark") ||
-		(!document.documentElement.classList.contains("mdui-theme-light") &&
-			window.matchMedia("(prefers-color-scheme: dark)").matches);
 
 	const syncSwitch = () => {
 		if (darkSwitch) darkSwitch.checked = isDark();
@@ -61,21 +57,17 @@ const SCHEMES = theme.schemes;
 	syncActiveDot(savedColor);
 
 	darkSwitch?.addEventListener("change", () => {
-		const html = document.documentElement;
-		if (darkSwitch.checked) {
-			html.classList.remove("mdui-theme-light");
-			html.classList.add("mdui-theme-dark");
-			localStorage.setItem("theme", "dark");
-		} else {
-			html.classList.remove("mdui-theme-dark");
-			html.classList.add("mdui-theme-light");
-			localStorage.setItem("theme", "light");
-		}
+		setAppTheme(darkSwitch.checked ? "dark" : "light");
 	});
 
+	window.addEventListener("app:theme-changed", syncSwitch);
 	window
 		.matchMedia("(prefers-color-scheme: dark)")
-		.addEventListener("change", syncSwitch);
+		.addEventListener("change", () => {
+			if (!localStorage.getItem("theme")) {
+				syncSwitch();
+			}
+		});
 	syncSwitch();
 
 	const card = darkSwitch?.closest("mdui-card");
