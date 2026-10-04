@@ -227,34 +227,34 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 	.track-group {
 		display: flex;
 		align-items: center;
-		gap: 16px;
-		padding-right: 16px; /* equal gap between groups */
+		gap: 20px;
+		padding-right: 20px; /* equal gap between groups */
 		flex-shrink: 0;
 	}
 
-	/* Crisp, high-contrast icon pod container */
+	/* Crisp, high-contrast enlarged icon pod container */
 	.stack-item {
 		flex-shrink: 0;
-		width: 44px;
-		height: 44px;
-		border-radius: 12px;
+		width: 64px;
+		height: 64px;
+		border-radius: 18px;
 		background: #ffffff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 		transition: transform var(--md-duration-short, 150ms) ease,
 		            box-shadow var(--md-duration-short, 150ms) ease;
 	}
 
 	.stack-item:hover {
-		transform: scale(1.15) translateY(-2px);
-		box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+		transform: scale(1.15) translateY(-3px);
+		box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 	}
 
 	.stack-icon {
-		width: 28px;
-		height: 28px;
+		width: 42px;
+		height: 42px;
 		object-fit: contain;
 		display: block;
 	}

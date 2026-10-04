@@ -53,9 +53,9 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 			<div class="grid-stack-item-content"><TalksCard /></div>
 		</div>
 		)}
-		{homeTiles.includes("search") && (
-		<div class="grid-stack-item" gs-id="search" gs-x="5" gs-y="3" gs-w="3" gs-h="3">
-			<div class="grid-stack-item-content"><SearchCard /></div>
+		{homeTiles.includes("gallery") && (
+		<div class="grid-stack-item" gs-id="gallery" gs-x="5" gs-y="3" gs-w="3" gs-h="3">
+			<div class="grid-stack-item-content"><GalleryStackCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("archive") && (
@@ -98,10 +98,10 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		</div>
 		)}
 		{homeTiles.includes("tags") && (
-		<div class="grid-stack-item" gs-id="tags" gs-x="4" gs-y="6" gs-w="4" gs-h="2">
+		<div class="grid-stack-item" gs-id="tags" gs-x="4" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
 				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-chart-widget chart-amber" title={`标签 · ${uniqueTags.size} 个`}>
-					<div class="chart-widget-inner flex-row">
+					<div class="chart-widget-inner">
 						<div class="dots-cluster-chart">
 							<span class="tag-bubble tb-amber-1"></span>
 							<span class="tag-bubble tb-amber-2"></span>
@@ -116,28 +116,28 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 			</div>
 		</div>
 		)}
-		{homeTiles.includes("contribution") && (
-		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="8" gs-w="8" gs-h="2">
-			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
+		{homeTiles.includes("search") && (
+		<div class="grid-stack-item" gs-id="search" gs-x="6" gs-y="6" gs-w="2" gs-h="2">
+			<div class="grid-stack-item-content"><SearchCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("techstack") && (
-		<div class="grid-stack-item" gs-id="techstack" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
+		<div class="grid-stack-item" gs-id="techstack" gs-x="0" gs-y="8" gs-w="5" gs-h="2">
 			<div class="grid-stack-item-content"><TechStackCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("tagcloud") && (
-		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="12" gs-w="8" gs-h="2">
+		<div class="grid-stack-item" gs-id="tagcloud" gs-x="5" gs-y="8" gs-w="3" gs-h="2">
 			<div class="grid-stack-item-content"><TagCloudCard posts={posts} /></div>
 		</div>
 		)}
-		{homeTiles.includes("gallery") && (
-		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="14" gs-w="8" gs-h="3">
-			<div class="grid-stack-item-content"><GalleryStackCard /></div>
+		{homeTiles.includes("contribution") && (
+		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
+			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
 		</div>
 		)}
 		{homeTiles.includes("github") && (
-		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="17" gs-w="8" gs-h="3">
+		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="12" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
 		</div>
 		)}
@@ -442,22 +442,22 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout_v6";
+	const KEY = "homeGridLayout_v7";
 
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 4, h: 3 },
 		{ id: "emoji", x: 4, y: 0, w: 2, h: 3 },
 		{ id: "appearance", x: 6, y: 0, w: 2, h: 3 },
 		{ id: "talks", x: 0, y: 3, w: 5, h: 3 },
-		{ id: "search", x: 5, y: 3, w: 3, h: 3 },
+		{ id: "gallery", x: 5, y: 3, w: 3, h: 3 },
 		{ id: "archive", x: 0, y: 6, w: 2, h: 2 },
 		{ id: "category", x: 2, y: 6, w: 2, h: 2 },
-		{ id: "tags", x: 4, y: 6, w: 4, h: 2 },
-		{ id: "contribution", x: 0, y: 8, w: 8, h: 2 },
-		{ id: "techstack", x: 0, y: 10, w: 8, h: 2 },
-		{ id: "tagcloud", x: 0, y: 12, w: 8, h: 2 },
-		{ id: "gallery", x: 0, y: 14, w: 8, h: 3 },
-		{ id: "github", x: 0, y: 17, w: 8, h: 3 },
+		{ id: "tags", x: 4, y: 6, w: 2, h: 2 },
+		{ id: "search", x: 6, y: 6, w: 2, h: 2 },
+		{ id: "techstack", x: 0, y: 8, w: 5, h: 2 },
+		{ id: "tagcloud", x: 5, y: 8, w: 3, h: 2 },
+		{ id: "contribution", x: 0, y: 10, w: 8, h: 2 },
+		{ id: "github", x: 0, y: 12, w: 8, h: 3 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 
@@ -468,11 +468,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		float: false,
 		animate: true,
 		columnOpts: {
+			breakpointForWindow: true,
 			breakpoints: [
-				{ w: 1200, c: 8 },
-				{ w: 1024, c: 6 },
-				{ w: 768, c: 4 },
-				{ w: 480, c: 2 },
+				{ w: 840, c: 8 },
+				{ w: 500, c: 4 },
+				{ w: 0, c: 2 },
 			],
 			layout: "moveScale",
 		},
@@ -519,41 +519,70 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
 	// Safe layout persistence: ONLY save when in 8-column desktop mode and not locked!
-	// This prevents mobile responsive re-orderings from corrupting the master desktop layout.
+	let saveTimer: any = null;
 	const saveCurrentLayout = () => {
 		if (grid.getColumn() === 8 && !locked) {
+			const nodes = grid.engine.nodes;
+			if (!nodes || nodes.length === 0) return;
+			const layoutData = nodes
+				.map((n) => ({
+					id: n.id,
+					x: n.x,
+					y: n.y,
+					w: n.w,
+					h: n.h,
+				}))
+				.filter((n) => Boolean(n.id));
 			try {
-				localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
+				localStorage.setItem(KEY, JSON.stringify(layoutData));
 			} catch {
 				/* ignore */
 			}
 		}
 	};
 
-	// Listen only to user interactions (drag & resize stop)
-	grid.on("dragstop resizestop", saveCurrentLayout);
+	const scheduleSave = () => {
+		clearTimeout(saveTimer);
+		saveTimer = setTimeout(saveCurrentLayout, 150);
+	};
 
-	// Reset layout button
+	grid.on("dragstop resizestop", scheduleSave);
+	grid.on("change", () => {
+		if (grid.getColumn() === 8 && !locked) {
+			scheduleSave();
+		}
+	});
+
+	const applyLayout = (layoutItems: Array<{ id?: string; x?: number; y?: number; w?: number; h?: number }>) => {
+		grid.batchUpdate();
+		layoutItems.forEach((item) => {
+			if (!item.id) return;
+			const el = document.querySelector(`.grid-stack > .grid-stack-item[gs-id="${item.id}"]`) as HTMLElement | null;
+			if (el) {
+				grid.update(el, {
+					x: item.x,
+					y: item.y,
+					w: item.w,
+					h: item.h,
+				});
+			}
+		});
+		grid.batchUpdate(false);
+	};
+
+	// Reset layout button: restore default layout cleanly
 	resetBtn?.addEventListener("click", () => {
 		try {
 			localStorage.removeItem(KEY);
 		} catch { /* ignore */ }
-		grid.load(DEFAULT_LAYOUT);
+		applyLayout(DEFAULT_LAYOUT);
 	});
 
 	// Load layout on initialization
-	const validTileIds = new Set([
-		...homeTiles,
-		...customCards.map((c) => c.id),
-	]);
 	try {
 		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
-		if (Array.isArray(saved) && saved.length > 0) {
-			const savedIds = new Set(saved.map((n: any) => n.id));
-			for (const d of DEFAULT_LAYOUT) {
-				if (!savedIds.has(d.id)) saved.push(d);
-			}
-			grid.load(saved.filter((n: any) => validTileIds.has(n.id)));
+		if (Array.isArray(saved) && saved.length > 0 && grid.getColumn() === 8) {
+			applyLayout(saved);
 		}
 	} catch {
 		/* ignore corrupt layout */
