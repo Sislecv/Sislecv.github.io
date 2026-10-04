@@ -2,13 +2,18 @@
 import { techStack } from "../site.config";
 const STACK = techStack;
 
-// Repeat the track 4x so its width exceeds 2x the viewport,
-// making the -50% loop seamless.
 const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
-<mdui-card clickable variant="filled" class="bento-card">
-	<div class="card-body" style="padding: 14px; justify-content: center">
+<mdui-card clickable variant="filled" class="bento-card pixel-stack-card">
+	<div class="stack-card-content">
+		<div class="stack-header-row">
+			<span class="stack-pill-badge">
+				<span class="stack-status-dot"></span>
+				Tech Stack · 开发技术栈
+			</span>
+		</div>
+
 		<div class="stack-viewport">
 			<div class="stack-track">
 				{
@@ -30,3 +35,105 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 		</div>
 	</div>
 </mdui-card>
+
+<style>
+	.pixel-stack-card {
+		height: 100%;
+		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.3) !important;
+		background: rgb(var(--mdui-color-surface-container)) !important;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
+		            border-color var(--md-duration-short, 200ms) ease,
+		            background var(--md-duration-short, 200ms) ease !important;
+	}
+
+	.pixel-stack-card:hover {
+		transform: translateY(-2px);
+		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
+		background: rgb(var(--mdui-color-surface-container-high)) !important;
+	}
+
+	.stack-card-content {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 14px 18px;
+		box-sizing: border-box;
+	}
+
+	.stack-header-row {
+		display: flex;
+		align-items: center;
+	}
+
+	.stack-pill-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 3px 10px;
+		border-radius: 9999px;
+		background: rgb(var(--mdui-color-surface-container-highest));
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25);
+		font-size: 0.74rem;
+		font-weight: 600;
+		color: rgb(var(--mdui-color-on-surface-variant));
+	}
+
+	.stack-status-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #34a853; /* Google Green status */
+		box-shadow: 0 0 6px rgba(52, 168, 83, 0.6);
+	}
+
+	.stack-viewport {
+		overflow: hidden;
+		width: 100%;
+		mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+		margin: auto 0;
+	}
+
+	.stack-track {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		width: max-content;
+		animation: stack-marquee 24s linear infinite;
+	}
+
+	.pixel-stack-card:hover .stack-track {
+		animation-play-state: paused;
+	}
+
+	.stack-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 6px;
+		border-radius: 12px;
+		background: rgb(var(--mdui-color-surface-container-lowest));
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.2);
+		transition: transform var(--md-duration-short, 150ms) ease,
+		            background var(--md-duration-short, 150ms) ease;
+	}
+
+	.stack-item:hover {
+		transform: scale(1.15) translateY(-2px);
+		background: rgb(var(--mdui-color-surface-container-highest));
+	}
+
+	.stack-icon {
+		width: 28px;
+		height: 28px;
+		object-fit: contain;
+		display: block;
+	}
+
+	@keyframes stack-marquee {
+		0% { transform: translateX(0); }
+		100% { transform: translateX(-50%); }
+	}
+</style>

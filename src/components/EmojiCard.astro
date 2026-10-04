@@ -1,16 +1,218 @@
 ---
+// Google Pixel Material You 12-point Scalloped Clock Widget
 ---
 
-<mdui-card clickable href="https://googlefonts.github.io/noto-emoji-animation/" target="_blank" rel="noreferrer" variant="elevated" class="bento-card emoji-card">
-	<div class="card-body" style="padding: 0; display: flex; align-items: center; justify-content: center">
-		<img
-			src="/emoji/partying-face.webp"
-			alt="🥳"
-			width="72"
-			height="72"
-			loading="lazy"
-			class="emoji-img emoji-hero"
-			style="margin: auto"
-		/>
+<mdui-card
+	clickable
+	variant="elevated"
+	class="bento-card pixel-clock-card"
+	id="pixel-clock-widget"
+	title="点击切换 Material You 配色"
+>
+	<div class="clock-widget-container">
+		<!-- 12-point Scalloped Flower Badge -->
+		<div class="scallop-badge-wrap">
+			<svg class="scallop-flower-svg" viewBox="0 0 100 100" aria-hidden="true">
+				<path
+					class="scallop-path"
+					d="M 50.00 6.00C 53.06 6.00, 56.06 13.32, 59.58 14.26C 63.10 15.20, 69.35 10.36, 72.00 11.89C 74.65 13.43, 73.59 21.26, 76.16 23.84C 78.74 26.41, 86.57 25.35, 88.11 28.00C 89.64 30.65, 84.80 36.90, 85.74 40.42C 86.68 43.94, 94.00 46.94, 94.00 50.00C 94.00 53.06, 86.68 56.06, 85.74 59.58C 84.80 63.10, 89.64 69.35, 88.11 72.00C 86.57 74.65, 78.74 73.59, 76.16 76.16C 73.59 78.74, 74.65 86.57, 72.00 88.11C 69.35 89.64, 63.10 84.80, 59.58 85.74C 56.06 86.68, 53.06 94.00, 50.00 94.00C 46.94 94.00, 43.94 86.68, 40.42 85.74C 36.90 84.80, 30.65 89.64, 28.00 88.11C 25.35 86.57, 26.41 78.74, 23.84 76.16C 21.26 73.59, 13.43 74.65, 11.89 72.00C 10.36 69.35, 15.20 63.10, 14.26 59.58C 13.32 56.06, 6.00 53.06, 6.00 50.00C 6.00 46.94, 13.32 43.94, 14.26 40.42C 15.20 36.90, 10.36 30.65, 11.89 28.00C 13.43 25.35, 21.26 26.41, 23.84 23.84C 26.41 21.26, 25.35 13.43, 28.00 11.89C 30.65 10.36, 36.90 15.20, 40.42 14.26C 43.94 13.32, 46.94 6.00, 50.00 6.00Z"
+				/>
+				<!-- Clock Hands (Real-time tracking with Google Material round caps) -->
+				<line id="clock-hour-hand" x1="50" y1="50" x2="50" y2="30" stroke-linecap="round" />
+				<line id="clock-minute-hand" x1="50" y1="50" x2="68" y2="60" stroke-linecap="round" />
+				<circle cx="50" cy="50" r="3.5" class="clock-pivot" />
+				<circle id="clock-accent-dot" cx="36" cy="62" r="3" />
+			</svg>
+		</div>
+
+		<!-- Friendly Greeting Typographic Label -->
+		<div class="clock-label-wrap">
+			<span id="pixel-greeting" class="pixel-greeting-text">Hi there!</span>
+		</div>
 	</div>
 </mdui-card>
+
+<style>
+	.pixel-clock-card {
+		height: 100%;
+		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
+		padding: 0 !important;
+		overflow: hidden;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
+		            background-color var(--md-duration-medium, 300ms) ease,
+		            color var(--md-duration-medium, 300ms) ease !important;
+		user-select: none;
+	}
+
+	.pixel-clock-card:hover {
+		transform: translateY(-2px);
+	}
+
+	.clock-widget-container {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 16px 12px;
+		box-sizing: border-box;
+		gap: 12px;
+	}
+
+	.scallop-badge-wrap {
+		width: 96px;
+		height: 96px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+	}
+
+	.pixel-clock-card:hover .scallop-badge-wrap {
+		transform: scale(1.06) rotate(6deg);
+	}
+
+	.scallop-flower-svg {
+		width: 100%;
+		height: 100%;
+		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+	}
+
+	/* Color theme styles matching reference image (Lavender, Dark Violet, Coral) */
+	/* Theme 1 (Default): Lavender */
+	.pixel-clock-card {
+		background: #ebdcf9 !important;
+		color: #4a2875 !important;
+	}
+	.pixel-clock-card .scallop-path {
+		fill: #673ab7;
+	}
+	.pixel-clock-card #clock-hour-hand,
+	.pixel-clock-card #clock-minute-hand,
+	.pixel-clock-card .clock-pivot,
+	.pixel-clock-card #clock-accent-dot {
+		stroke: #ffb4ab;
+		fill: #ffb4ab;
+		stroke-width: 6;
+	}
+
+	/* Theme 2: Coral Pink */
+	.pixel-clock-card.theme-coral {
+		background: #ffb3a7 !important;
+		color: #410002 !important;
+	}
+	.pixel-clock-card.theme-coral .scallop-path {
+		fill: #2c1b18;
+	}
+	.pixel-clock-card.theme-coral #clock-hour-hand,
+	.pixel-clock-card.theme-coral #clock-minute-hand,
+	.pixel-clock-card.theme-coral .clock-pivot,
+	.pixel-clock-card.theme-coral #clock-accent-dot {
+		stroke: #ffdad5;
+		fill: #ffdad5;
+		stroke-width: 6;
+	}
+
+	/* Theme 3: Dark Violet (Night) */
+	.pixel-clock-card.theme-dark-violet {
+		background: #1d1b20 !important;
+		color: #e6e1e5 !important;
+	}
+	.pixel-clock-card.theme-dark-violet .scallop-path {
+		fill: #4f378b;
+	}
+	.pixel-clock-card.theme-dark-violet #clock-hour-hand,
+	.pixel-clock-card.theme-dark-violet #clock-minute-hand,
+	.pixel-clock-card.theme-dark-violet .clock-pivot,
+	.pixel-clock-card.theme-dark-violet #clock-accent-dot {
+		stroke: #e8def8;
+		fill: #e8def8;
+		stroke-width: 6;
+	}
+
+	/* Hands width adjustment */
+	#clock-hour-hand {
+		stroke-width: 6.5px;
+	}
+	#clock-minute-hand {
+		stroke-width: 5.5px;
+	}
+
+	.clock-label-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.pixel-greeting-text {
+		font-family: inherit;
+		font-size: 1.15rem;
+		font-weight: 700;
+		letter-spacing: -0.3px;
+	}
+</style>
+
+<script>
+	const clockCard = document.getElementById("pixel-clock-widget");
+	const hourHand = document.getElementById("clock-hour-hand");
+	const minuteHand = document.getElementById("clock-minute-hand");
+	const greeting = document.getElementById("pixel-greeting");
+
+	// Update hands based on real-world client time
+	function updateClock() {
+		const now = new Date();
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+
+		// Calculate angles
+		const minuteAngle = (minutes / 60) * 360;
+		const hourAngle = ((hours % 12) + minutes / 60) * 30;
+
+		// Center is (50, 50)
+		const cx = 50;
+		const cy = 50;
+
+		// Hour hand length = 18
+		const radH = ((hourAngle - 90) * Math.PI) / 180;
+		const hx = cx + 18 * Math.cos(radH);
+		const hy = cy + 18 * Math.sin(radH);
+		hourHand?.setAttribute("x2", hx.toFixed(2));
+		hourHand?.setAttribute("y2", hy.toFixed(2));
+
+		// Minute hand length = 25
+		const radM = ((minuteAngle - 90) * Math.PI) / 180;
+		const mx = cx + 25 * Math.cos(radM);
+		const my = cy + 25 * Math.sin(radM);
+		minuteHand?.setAttribute("x2", mx.toFixed(2));
+		minuteHand?.setAttribute("y2", my.toFixed(2));
+
+		// Update greeting based on hour
+		if (greeting) {
+			if (hours >= 5 && hours < 12) {
+				greeting.textContent = "Morning";
+			} else if (hours >= 12 && hours < 18) {
+				greeting.textContent = "Afternoon";
+			} else if (hours >= 18 && hours < 23) {
+				greeting.textContent = "Hi there!";
+			} else {
+				greeting.textContent = "Good night";
+			}
+		}
+	}
+
+	updateClock();
+	setInterval(updateClock, 1000 * 30);
+
+	// Click to cycle color theme like in the reference!
+	const themes = ["", "theme-coral", "theme-dark-violet"];
+	let themeIndex = 0;
+	clockCard?.addEventListener("click", () => {
+		if (!clockCard) return;
+		clockCard.classList.remove(themes[themeIndex]);
+		themeIndex = (themeIndex + 1) % themes.length;
+		if (themes[themeIndex]) {
+			clockCard.classList.add(themes[themeIndex]);
+		}
+	});
+</script>

@@ -10,12 +10,14 @@ import TagCloudCard from "../components/TagCloudCard.astro";
 import TechStackCard from "../components/TechStackCard.astro";
 import GalleryStackCard from "../components/GalleryStackCard.astro";
 import GitHubProjectsCard from "../components/GitHubProjectsCard.astro";
+import TalksCard from "../components/TalksCard.astro";
 import CustomCard from "../components/CustomCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
 import { homeTiles, customCards } from "../site.config";
 
 const posts = await getAllPosts();
 const categories = [...getCategories(posts).entries()];
+const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 ---
 
 <Layout showFooterNav={false}>
@@ -32,14 +34,14 @@ const categories = [...getCategories(posts).entries()];
 			<div class="grid-stack-item-content"><ProfileCard /></div>
 		</div>
 		)}
-		{homeTiles.includes("appearance") && (
-		<div class="grid-stack-item" gs-id="appearance" gs-x="3" gs-y="0" gs-w="3" gs-h="3">
-			<div class="grid-stack-item-content"><AppearanceCard /></div>
+		{homeTiles.includes("emoji") && (
+		<div class="grid-stack-item" gs-id="emoji" gs-x="3" gs-y="0" gs-w="3" gs-h="3">
+			<div class="grid-stack-item-content"><EmojiCard /></div>
 		</div>
 		)}
-		{homeTiles.includes("emoji") && (
-		<div class="grid-stack-item" gs-id="emoji" gs-x="6" gs-y="0" gs-w="2" gs-h="3">
-			<div class="grid-stack-item-content"><EmojiCard /></div>
+		{homeTiles.includes("appearance") && (
+		<div class="grid-stack-item" gs-id="appearance" gs-x="6" gs-y="0" gs-w="2" gs-h="3">
+			<div class="grid-stack-item-content"><AppearanceCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("contribution") && (
@@ -47,73 +49,85 @@ const categories = [...getCategories(posts).entries()];
 			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
 		</div>
 		)}
+		{homeTiles.includes("talks") && (
+		<div class="grid-stack-item" gs-id="talks" gs-x="0" gs-y="5" gs-w="4" gs-h="3">
+			<div class="grid-stack-item-content"><TalksCard /></div>
+		</div>
+		)}
 		{homeTiles.includes("search") && (
-		<div class="grid-stack-item" gs-id="search" gs-x="0" gs-y="6" gs-w="2" gs-h="3">
+		<div class="grid-stack-item" gs-id="search" gs-x="4" gs-y="5" gs-w="4" gs-h="1">
 			<div class="grid-stack-item-content"><SearchCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("archive") && (
-		<div class="grid-stack-item" gs-id="archive" gs-x="2" gs-y="6" gs-w="2" gs-h="3">
+		<div class="grid-stack-item" gs-id="archive" gs-x="4" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
-					<div class="sq-body">
-						<mdui-icon-history--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-history--outlined>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-nav-widget">
+					<div class="widget-body">
+						<div class="widget-top-row">
+							<mdui-icon-history--outlined class="widget-icon"></mdui-icon-history--outlined>
+							<span class="widget-pill-badge">{posts.length} 篇</span>
+						</div>
+						<div class="widget-bottom-row">
+							<span class="widget-title">归档时光</span>
+						</div>
 					</div>
 				</mdui-card>
 			</div>
 		</div>
 		)}
 		{homeTiles.includes("category") && (
-		<div class="grid-stack-item" gs-id="category" gs-x="4" gs-y="6" gs-w="2" gs-h="3">
+		<div class="grid-stack-item" gs-id="category" gs-x="6" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card sq-card">
-					<div class="sq-body">
-						<mdui-icon-folder--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-folder--outlined>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-nav-widget">
+					<div class="widget-body">
+						<div class="widget-top-row">
+							<mdui-icon-folder--outlined class="widget-icon"></mdui-icon-folder--outlined>
+							<span class="widget-pill-badge">{categories.length} 个</span>
+						</div>
+						<div class="widget-bottom-row">
+							<span class="widget-title">分类专栏</span>
+						</div>
 					</div>
 				</mdui-card>
 			</div>
 		</div>
 		)}
+		{homeTiles.includes("techstack") && (
+		<div class="grid-stack-item" gs-id="techstack" gs-x="0" gs-y="8" gs-w="5" gs-h="2">
+			<div class="grid-stack-item-content"><TechStackCard /></div>
+		</div>
+		)}
 		{homeTiles.includes("tags") && (
-		<div class="grid-stack-item" gs-id="tags" gs-x="6" gs-y="6" gs-w="2" gs-h="3">
+		<div class="grid-stack-item" gs-id="tags" gs-x="5" gs-y="8" gs-w="3" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/tags/" variant="filled" class="bento-card sq-card">
-					<div class="sq-body">
-						<mdui-icon-tag--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-tag--outlined>
+				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-nav-widget">
+					<div class="widget-body">
+						<div class="widget-top-row">
+							<mdui-icon-tag--outlined class="widget-icon"></mdui-icon-tag--outlined>
+							<span class="widget-pill-badge">{uniqueTags.size} 话题</span>
+						</div>
+						<div class="widget-bottom-row">
+							<span class="widget-title">标签世界</span>
+						</div>
 					</div>
 				</mdui-card>
 			</div>
 		</div>
 		)}
 		{homeTiles.includes("tagcloud") && (
-		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="9" gs-w="4" gs-h="2">
+		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
 			<div class="grid-stack-item-content"><TagCloudCard posts={posts} /></div>
 		</div>
 		)}
-		{homeTiles.includes("techstack") && (
-		<div class="grid-stack-item" gs-id="techstack" gs-x="4" gs-y="9" gs-w="4" gs-h="2">
-			<div class="grid-stack-item-content"><TechStackCard /></div>
-		</div>
-		)}
 		{homeTiles.includes("gallery") && (
-		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="11" gs-w="8" gs-h="3">
+		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="12" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GalleryStackCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("github") && (
-		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="13" gs-w="4" gs-h="4">
+		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="15" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
-		</div>
-		)}
-		{homeTiles.includes("talks") && (
-		<div class="grid-stack-item" gs-id="talks" gs-x="4" gs-y="13" gs-w="4" gs-h="2">
-			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/talks/" variant="filled" class="bento-card sq-card">
-					<div class="sq-body">
-						<mdui-icon-mode-comment--outlined style="font-size: 34px; color: rgb(var(--mdui-color-primary))"></mdui-icon-mode-comment--outlined>
-					</div>
-				</mdui-card>
-			</div>
 		</div>
 		)}
 		{
@@ -136,40 +150,109 @@ const categories = [...getCategories(posts).entries()];
 	}
 </Layout>
 
+<style>
+	.pixel-nav-widget {
+		height: 100%;
+		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.3) !important;
+		background: rgb(var(--mdui-color-surface-container)) !important;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
+		            border-color var(--md-duration-short, 200ms) ease,
+		            background var(--md-duration-short, 200ms) ease !important;
+	}
+
+	.pixel-nav-widget:hover {
+		transform: translateY(-2px);
+		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
+		background: rgb(var(--mdui-color-surface-container-high)) !important;
+	}
+
+	.widget-body {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 16px 18px;
+		box-sizing: border-box;
+	}
+
+	.widget-top-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.widget-icon {
+		font-size: 26px;
+		color: rgb(var(--mdui-color-primary));
+		transition: transform var(--md-duration-short, 150ms) ease;
+	}
+
+	.pixel-nav-widget:hover .widget-icon {
+		transform: scale(1.12);
+	}
+
+	.widget-pill-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 2px 9px;
+		border-radius: 9999px;
+		font-size: 0.72rem;
+		font-weight: 600;
+		background: rgb(var(--mdui-color-surface-container-highest));
+		color: rgb(var(--mdui-color-on-surface-variant));
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25);
+	}
+
+	.widget-bottom-row {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.widget-title {
+		font-size: 0.92rem;
+		font-weight: 600;
+		color: rgb(var(--mdui-color-on-surface));
+		letter-spacing: 0.2px;
+	}
+</style>
+
 <script>
 	import { GridStack } from "gridstack";
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout";
+	// Layout version key to upgrade users to the Google Pixel Widget Bento layout
+	const KEY = "homeGridLayout_v3";
 
-	// Full default layout: every tile incl. newly added ones (gridstack load()
-	// removes tiles missing from a saved layout, so merge saved onto default)
+	// Dynamic Google Material You / Pixel Widget Bento Layout
 	const DEFAULT_LAYOUT = [
 		{ id: "profile", x: 0, y: 0, w: 3, h: 3 },
-		{ id: "appearance", x: 3, y: 0, w: 3, h: 3 },
-		{ id: "emoji", x: 6, y: 0, w: 2, h: 3 },
+		{ id: "emoji", x: 3, y: 0, w: 3, h: 3 },
+		{ id: "appearance", x: 6, y: 0, w: 2, h: 3 },
 		{ id: "contribution", x: 0, y: 3, w: 8, h: 2 },
-		{ id: "search", x: 0, y: 6, w: 2, h: 3 },
-		{ id: "archive", x: 2, y: 6, w: 2, h: 3 },
-		{ id: "category", x: 4, y: 6, w: 2, h: 3 },
-		{ id: "tags", x: 6, y: 6, w: 2, h: 3 },
-		{ id: "tagcloud", x: 0, y: 9, w: 4, h: 2 },
-		{ id: "techstack", x: 4, y: 9, w: 4, h: 2 },
-		{ id: "gallery", x: 0, y: 11, w: 8, h: 3 },
-		{ id: "github", x: 0, y: 13, w: 4, h: 4 },
-		{ id: "talks", x: 4, y: 13, w: 4, h: 2 },
+		{ id: "talks", x: 0, y: 5, w: 4, h: 3 },
+		{ id: "search", x: 4, y: 5, w: 4, h: 1 },
+		{ id: "archive", x: 4, y: 6, w: 2, h: 2 },
+		{ id: "category", x: 6, y: 6, w: 2, h: 2 },
+		{ id: "techstack", x: 0, y: 8, w: 5, h: 2 },
+		{ id: "tags", x: 5, y: 8, w: 3, h: 2 },
+		{ id: "tagcloud", x: 0, y: 10, w: 8, h: 2 },
+		{ id: "gallery", x: 0, y: 12, w: 8, h: 3 },
+		{ id: "github", x: 0, y: 15, w: 8, h: 3 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 
 	const grid = GridStack.init({
 		column: 8,
 		cellHeight: 88,
-		margin: 12, // uniform 24px gap (gridstack insets content)
+		margin: 12,
 		float: false,
 		animate: true,
 		columnOpts: {
-			// breakpoint.w = width UPPER bound: below w -> c columns
 			breakpoints: [
 				{ w: 1200, c: 8 },
 				{ w: 1024, c: 6 },
@@ -180,19 +263,19 @@ const categories = [...getCategories(posts).entries()];
 		},
 	})!;
 
-	// Compact cells on phones (gridstack has no cellHeight breakpoint)
+	// Compact cells on phones
 	const mqSmall = window.matchMedia("(max-width: 480px)");
 	const applyCellHeight = () => grid.cellHeight(mqSmall.matches ? 56 : 88);
 	applyCellHeight();
 	mqSmall.addEventListener("change", applyCellHeight);
 
-	// Layout lock: prevents dragging/reordering while locked
+	// Layout lock
 	const LOCK_KEY = "gridLocked";
 	const lockBtn = document.getElementById("layout-lock");
 	const lockIcon = document.getElementById("lock-icon");
 	const lockOpenIcon = document.getElementById("lock-open-icon");
 	const lockLabel = document.getElementById("lock-label");
-	const syncLockUI = (locked) => {
+	const syncLockUI = (locked: boolean) => {
 		if (lockIcon) lockIcon.style.display = locked ? "" : "none";
 		if (lockOpenIcon) lockOpenIcon.style.display = locked ? "none" : "";
 		if (lockLabel) lockLabel.textContent = locked ? "已锁定" : "锁定布局";
@@ -201,10 +284,10 @@ const categories = [...getCategories(posts).entries()];
 			lockBtn.setAttribute("title", locked ? "解锁布局" : "锁定布局");
 		}
 	};
-	const setLocked = (value) => {
+	const setLocked = (value: boolean) => {
 		locked = value;
 		grid.enableMove(!value);
-		grid.enableResize(!value); // resize follows lock too
+		grid.enableResize(!value);
 		try {
 			localStorage.setItem(LOCK_KEY, locked ? "1" : "0");
 		} catch { /* ignore */ }
@@ -218,9 +301,6 @@ const categories = [...getCategories(posts).entries()];
 	lockBtn?.addEventListener("click", () => setLocked(!locked));
 
 	// Restore persisted layout, merging in tiles added since it was saved.
-	// User positions AND sizes are kept; only missing tiles are added.
-	// Stale entries (tiles removed from config, e.g. commented-out custom
-	// cards) are dropped so they leave no empty placeholder on the grid.
 	const validTileIds = new Set([
 		...homeTiles,
 		...customCards.map((c) => c.id),
@@ -228,12 +308,11 @@ const categories = [...getCategories(posts).entries()];
 	try {
 		const saved = JSON.parse(localStorage.getItem(KEY) ?? "null");
 		if (Array.isArray(saved) && saved.length > 0) {
-			const savedIds = new Set(saved.map((n) => n.id));
+			const savedIds = new Set(saved.map((n: any) => n.id));
 			for (const d of DEFAULT_LAYOUT) {
 				if (!savedIds.has(d.id)) saved.push(d);
 			}
-			grid.load(saved.filter((n) => validTileIds.has(n.id)));
-			// persist cleaned layout so stale ids don't linger
+			grid.load(saved.filter((n: any) => validTileIds.has(n.id)));
 			try {
 				localStorage.setItem(KEY, JSON.stringify(grid.save(false)));
 			} catch {
