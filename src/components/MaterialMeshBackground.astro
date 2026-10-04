@@ -1,0 +1,105 @@
+---
+// Google Material You Dynamic Theme-Color Mesh Gradient with Gaussian Blur
+---
+
+<div class="material-mesh-bg" aria-hidden="true">
+	<div class="mesh-blob blob-primary"></div>
+	<div class="mesh-blob blob-secondary"></div>
+	<div class="mesh-blob blob-tertiary"></div>
+</div>
+
+<style>
+	.material-mesh-bg {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		overflow: hidden;
+		filter: blur(100px);
+		-webkit-filter: blur(100px);
+		opacity: 0.55;
+		transition: opacity var(--md-duration-medium, 300ms) ease;
+	}
+
+	:global(.mdui-theme-dark) .material-mesh-bg {
+		opacity: 0.38;
+	}
+
+	.mesh-blob {
+		position: absolute;
+		border-radius: 50%;
+		will-change: transform;
+	}
+
+	/* Blob 1: Main Primary Color */
+	.blob-primary {
+		top: -8%;
+		left: 10%;
+		width: 58vw;
+		height: 58vw;
+		max-width: 650px;
+		max-height: 650px;
+		background: radial-gradient(circle, rgb(var(--mdui-color-primary)) 0%, transparent 68%);
+		opacity: 0.5;
+		animation: meshFloat1 22s ease-in-out infinite alternate;
+	}
+
+	/* Blob 2: Secondary / Tertiary Color */
+	.blob-secondary {
+		top: 35%;
+		right: -6%;
+		width: 52vw;
+		height: 52vw;
+		max-width: 580px;
+		max-height: 580px;
+		background: radial-gradient(circle, rgb(var(--mdui-color-tertiary, var(--mdui-color-secondary))) 0%, transparent 68%);
+		opacity: 0.42;
+		animation: meshFloat2 26s ease-in-out infinite alternate;
+	}
+
+	/* Blob 3: Lower Supporting Glow */
+	.blob-tertiary {
+		bottom: -12%;
+		left: 22%;
+		width: 62vw;
+		height: 62vw;
+		max-width: 680px;
+		max-height: 680px;
+		background: radial-gradient(circle, rgb(var(--mdui-color-secondary, var(--mdui-color-primary))) 0%, transparent 68%);
+		opacity: 0.35;
+		animation: meshFloat3 28s ease-in-out infinite alternate;
+	}
+
+	@keyframes meshFloat1 {
+		0% {
+			transform: translate(0, 0) scale(1);
+		}
+		100% {
+			transform: translate(50px, 40px) scale(1.08);
+		}
+	}
+
+	@keyframes meshFloat2 {
+		0% {
+			transform: translate(0, 0) scale(1);
+		}
+		100% {
+			transform: translate(-45px, -50px) scale(1.05);
+		}
+	}
+
+	@keyframes meshFloat3 {
+		0% {
+			transform: translate(0, 0) scale(1);
+		}
+		100% {
+			transform: translate(35px, -35px) scale(1.1);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mesh-blob {
+			animation: none;
+		}
+	}
+</style>

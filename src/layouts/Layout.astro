@@ -3,6 +3,7 @@ import { SITE } from "../consts";
 import Footer from "../components/Footer.astro";
 import FooterNav from "../components/FooterNav.astro";
 import SearchDialog from "../components/SearchDialog.astro";
+import MaterialMeshBackground from "../components/MaterialMeshBackground.astro";
 import AsciiGridBackground from "../components/AsciiGridBackground.astro";
 
 // MDUI global styles + KaTeX styles
@@ -68,6 +69,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 		</script>
 	</head>
 	<body>
+		<MaterialMeshBackground />
 		<AsciiGridBackground />
 		<div class="progress-bar" aria-hidden="true"></div>
 		<mdui-fab id="back-top" aria-label="回到顶部" title="回到顶部">
