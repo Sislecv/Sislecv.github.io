@@ -12,19 +12,19 @@ if (latestTalk) {
 		.replace(/!\[.*?\]\(.*?\)/g, "")
 		.replace(/\[(.*?)\]\(.*?\)/g, "$1")
 		.trim();
-	if (snippet.length > 60) {
-		snippet = snippet.slice(0, 58) + "...";
+	if (snippet.length > 68) {
+		snippet = snippet.slice(0, 65) + "...";
 	}
 }
 ---
 
 <mdui-card clickable href="/talks/" variant="filled" class="bento-card pixel-media-talks-card">
 	<div class="media-card-inner">
-		<!-- Top header: Badge + date -->
+		<!-- Top header: Badge + pulse dot -->
 		<div class="media-card-header">
 			<span class="media-pill-tag">
 				<mdui-icon-mode-comment--outlined class="tag-icon"></mdui-icon-mode-comment--outlined>
-				Talks · 动态碎语
+				Talks · 碎语
 			</span>
 			<span class="media-now-playing-dot" title="最新记录"></span>
 		</div>
@@ -37,14 +37,11 @@ if (latestTalk) {
 		<!-- Signature Android 13 Squiggly Waveform Progress Bar -->
 		<div class="squiggly-progress-wrap" aria-hidden="true">
 			<svg class="squiggly-svg" viewBox="0 0 300 24" preserveAspectRatio="none">
-				<!-- Background straight line -->
 				<path class="wave-bg-line" d="M 0 12 L 300 12" />
-				<!-- Animated squiggly wave active portion (0 to 180) -->
 				<path
 					class="squiggly-wave-path"
 					d="M 0 12 Q 15 2, 30 12 T 60 12 T 90 12 T 120 12 T 150 12 T 180 12"
 				/>
-				<!-- Playhead scrubber dot -->
 				<circle cx="180" cy="12" r="5" class="scrubber-dot" />
 			</svg>
 			<div class="progress-timestamps">
@@ -85,14 +82,14 @@ if (latestTalk) {
 		background: #251b2e !important;
 		color: #ffffff !important;
 		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
-		border: 1px solid rgba(255, 255, 255, 0.08) !important;
+		border: none !important;
+		outline: none !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
 		            box-shadow var(--md-duration-short, 200ms) ease !important;
 	}
 
 	:global(.mdui-theme-dark) .pixel-media-talks-card {
 		background: #1c1524 !important;
-		border-color: rgba(255, 255, 255, 0.06) !important;
 	}
 
 	.pixel-media-talks-card:hover {
@@ -121,8 +118,7 @@ if (latestTalk) {
 		gap: 6px;
 		padding: 3px 12px;
 		border-radius: 9999px;
-		background: rgba(232, 222, 248, 0.15);
-		border: 1px solid rgba(232, 222, 248, 0.25);
+		background: rgba(232, 222, 248, 0.16);
 		font-size: 0.76rem;
 		font-weight: 600;
 		color: #e8def8;
@@ -154,7 +150,7 @@ if (latestTalk) {
 	.media-snippet-quote {
 		margin: 0;
 		font-size: 0.95rem;
-		line-height: 1.45;
+		line-height: 1.48;
 		font-weight: 500;
 		color: #f5eff7;
 		display: -webkit-box;
@@ -163,7 +159,7 @@ if (latestTalk) {
 		overflow: hidden;
 	}
 
-	/* Signature Android 13 Squiggly Waveform */
+	/* Squiggly Waveform */
 	.squiggly-progress-wrap {
 		width: 100%;
 		margin: 6px 0 2px;
@@ -176,7 +172,7 @@ if (latestTalk) {
 	}
 
 	.wave-bg-line {
-		stroke: rgba(255, 255, 255, 0.2);
+		stroke: rgba(255, 255, 255, 0.18);
 		stroke-width: 3.5;
 		stroke-linecap: round;
 	}
@@ -215,7 +211,7 @@ if (latestTalk) {
 		margin-top: 2px;
 	}
 
-	/* Bottom controls */
+	/* Controls */
 	.media-controls-row {
 		display: flex;
 		align-items: center;

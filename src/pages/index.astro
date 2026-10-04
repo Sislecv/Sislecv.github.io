@@ -30,12 +30,12 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	</div>
 	<div class="grid-stack" id="home-grid">
 		{homeTiles.includes("profile") && (
-		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="3" gs-h="3">
+		<div class="grid-stack-item" gs-id="profile" gs-x="0" gs-y="0" gs-w="4" gs-h="3">
 			<div class="grid-stack-item-content"><ProfileCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("emoji") && (
-		<div class="grid-stack-item" gs-id="emoji" gs-x="3" gs-y="0" gs-w="3" gs-h="3">
+		<div class="grid-stack-item" gs-id="emoji" gs-x="4" gs-y="0" gs-w="2" gs-h="3">
 			<div class="grid-stack-item-content"><EmojiCard /></div>
 		</div>
 		)}
@@ -44,34 +44,29 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 			<div class="grid-stack-item-content"><AppearanceCard /></div>
 		</div>
 		)}
-		{homeTiles.includes("contribution") && (
-		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="3" gs-w="8" gs-h="2">
-			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
-		</div>
-		)}
 		{homeTiles.includes("talks") && (
-		<div class="grid-stack-item" gs-id="talks" gs-x="0" gs-y="5" gs-w="4" gs-h="3">
+		<div class="grid-stack-item" gs-id="talks" gs-x="0" gs-y="3" gs-w="5" gs-h="3">
 			<div class="grid-stack-item-content"><TalksCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("search") && (
-		<div class="grid-stack-item" gs-id="search" gs-x="4" gs-y="5" gs-w="4" gs-h="1">
+		<div class="grid-stack-item" gs-id="search" gs-x="5" gs-y="3" gs-w="3" gs-h="3">
 			<div class="grid-stack-item-content"><SearchCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("archive") && (
-		<div class="grid-stack-item" gs-id="archive" gs-x="4" gs-y="6" gs-w="2" gs-h="2">
+		<div class="grid-stack-item" gs-id="archive" gs-x="0" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget" title={`归档 · ${posts.length} 篇`}>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget chart-coral" title={`归档 · ${posts.length} 篇`}>
 					<div class="chart-widget-inner">
 						<div class="ring-chart-wrap">
 							<svg class="ring-svg" viewBox="0 0 64 64">
 								<circle class="ring-bg" cx="32" cy="32" r="26" />
-								<circle class="ring-fill" cx="32" cy="32" r="26" />
+								<circle class="ring-fill ring-coral-fill" cx="32" cy="32" r="26" />
 							</svg>
-							<div class="ring-center-stat">{posts.length}</div>
+							<div class="ring-center-stat coral-text">{posts.length}</div>
 						</div>
-						<div class="chart-sub-icon">
+						<div class="chart-sub-icon coral-sub">
 							<mdui-icon-history--outlined></mdui-icon-history--outlined>
 						</div>
 					</div>
@@ -80,17 +75,17 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		</div>
 		)}
 		{homeTiles.includes("category") && (
-		<div class="grid-stack-item" gs-id="category" gs-x="6" gs-y="6" gs-w="2" gs-h="2">
+		<div class="grid-stack-item" gs-id="category" gs-x="2" gs-y="6" gs-w="2" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget" title={`分类 · ${categories.length} 个`}>
+				<mdui-card clickable href="/archive/" variant="filled" class="bento-card pixel-chart-widget chart-mint" title={`分类 · ${categories.length} 个`}>
 					<div class="chart-widget-inner">
 						<div class="bars-chart-wrap">
-							<span class="bar-col b1"></span>
-							<span class="bar-col b2"></span>
-							<span class="bar-col b3"></span>
-							<div class="bars-center-stat">{categories.length}</div>
+							<span class="bar-col b1 mint-bar"></span>
+							<span class="bar-col b2 mint-bar-active"></span>
+							<span class="bar-col b3 mint-bar"></span>
+							<div class="bars-center-stat mint-text">{categories.length}</div>
 						</div>
-						<div class="chart-sub-icon">
+						<div class="chart-sub-icon mint-sub">
 							<mdui-icon-folder--outlined></mdui-icon-folder--outlined>
 						</div>
 					</div>
@@ -98,23 +93,18 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 			</div>
 		</div>
 		)}
-		{homeTiles.includes("techstack") && (
-		<div class="grid-stack-item" gs-id="techstack" gs-x="0" gs-y="8" gs-w="5" gs-h="2">
-			<div class="grid-stack-item-content"><TechStackCard /></div>
-		</div>
-		)}
 		{homeTiles.includes("tags") && (
-		<div class="grid-stack-item" gs-id="tags" gs-x="5" gs-y="8" gs-w="3" gs-h="2">
+		<div class="grid-stack-item" gs-id="tags" gs-x="4" gs-y="6" gs-w="4" gs-h="2">
 			<div class="grid-stack-item-content">
-				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-chart-widget" title={`标签 · ${uniqueTags.size} 个`}>
+				<mdui-card clickable href="/tags/" variant="filled" class="bento-card pixel-chart-widget chart-amber" title={`标签 · ${uniqueTags.size} 个`}>
 					<div class="chart-widget-inner flex-row">
 						<div class="dots-cluster-chart">
-							<span class="tag-bubble tb-1"></span>
-							<span class="tag-bubble tb-2"></span>
-							<span class="tag-bubble tb-3"></span>
-							<div class="tags-center-stat">{uniqueTags.size}</div>
+							<span class="tag-bubble tb-amber-1"></span>
+							<span class="tag-bubble tb-amber-2"></span>
+							<span class="tag-bubble tb-amber-3"></span>
+							<div class="tags-center-stat amber-text">{uniqueTags.size}</div>
 						</div>
-						<div class="chart-sub-icon">
+						<div class="chart-sub-icon amber-sub">
 							<mdui-icon-tag--outlined></mdui-icon-tag--outlined>
 						</div>
 					</div>
@@ -122,18 +112,28 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 			</div>
 		</div>
 		)}
+		{homeTiles.includes("contribution") && (
+		<div class="grid-stack-item" gs-id="contribution" gs-x="0" gs-y="8" gs-w="8" gs-h="2">
+			<div class="grid-stack-item-content"><ContributionCard posts={posts} /></div>
+		</div>
+		)}
+		{homeTiles.includes("techstack") && (
+		<div class="grid-stack-item" gs-id="techstack" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
+			<div class="grid-stack-item-content"><TechStackCard /></div>
+		</div>
+		)}
 		{homeTiles.includes("tagcloud") && (
-		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="10" gs-w="8" gs-h="2">
+		<div class="grid-stack-item" gs-id="tagcloud" gs-x="0" gs-y="12" gs-w="8" gs-h="2">
 			<div class="grid-stack-item-content"><TagCloudCard posts={posts} /></div>
 		</div>
 		)}
 		{homeTiles.includes("gallery") && (
-		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="12" gs-w="8" gs-h="3">
+		<div class="grid-stack-item" gs-id="gallery" gs-x="0" gs-y="14" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GalleryStackCard /></div>
 		</div>
 		)}
 		{homeTiles.includes("github") && (
-		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="15" gs-w="8" gs-h="3">
+		<div class="grid-stack-item" gs-id="github" gs-x="0" gs-y="17" gs-w="8" gs-h="3">
 			<div class="grid-stack-item-content"><GitHubProjectsCard /></div>
 		</div>
 		)}
@@ -158,23 +158,140 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 </Layout>
 
 <style>
-	/* Pure Graphical Pixel Charts Widgets (No text clutter) */
+	/* Pure Solid Borderless Charts Widgets */
 	.pixel-chart-widget {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25) !important;
-		background: rgb(var(--mdui-color-surface-container)) !important;
+		border: none !important;
+		outline: none !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            border-color var(--md-duration-short, 200ms) ease,
-		            background var(--md-duration-short, 200ms) ease !important;
+		            background-color var(--md-duration-short, 200ms) ease !important;
 		overflow: hidden;
 		user-select: none;
 	}
 
 	.pixel-chart-widget:hover {
 		transform: translateY(-2px);
-		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
-		background: rgb(var(--mdui-color-surface-container-high)) !important;
+	}
+
+	/* Color 1: Coral / Peach Pink Tonal Container */
+	.chart-coral {
+		background: #ffd8d8 !important;
+		color: #410002 !important;
+	}
+	:global(.mdui-theme-dark) .chart-coral {
+		background: #3b2222 !important;
+		color: #ffdad5 !important;
+	}
+	.chart-coral:hover {
+		background: #ffcfcf !important;
+	}
+	:global(.mdui-theme-dark) .chart-coral:hover {
+		background: #462929 !important;
+	}
+	.ring-coral-fill {
+		stroke: #b3261e !important;
+	}
+	:global(.mdui-theme-dark) .ring-coral-fill {
+		stroke: #ffb4ab !important;
+	}
+	.coral-text {
+		color: #410002 !important;
+	}
+	:global(.mdui-theme-dark) .coral-text {
+		color: #ffdad5 !important;
+	}
+	.coral-sub {
+		color: #8c1d18 !important;
+	}
+	:global(.mdui-theme-dark) .coral-sub {
+		color: #ffb4ab !important;
+	}
+
+	/* Color 2: Mint Green Tonal Container */
+	.chart-mint {
+		background: #d3f8df !important;
+		color: #00210c !important;
+	}
+	:global(.mdui-theme-dark) .chart-mint {
+		background: #193325 !important;
+		color: #c4eed0 !important;
+	}
+	.chart-mint:hover {
+		background: #c5f5d4 !important;
+	}
+	:global(.mdui-theme-dark) .chart-mint:hover {
+		background: #20402f !important;
+	}
+	.mint-bar {
+		background: rgba(27, 135, 59, 0.4) !important;
+	}
+	.mint-bar-active {
+		background: #1b873b !important;
+	}
+	:global(.mdui-theme-dark) .mint-bar {
+		background: rgba(123, 217, 153, 0.35) !important;
+	}
+	:global(.mdui-theme-dark) .mint-bar-active {
+		background: #7bd999 !important;
+	}
+	.mint-text {
+		color: #00210c !important;
+	}
+	:global(.mdui-theme-dark) .mint-text {
+		color: #c4eed0 !important;
+	}
+	.mint-sub {
+		color: #1b873b !important;
+	}
+	:global(.mdui-theme-dark) .mint-sub {
+		color: #7bd999 !important;
+	}
+
+	/* Color 3: Warm Amber / Honey Yellow Tonal Container */
+	.chart-amber {
+		background: #ffeab2 !important;
+		color: #261900 !important;
+	}
+	:global(.mdui-theme-dark) .chart-amber {
+		background: #332814 !important;
+		color: #ffe088 !important;
+	}
+	.chart-amber:hover {
+		background: #ffe39e !important;
+	}
+	:global(.mdui-theme-dark) .chart-amber:hover {
+		background: #3d3018 !important;
+	}
+	.tb-amber-1 {
+		background: rgba(178, 80, 0, 0.15) !important;
+	}
+	.tb-amber-2 {
+		background: #b25000 !important;
+	}
+	.tb-amber-3 {
+		background: #e28700 !important;
+	}
+	:global(.mdui-theme-dark) .tb-amber-1 {
+		background: rgba(255, 186, 47, 0.2) !important;
+	}
+	:global(.mdui-theme-dark) .tb-amber-2 {
+		background: #ffba2f !important;
+	}
+	:global(.mdui-theme-dark) .tb-amber-3 {
+		background: #ffd073 !important;
+	}
+	.amber-text {
+		color: #261900 !important;
+	}
+	:global(.mdui-theme-dark) .amber-text {
+		color: #ffe088 !important;
+	}
+	.amber-sub {
+		color: #7e5700 !important;
+	}
+	:global(.mdui-theme-dark) .amber-sub {
+		color: #ffba2f !important;
 	}
 
 	.chart-widget-inner {
@@ -192,10 +309,10 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	.chart-widget-inner.flex-row {
 		flex-direction: row;
-		gap: 16px;
+		gap: 20px;
 	}
 
-	/* Circular Activity Ring Chart */
+	/* Circular Ring */
 	.ring-chart-wrap {
 		position: relative;
 		width: 58px;
@@ -213,17 +330,19 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 
 	.ring-bg {
 		fill: none;
-		stroke: rgba(var(--mdui-color-outline-variant), 0.35);
+		stroke: rgba(0, 0, 0, 0.08);
 		stroke-width: 5.5;
+	}
+	:global(.mdui-theme-dark) .ring-bg {
+		stroke: rgba(255, 255, 255, 0.1);
 	}
 
 	.ring-fill {
 		fill: none;
-		stroke: rgb(var(--mdui-color-primary));
 		stroke-width: 5.5;
 		stroke-linecap: round;
 		stroke-dasharray: 163.36;
-		stroke-dashoffset: 45; /* around 72% ring fill */
+		stroke-dashoffset: 45;
 		transition: stroke-dashoffset var(--md-duration-medium, 300ms) ease;
 	}
 
@@ -235,11 +354,10 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		position: absolute;
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: rgb(var(--mdui-color-on-surface));
 		letter-spacing: -0.5px;
 	}
 
-	/* Segmented Column Bars Chart */
+	/* Bars */
 	.bars-chart-wrap {
 		position: relative;
 		width: 58px;
@@ -254,29 +372,22 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	.bar-col {
 		width: 7px;
 		border-radius: 9999px;
-		background: rgba(var(--mdui-color-primary), 0.4);
-		transition: height var(--md-duration-short, 200ms) ease,
-		            background-color var(--md-duration-short, 200ms) ease;
+		transition: height var(--md-duration-short, 200ms) ease;
 	}
 
 	.b1 { height: 28px; }
-	.b2 { height: 46px; background: rgb(var(--mdui-color-primary)); }
+	.b2 { height: 46px; }
 	.b3 { height: 34px; }
-
-	.pixel-chart-widget:hover .bar-col {
-		background: rgb(var(--mdui-color-primary));
-	}
 
 	.bars-center-stat {
 		position: absolute;
 		top: 2px;
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: rgb(var(--mdui-color-on-surface));
 		letter-spacing: -0.5px;
 	}
 
-	/* Dot matrix / bubble cluster chart */
+	/* Dots Cluster */
 	.dots-cluster-chart {
 		position: relative;
 		width: 60px;
@@ -289,13 +400,12 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	.tag-bubble {
 		position: absolute;
 		border-radius: 50%;
-		background: rgba(var(--mdui-color-tertiary, var(--mdui-color-primary)), 0.25);
 		transition: transform var(--md-duration-short, 200ms) ease;
 	}
 
-	.tb-1 { width: 44px; height: 44px; background: rgba(var(--mdui-color-primary), 0.15); }
-	.tb-2 { width: 14px; height: 14px; top: 2px; right: 2px; background: #ea4335; opacity: 0.8; }
-	.tb-3 { width: 10px; height: 10px; bottom: 4px; left: 4px; background: #34a853; opacity: 0.8; }
+	.tb-amber-1 { width: 44px; height: 44px; }
+	.tb-amber-2 { width: 14px; height: 14px; top: 2px; right: 2px; }
+	.tb-amber-3 { width: 10px; height: 10px; bottom: 4px; left: 4px; }
 
 	.pixel-chart-widget:hover .tag-bubble {
 		transform: scale(1.08);
@@ -306,22 +416,18 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		z-index: 2;
 		font-size: 1.15rem;
 		font-weight: 800;
-		color: rgb(var(--mdui-color-on-surface));
 		letter-spacing: -0.5px;
 	}
 
-	/* Sub-icon at bottom/corner */
+	/* Sub-icon */
 	.chart-sub-icon {
 		font-size: 18px;
-		color: rgb(var(--mdui-color-on-surface-variant));
-		opacity: 0.8;
-		transition: transform var(--md-duration-short, 150ms) ease,
-		            color var(--md-duration-short, 150ms) ease;
+		opacity: 0.85;
+		transition: transform var(--md-duration-short, 150ms) ease;
 	}
 
 	.pixel-chart-widget:hover .chart-sub-icon {
 		transform: scale(1.15);
-		color: rgb(var(--mdui-color-primary));
 	}
 </style>
 
@@ -330,22 +436,22 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 	import "gridstack/dist/gridstack.min.css";
 	import { customCards, homeTiles } from "../site.config";
 
-	const KEY = "homeGridLayout_v4";
+	const KEY = "homeGridLayout_v5";
 
 	const DEFAULT_LAYOUT = [
-		{ id: "profile", x: 0, y: 0, w: 3, h: 3 },
-		{ id: "emoji", x: 3, y: 0, w: 3, h: 3 },
+		{ id: "profile", x: 0, y: 0, w: 4, h: 3 },
+		{ id: "emoji", x: 4, y: 0, w: 2, h: 3 },
 		{ id: "appearance", x: 6, y: 0, w: 2, h: 3 },
-		{ id: "contribution", x: 0, y: 3, w: 8, h: 2 },
-		{ id: "talks", x: 0, y: 5, w: 4, h: 3 },
-		{ id: "search", x: 4, y: 5, w: 4, h: 1 },
-		{ id: "archive", x: 4, y: 6, w: 2, h: 2 },
-		{ id: "category", x: 6, y: 6, w: 2, h: 2 },
-		{ id: "techstack", x: 0, y: 8, w: 5, h: 2 },
-		{ id: "tags", x: 5, y: 8, w: 3, h: 2 },
-		{ id: "tagcloud", x: 0, y: 10, w: 8, h: 2 },
-		{ id: "gallery", x: 0, y: 12, w: 8, h: 3 },
-		{ id: "github", x: 0, y: 15, w: 8, h: 3 },
+		{ id: "talks", x: 0, y: 3, w: 5, h: 3 },
+		{ id: "search", x: 5, y: 3, w: 3, h: 3 },
+		{ id: "archive", x: 0, y: 6, w: 2, h: 2 },
+		{ id: "category", x: 2, y: 6, w: 2, h: 2 },
+		{ id: "tags", x: 4, y: 6, w: 4, h: 2 },
+		{ id: "contribution", x: 0, y: 8, w: 8, h: 2 },
+		{ id: "techstack", x: 0, y: 10, w: 8, h: 2 },
+		{ id: "tagcloud", x: 0, y: 12, w: 8, h: 2 },
+		{ id: "gallery", x: 0, y: 14, w: 8, h: 3 },
+		{ id: "github", x: 0, y: 17, w: 8, h: 3 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
 	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
 

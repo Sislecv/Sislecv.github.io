@@ -29,7 +29,7 @@
 
 		<!-- Companion Graphic: Pixel 72° Sun Weather Capsule -->
 		<div class="weather-graphic-capsule" aria-hidden="true">
-			<svg class="sun-flower-svg" viewBox="0 0 24 24" width="18" height="18">
+			<svg class="sun-flower-svg" viewBox="0 0 24 24" width="16" height="16">
 				<path fill="#fbbc04" d="M12 2l1.5 2.5 2.8-.8.5 2.9 2.9.7-.5 2.9 2.5 1.5-1.5 2.5.8 2.8-2.9.5-.7 2.9-2.9-.5-1.5 2.5-1.5-2.5-2.8.8-.5-2.9-2.9-.7.5-2.9-2.5-1.5 1.5-2.5-.8-2.8 2.9-.5.7-2.9 2.9.5z"/>
 			</svg>
 			<span class="weather-temp-num">72°</span>
@@ -41,11 +41,12 @@
 	.pixel-graphic-clock-card {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
+		border: none !important;
+		outline: none !important;
 		padding: 0 !important;
 		overflow: hidden;
 		background: #ebdcf9 !important;
 		color: #4a2875 !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25) !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
 		            background-color var(--md-duration-medium, 300ms) ease !important;
 		user-select: none;
@@ -68,8 +69,8 @@
 	}
 
 	.clock-badge-interactive {
-		width: 102px;
-		height: 102px;
+		width: 96px;
+		height: 96px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -83,7 +84,7 @@
 	.clock-main-svg {
 		width: 100%;
 		height: 100%;
-		filter: drop-shadow(0 6px 14px rgba(103, 58, 183, 0.24));
+		filter: drop-shadow(0 6px 14px rgba(103, 58, 183, 0.22));
 	}
 
 	.clock-bg-shape {
@@ -109,7 +110,7 @@
 
 	/* Theme 2: Coral Pink */
 	.pixel-graphic-clock-card.theme-coral {
-		background: #ffb3a7 !important;
+		background: #ffd8d8 !important;
 	}
 	.pixel-graphic-clock-card.theme-coral .clock-bg-shape {
 		fill: #2c1b18;
@@ -158,7 +159,7 @@
 	}
 
 	.weather-temp-num {
-		font-size: 0.82rem;
+		font-size: 0.8rem;
 		font-weight: 800;
 		letter-spacing: -0.5px;
 		color: #1d1b20;
@@ -175,7 +176,6 @@
 	const minuteHand = document.getElementById("clock-minute-hand");
 	const shapePath = document.getElementById("clover-clock-path");
 
-	// SVG paths: Clover (4-leaf) vs Flower (12-point scallop)
 	const CLOVER_D = "M 50.00 4.00 C 62.00 4.00, 72.00 14.00, 72.00 26.00 C 72.00 34.00, 66.00 40.00, 60.00 44.00 C 66.00 40.00, 74.00 34.00, 86.00 34.00 C 94.00 34.00, 96.00 42.00, 96.00 50.00 C 96.00 58.00, 94.00 66.00, 86.00 66.00 C 74.00 66.00, 66.00 60.00, 60.00 56.00 C 66.00 60.00, 72.00 66.00, 72.00 74.00 C 72.00 86.00, 62.00 96.00, 50.00 96.00 C 38.00 96.00, 28.00 86.00, 28.00 74.00 C 28.00 66.00, 34.00 60.00, 40.00 56.00 C 34.00 60.00, 26.00 66.00, 14.00 66.00 C 6.00 66.00, 4.00 58.00, 4.00 50.00 C 4.00 42.00, 6.00 34.00, 14.00 34.00 C 26.00 34.00, 34.00 40.00, 40.00 44.00 C 34.00 40.00, 28.00 34.00, 28.00 26.00 C 28.00 14.00, 38.00 4.00, 50.00 4.00 Z";
 	const FLOWER_D = "M 50.00 6.00C 53.06 6.00, 56.06 13.32, 59.58 14.26C 63.10 15.20, 69.35 10.36, 72.00 11.89C 74.65 13.43, 73.59 21.26, 76.16 23.84C 78.74 26.41, 86.57 25.35, 88.11 28.00C 89.64 30.65, 84.80 36.90, 85.74 40.42C 86.68 43.94, 94.00 46.94, 94.00 50.00C 94.00 53.06, 86.68 56.06, 85.74 59.58C 84.80 63.10, 89.64 69.35, 88.11 72.00C 86.57 74.65, 78.74 73.59, 76.16 76.16C 73.59 78.74, 74.65 86.57, 72.00 88.11C 69.35 89.64, 63.10 84.80, 59.58 85.74C 56.06 86.68, 53.06 94.00, 50.00 94.00C 46.94 94.00, 43.94 86.68, 40.42 85.74C 36.90 84.80, 30.65 89.64, 28.00 88.11C 25.35 86.57, 26.41 78.74, 23.84 76.16C 21.26 73.59, 13.43 74.65, 11.89 72.00C 10.36 69.35, 15.20 63.10, 14.26 59.58C 13.32 56.06, 6.00 53.06, 6.00 50.00C 6.00 46.94, 13.32 43.94, 14.26 40.42C 15.20 36.90, 10.36 30.65, 11.89 28.00C 13.43 25.35, 21.26 26.41, 23.84 23.84C 26.41 21.26, 25.35 13.43, 28.00 11.89C 30.65 10.36, 36.90 15.20, 40.42 14.26C 43.94 13.32, 46.94 6.00, 50.00 6.00Z";
 
@@ -200,7 +200,6 @@
 	updateClock();
 	setInterval(updateClock, 1000 * 30);
 
-	// Toggle shapes and themes on click
 	const themes = ["", "theme-coral", "theme-forest"];
 	let stateIdx = 0;
 	clockCard?.addEventListener("click", () => {
@@ -210,7 +209,6 @@
 		const theme = themes[stateIdx % themes.length];
 		if (theme) clockCard.classList.add(theme);
 
-		// Alternate between 4-leaf clover and 12-point flower
 		shapePath.setAttribute("d", stateIdx % 2 === 0 ? CLOVER_D : FLOWER_D);
 	});
 </script>

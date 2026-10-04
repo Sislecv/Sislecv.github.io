@@ -1,5 +1,5 @@
 ---
-// Google Material You Clover (四叶草) Icon Search Widget
+// Google Material You Pure Solid Clover (四叶草) Icon Search Widget
 ---
 
 <mdui-card
@@ -10,10 +10,9 @@
 	title="搜索 (⌘K)"
 >
 	<div class="clover-search-wrap">
-		<!-- MD3 4-Leaf Clover (四叶草) Graphic Container -->
+		<!-- MD3 4-Leaf Clover (四叶草) Solid Graphic Container -->
 		<div class="clover-shape-badge">
 			<svg class="clover-svg" viewBox="0 0 100 100" aria-hidden="true">
-				<!-- Smooth 4-leaf clover path -->
 				<path
 					class="clover-path"
 					d="M 50.00 4.00 C 62.00 4.00, 72.00 14.00, 72.00 26.00 C 72.00 34.00, 66.00 40.00, 60.00 44.00 C 66.00 40.00, 74.00 34.00, 86.00 34.00 C 94.00 34.00, 96.00 42.00, 96.00 50.00 C 96.00 58.00, 94.00 66.00, 86.00 66.00 C 74.00 66.00, 66.00 60.00, 60.00 56.00 C 66.00 60.00, 72.00 66.00, 72.00 74.00 C 72.00 86.00, 62.00 96.00, 50.00 96.00 C 38.00 96.00, 28.00 86.00, 28.00 74.00 C 28.00 66.00, 34.00 60.00, 40.00 56.00 C 34.00 60.00, 26.00 66.00, 14.00 66.00 C 6.00 66.00, 4.00 58.00, 4.00 50.00 C 4.00 42.00, 6.00 34.00, 14.00 34.00 C 26.00 34.00, 34.00 40.00, 40.00 44.00 C 34.00 40.00, 28.00 34.00, 28.00 26.00 C 28.00 14.00, 38.00 4.00, 50.00 4.00 Z"
@@ -36,32 +35,30 @@
 	.pixel-clover-search-card {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
+		border: none !important;
+		outline: none !important;
 		padding: 0 !important;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #f3edf7 !important;
-		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.25) !important;
+		background: #eddff7 !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            background-color var(--md-duration-short, 200ms) ease,
-		            border-color var(--md-duration-short, 200ms) ease !important;
+		            background-color var(--md-duration-short, 200ms) ease !important;
 		overflow: hidden;
 		user-select: none;
 	}
 
 	:global(.mdui-theme-dark) .pixel-clover-search-card {
-		background: #2b2930 !important;
-		border-color: rgba(255, 255, 255, 0.08) !important;
+		background: #2b2633 !important;
 	}
 
 	.pixel-clover-search-card:hover {
 		transform: translateY(-2px);
-		border-color: rgba(var(--mdui-color-primary), 0.35) !important;
-		background: #ede6f5 !important;
+		background: #e5d5f2 !important;
 	}
 
 	:global(.mdui-theme-dark) .pixel-clover-search-card:hover {
-		background: #332f38 !important;
+		background: #342e3d !important;
 	}
 
 	.clover-search-wrap {
@@ -71,14 +68,14 @@
 		align-items: center;
 		justify-content: center;
 		position: relative;
-		padding: 12px;
+		padding: 16px;
 		box-sizing: border-box;
 	}
 
 	.clover-shape-badge {
 		position: relative;
-		width: 82px;
-		height: 82px;
+		width: 104px;
+		height: 104px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -86,7 +83,7 @@
 	}
 
 	.pixel-clover-search-card:hover .clover-shape-badge {
-		transform: scale(1.1) rotate(8deg);
+		transform: scale(1.09) rotate(8deg);
 	}
 
 	.clover-svg {
@@ -94,11 +91,11 @@
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		filter: drop-shadow(0 4px 12px rgba(103, 80, 164, 0.22));
+		filter: drop-shadow(0 6px 16px rgba(103, 80, 164, 0.28));
 	}
 
 	:global(.mdui-theme-dark) .clover-svg {
-		filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+		filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
 	}
 
 	.clover-path {
@@ -107,15 +104,15 @@
 	}
 
 	:global(.mdui-theme-dark) .clover-path {
-		fill: #4f378b;
-	}
-
-	.pixel-clover-search-card:hover .clover-path {
 		fill: #7d5260;
 	}
 
+	.pixel-clover-search-card:hover .clover-path {
+		fill: #5b4594;
+	}
+
 	:global(.mdui-theme-dark) .pixel-clover-search-card:hover .clover-path {
-		fill: #633b48;
+		fill: #8f6070;
 	}
 
 	.clover-center-icon {
@@ -128,29 +125,29 @@
 	}
 
 	.search-symbol {
-		font-size: 32px;
+		font-size: 38px;
 		transition: transform var(--md-duration-short, 200ms) ease;
 	}
 
 	.pixel-clover-search-card:hover .search-symbol {
-		transform: scale(1.12);
+		transform: scale(1.1);
 	}
 
 	.clover-badge-pill {
 		position: absolute;
-		bottom: 10px;
-		right: 12px;
-		padding: 2px 7px;
+		bottom: 12px;
+		right: 14px;
+		padding: 3px 9px;
 		border-radius: 9999px;
-		background: rgba(0, 0, 0, 0.06);
-		font-size: 0.68rem;
+		background: rgba(103, 80, 164, 0.14);
+		font-size: 0.7rem;
 		font-weight: 700;
 		color: #49454f;
 		letter-spacing: 0.3px;
 	}
 
 	:global(.mdui-theme-dark) .clover-badge-pill {
-		background: rgba(255, 255, 255, 0.1);
-		color: #cac4d0;
+		background: rgba(255, 255, 255, 0.12);
+		color: #e6e1e5;
 	}
 </style>

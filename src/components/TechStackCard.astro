@@ -55,17 +55,16 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 		background: #18191b !important;
 		color: #ffffff !important;
 		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
-		border: 1px solid rgba(255, 255, 255, 0.08) !important;
-		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            border-color var(--md-duration-short, 200ms) ease !important;
+		border: none !important;
+		outline: none !important;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
 	}
 
 	.pixel-tech-grid-card:hover {
 		transform: translateY(-2px);
-		border-color: rgba(255, 255, 255, 0.22) !important;
 	}
 
-	/* 3D Horizon Perspective Grid from Google I/O 2023 */
+	/* 3D Horizon Perspective Grid */
 	.perspective-horizon {
 		position: absolute;
 		right: 0;
@@ -209,7 +208,6 @@ const TRACK_ITEMS = [...STACK, ...STACK, ...STACK, ...STACK];
 		padding: 6px;
 		border-radius: 12px;
 		background: rgba(255, 255, 255, 0.08);
-		border: 1px solid rgba(255, 255, 255, 0.12);
 		transition: transform var(--md-duration-short, 150ms) ease,
 		            background var(--md-duration-short, 150ms) ease;
 	}

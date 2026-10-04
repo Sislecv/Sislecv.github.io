@@ -182,6 +182,8 @@ mdui-card,
 .masonry-card {
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
+	border: none !important;
+	outline: none !important;
 }
 
 /* Tactile press feedback */
