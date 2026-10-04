@@ -91,4 +91,16 @@ const SCHEMES = theme.schemes;
 		outline-offset: 3px;
 		transform: scale(1.1);
 	}
+
+	@media (max-width: 640px) {
+		.card-body {
+			flex-direction: row !important;
+			align-items: center !important;
+			justify-content: space-between !important;
+			padding: 16px 20px !important;
+		}
+		.scheme-grid {
+			margin-top: 0 !important;
+		}
+	}
 </style>
