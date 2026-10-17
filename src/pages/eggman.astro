@@ -1,0 +1,97 @@
+---
+// Deltarune Easter Egg: The Man Behind the Tree (room_man)
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>* (Behind the tree.).</title>
+		<meta name="robots" content="noindex, nofollow" />
+		<meta name="theme-color" content="#000000" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #000000 !important;
+				overflow: hidden;
+				user-select: none;
+				-webkit-user-select: none;
+				cursor: pointer;
+			}
+			.room-man-container {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: #000000;
+				position: relative;
+			}
+			.man-tree-wrap {
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: transform 0.15s ease-out;
+			}
+			.man-tree-img {
+				width: 320px;
+				max-width: 85vw;
+				height: auto;
+				object-fit: contain;
+				image-rendering: pixelated;
+				image-rendering: crisp-edges;
+				pointer-events: auto;
+				transition: filter 0.2s ease;
+			}
+			.man-tree-wrap:active {
+				transform: scale(0.97);
+			}
+		</style>
+	</head>
+	<body>
+		<main class="room-man-container" id="room-man">
+			<div class="man-tree-wrap">
+				<img
+					src="/images/tree.gif"
+					alt=""
+					class="man-tree-img"
+					id="man-tree"
+				/>
+			</div>
+		</main>
+
+		<script is:inline>
+			(function () {
+				let leaving = false;
+				function leaveRoom() {
+					if (leaving) return;
+					leaving = true;
+					const returnTo = sessionStorage.getItem("eggman_return_to");
+					if (returnTo) {
+						sessionStorage.removeItem("eggman_return_to");
+						window.location.href = returnTo;
+					} else if (window.history.length > 1) {
+						window.history.back();
+					} else {
+						window.location.href = "/";
+					}
+				}
+
+				document.addEventListener("click", leaveRoom);
+				document.addEventListener("keydown", function (e) {
+					if (e.key === "Escape" || e.key === "Enter" || e.key === " " || e.key === "Backspace") {
+						leaveRoom();
+					}
+				});
+			})();
+		</script>
+	</body>
+</html>

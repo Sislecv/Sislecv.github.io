@@ -108,6 +108,56 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 					};
 					requestAnimationFrame(update);
 				}
+
+				// Deltarune Easter Egg: Chance to teleport to room_man (/eggman) on internal navigation
+				document.addEventListener(
+					"click",
+					(e) => {
+						if (
+							e.defaultPrevented ||
+							e.button !== 0 ||
+							e.metaKey ||
+							e.ctrlKey ||
+							e.shiftKey ||
+							e.altKey
+						) {
+							return;
+						}
+
+						const anchor = e.target.closest("a");
+						if (!anchor) return;
+
+						const href = anchor.getAttribute("href");
+						if (!href) return;
+
+						if (
+							href.startsWith("#") ||
+							href.startsWith("javascript:") ||
+							anchor.target === "_blank" ||
+							anchor.hasAttribute("download")
+						) {
+							return;
+						}
+
+						try {
+							const url = new URL(anchor.href, window.location.origin);
+							if (url.origin !== window.location.origin) return;
+							if (url.pathname === "/eggman" || url.pathname === "/eggman/") return;
+							if (url.pathname === window.location.pathname && url.hash) return;
+
+							// 2% chance to stumble upon the man behind the tree
+							if (Math.random() < 0.02) {
+								e.preventDefault();
+								sessionStorage.setItem(
+									"eggman_return_to",
+									url.pathname + url.search + url.hash,
+								);
+								window.location.href = "/eggman";
+							}
+						} catch (_) {}
+					},
+					true,
+				);
 			})();
 		</script>
 	</body>
