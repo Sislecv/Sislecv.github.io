@@ -23,7 +23,7 @@
 				overflow: hidden;
 				user-select: none;
 				-webkit-user-select: none;
-				cursor: pointer;
+				cursor: default;
 			}
 			.room-man-container {
 				width: 100vw;
@@ -50,9 +50,6 @@
 				image-rendering: crisp-edges;
 				pointer-events: auto;
 				transition: filter 0.2s ease;
-			}
-			.man-tree-wrap:active {
-				transform: scale(0.97);
 			}
 		</style>
 	</head>
@@ -85,7 +82,7 @@
 					}
 				}
 
-				document.addEventListener("click", leaveRoom);
+				// Click is intentionally disabled from exiting the room
 				document.addEventListener("keydown", function (e) {
 					if (e.key === "Escape" || e.key === "Enter" || e.key === " " || e.key === "Backspace") {
 						leaveRoom();
