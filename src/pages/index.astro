@@ -503,7 +503,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		{ id: "contribution", x: 0, y: 10, w: 8, h: 3 },
 		{ id: "github", x: 0, y: 13, w: 8, h: 4 },
 		...customCards.map((c) => ({ id: c.id, x: c.x, y: c.y, w: c.w, h: c.h })),
-	].filter((t) => homeTiles.includes(t.id) || customCards.some((c) => c.id === t.id));
+	].filter((t) => (homeTiles as readonly string[]).includes(t.id) || customCards.some((c) => c.id === t.id));
 
 	const isMobile = () => window.innerWidth < 640;
 
