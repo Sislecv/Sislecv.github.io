@@ -92,22 +92,32 @@ const SCHEMES = theme.schemes;
 	.card-editorial-appearance {
 		position: relative;
 		overflow: hidden;
+		background: #fdf5e6 !important; /* Pinterest Butter Cream / Warm Vanilla */
+		color: #3b2800 !important;
+	}
+	:global(.mdui-theme-dark) .card-editorial-appearance {
+		background: #2e261a !important; /* Rich Dark Vanilla */
+		color: #fdf5e6 !important;
 	}
 
 	.editorial-watermark {
 		position: absolute;
-		left: -6px;
-		top: -12px;
+		right: -10px;
+		bottom: -16px;
 		font-family: var(--font-display), var(--font-sans);
-		font-size: 3.5rem;
+		font-size: 4.8rem;
 		font-weight: 900;
-		line-height: 1;
-		color: rgb(var(--mdui-color-on-surface));
-		opacity: 0.04;
+		line-height: 0.85;
+		color: #3b2800;
+		opacity: 0.05;
 		letter-spacing: -0.05em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease;
+	}
+	:global(.mdui-theme-dark) .editorial-watermark {
+		color: #fdf5e6;
+		opacity: 0.07;
 	}
 
 	.card-editorial-appearance:hover .editorial-watermark {

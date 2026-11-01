@@ -67,22 +67,32 @@ const levelColor = (count: number) =>
 	.card-editorial-contrib {
 		position: relative;
 		overflow: hidden;
+		background: #e5ebe4 !important; /* Pinterest Soft Sage Cream */
+		color: #172619 !important;
+	}
+	:global(.mdui-theme-dark) .card-editorial-contrib {
+		background: #1c261e !important; /* Deep Moss Night */
+		color: #e5ebe4 !important;
 	}
 
 	.editorial-watermark {
 		position: absolute;
-		left: 14px;
-		bottom: -16px;
+		right: 14px;
+		bottom: -22px;
 		font-family: var(--font-display), var(--font-sans);
-		font-size: 5.5rem;
+		font-size: 6.5rem;
 		font-weight: 900;
-		line-height: 1;
-		color: rgb(var(--mdui-color-on-surface));
-		opacity: 0.035;
+		line-height: 0.85;
+		color: #172619;
+		opacity: 0.045;
 		letter-spacing: -0.06em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease;
+	}
+	:global(.mdui-theme-dark) .editorial-watermark {
+		color: #e5ebe4;
+		opacity: 0.07;
 	}
 
 	.card-editorial-contrib:hover .editorial-watermark {

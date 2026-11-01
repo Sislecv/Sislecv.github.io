@@ -31,22 +31,32 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 	.card-editorial-tagcloud {
 		position: relative;
 		overflow: hidden;
+		background: #f7ede8 !important; /* Pinterest Peach Blossom Tint */
+		color: #3b190f !important;
+	}
+	:global(.mdui-theme-dark) .card-editorial-tagcloud {
+		background: #2b1a16 !important; /* Deep Terracotta Night */
+		color: #f7ede8 !important;
 	}
 
 	.editorial-watermark {
 		position: absolute;
-		right: 10px;
-		bottom: -15px;
+		right: -10px;
+		bottom: -18px;
 		font-family: var(--font-display), var(--font-sans);
-		font-size: 5rem;
+		font-size: 5.5rem;
 		font-weight: 900;
-		line-height: 1;
-		color: rgb(var(--mdui-color-on-surface));
-		opacity: 0.04;
-		letter-spacing: -0.05em;
+		line-height: 0.85;
+		color: #3b190f;
+		opacity: 0.05;
+		letter-spacing: -0.06em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease;
+	}
+	:global(.mdui-theme-dark) .editorial-watermark {
+		color: #f7ede8;
+		opacity: 0.08;
 	}
 
 	.card-editorial-tagcloud:hover .editorial-watermark {

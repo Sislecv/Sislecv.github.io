@@ -55,26 +55,32 @@ import { status } from "../site.config";
 	.card-editorial-emoji {
 		position: relative;
 		overflow: hidden;
-		background: #fbf0dc !important;
+		background: #edd2fe !important; /* Pinterest Lavender / Lilac */
+		color: #2a1140 !important;
 	}
 	:global(.mdui-theme-dark) .card-editorial-emoji {
-		background: #2b2216 !important;
+		background: #331944 !important; /* Deep Plum Night */
+		color: #edd2fe !important;
 	}
 
 	.card-editorial-emoji .editorial-watermark {
 		position: absolute;
-		left: -6px;
-		bottom: -12px;
+		right: -8px;
+		bottom: -16px;
 		font-family: var(--font-display), var(--font-sans);
-		font-size: 3.8rem;
+		font-size: 5rem;
 		font-weight: 900;
-		line-height: 1;
-		color: rgb(var(--mdui-color-on-secondary-container));
-		opacity: 0.05;
-		letter-spacing: -0.04em;
+		line-height: 0.85;
+		color: #2a1140;
+		opacity: 0.06;
+		letter-spacing: -0.05em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease, transform 0.3s ease;
+	}
+	:global(.mdui-theme-dark) .card-editorial-emoji .editorial-watermark {
+		color: #edd2fe;
+		opacity: 0.08;
 	}
 
 	.card-editorial-emoji:hover .editorial-watermark {
