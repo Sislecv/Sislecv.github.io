@@ -13,8 +13,8 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 				class="profile-avatar"
 			/>
 			<div>
-				<div style="font-weight: 600; font-size: 1.05rem; letter-spacing: -0.2px">{SITE.author}</div>
-				<div style="font-size: 0.8rem; color: rgb(var(--mdui-color-on-surface-variant)); margin-top: 2px">
+				<div class="profile-name">{SITE.author}</div>
+				<div class="profile-desc">
 					{SITE.description}
 				</div>
 			</div>
@@ -47,6 +47,19 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 </mdui-card>
 
 <style>
+	.profile-name {
+		font-family: var(--font-double-line), var(--font-sans);
+		font-size: 1.45rem;
+		line-height: 1.15;
+		letter-spacing: 0.04em;
+		color: rgb(var(--mdui-color-primary));
+	}
+	.profile-desc {
+		font-size: 0.8rem;
+		color: rgb(var(--mdui-color-on-surface-variant));
+		margin-top: 3px;
+		letter-spacing: -0.01em;
+	}
 	.profile-avatar {
 		border-radius: 50%;
 		background: rgb(var(--mdui-color-surface-container-highest));

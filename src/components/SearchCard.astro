@@ -35,30 +35,30 @@
 	.pixel-clover-search-card {
 		height: 100%;
 		border-radius: var(--mdui-shape-corner-extra-large, 28px) !important;
-		border: none !important;
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.12) !important;
 		outline: none !important;
 		padding: 0 !important;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #eddff7 !important;
+		background: rgba(var(--mdui-color-tertiary-container), 0.55) !important;
+		backdrop-filter: blur(20px) saturate(160%);
+		-webkit-backdrop-filter: blur(20px) saturate(160%);
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
-		            background-color var(--md-duration-short, 200ms) ease !important;
+		            background-color var(--md-duration-short, 200ms) ease,
+		            box-shadow var(--md-duration-short, 200ms) ease !important;
 		overflow: hidden;
 		user-select: none;
 	}
 
-	:global(.mdui-theme-dark) .pixel-clover-search-card {
-		background: #2b2633 !important;
-	}
-
 	.pixel-clover-search-card:hover {
 		transform: translateY(-2px);
-		background: #e5d5f2 !important;
+		background: rgba(var(--mdui-color-tertiary-container), 0.8) !important;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 	}
 
 	:global(.mdui-theme-dark) .pixel-clover-search-card:hover {
-		background: #342e3d !important;
+		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
 	}
 
 	.clover-search-wrap {
@@ -74,8 +74,8 @@
 
 	.clover-shape-badge {
 		position: relative;
-		width: 104px;
-		height: 104px;
+		width: 100px;
+		height: 100px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -83,7 +83,7 @@
 	}
 
 	.pixel-clover-search-card:hover .clover-shape-badge {
-		transform: scale(1.09) rotate(8deg);
+		transform: scale(1.08) rotate(6deg);
 	}
 
 	.clover-svg {
@@ -91,41 +91,33 @@
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		filter: drop-shadow(0 6px 16px rgba(103, 80, 164, 0.28));
+		filter: drop-shadow(0 4px 12px rgba(var(--mdui-color-tertiary), 0.25));
 	}
 
 	:global(.mdui-theme-dark) .clover-svg {
-		filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+		filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
 	}
 
 	.clover-path {
-		fill: #6750a4;
+		fill: rgb(var(--mdui-color-tertiary));
 		transition: fill var(--md-duration-short, 200ms) ease;
 	}
 
-	:global(.mdui-theme-dark) .clover-path {
-		fill: #7d5260;
-	}
-
 	.pixel-clover-search-card:hover .clover-path {
-		fill: #5b4594;
-	}
-
-	:global(.mdui-theme-dark) .pixel-clover-search-card:hover .clover-path {
-		fill: #8f6070;
+		opacity: 0.92;
 	}
 
 	.clover-center-icon {
 		position: relative;
 		z-index: 2;
-		color: #ffffff;
+		color: rgb(var(--mdui-color-on-tertiary));
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
 	.search-symbol {
-		font-size: 38px;
+		font-size: 36px;
 		transition: transform var(--md-duration-short, 200ms) ease;
 	}
 
@@ -137,17 +129,14 @@
 		position: absolute;
 		bottom: 12px;
 		right: 14px;
-		padding: 3px 9px;
+		padding: 3px 8px;
 		border-radius: 9999px;
-		background: rgba(103, 80, 164, 0.14);
-		font-size: 0.7rem;
-		font-weight: 550;
-		color: #49454f;
-		letter-spacing: 0.3px;
-	}
-
-	:global(.mdui-theme-dark) .clover-badge-pill {
-		background: rgba(255, 255, 255, 0.12);
-		color: #e6e1e5;
+		background: rgba(var(--mdui-color-surface), 0.7);
+		border: 1px solid rgba(var(--mdui-color-outline-variant), 0.2);
+		font-family: var(--font-pixel), monospace;
+		font-size: 0.68rem;
+		font-weight: 700;
+		color: rgb(var(--mdui-color-on-tertiary-container));
+		letter-spacing: 0.05em;
 	}
 </style>

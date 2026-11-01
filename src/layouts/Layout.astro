@@ -50,6 +50,13 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
 			href="/favicon/favicon-dark-192.png"
 			media="(prefers-color-scheme: dark)"
 		/>
+		<!-- Google Art Fonts: Monoton (Double-line/Inline) & Silkscreen (Pixel) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Monoton&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
 		<script is:inline>
 			// Apply persisted theme before paint to avoid flash and guarantee global harmony
 			(function () {

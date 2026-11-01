@@ -3,6 +3,11 @@
 	--blog-max-width: 1100px;
 	--blog-gap: 16px;
 
+	/* Editorial & Artistic Typography System */
+	--font-double-line: "Monoton", -apple-system, sans-serif;
+	--font-pixel: "Silkscreen", monospace;
+	--font-sans: "Noto Sans SC", "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+
 	/* Motion system (Material Design 3 easing) */
 	--md-easing-standard: cubic-bezier(0.2, 0, 0, 1);
 	--md-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
