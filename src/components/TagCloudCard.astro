@@ -31,9 +31,6 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 	.card-editorial-tagcloud {
 		position: relative;
 		overflow: hidden;
-		background: rgba(var(--mdui-color-surface-container), 0.7) !important;
-		backdrop-filter: blur(18px);
-		-webkit-backdrop-filter: blur(18px);
 	}
 
 	.editorial-watermark {

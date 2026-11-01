@@ -479,25 +479,6 @@ button.nav-link {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
-	border: 1px solid rgba(var(--mdui-color-outline-variant), 0.14) !important;
-	box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
-	transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard),
-	            box-shadow var(--md-duration-short, 200ms) ease !important;
-}
-
-.bento-card:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.mdui-theme-dark .bento-card {
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-	border-color: rgba(255, 255, 255, 0.07) !important;
-}
-
-.mdui-theme-dark .bento-card:hover {
-	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
 }
 
 .bento-card .card-body {

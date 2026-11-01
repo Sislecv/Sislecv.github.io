@@ -55,9 +55,10 @@ import { status } from "../site.config";
 	.card-editorial-emoji {
 		position: relative;
 		overflow: hidden;
-		background: rgba(var(--mdui-color-secondary-container), 0.38) !important;
-		backdrop-filter: blur(18px);
-		-webkit-backdrop-filter: blur(18px);
+		background: #fbf0dc !important;
+	}
+	:global(.mdui-theme-dark) .card-editorial-emoji {
+		background: #2b2216 !important;
 	}
 
 	.card-editorial-emoji .editorial-watermark {
