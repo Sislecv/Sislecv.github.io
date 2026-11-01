@@ -71,18 +71,16 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 	.pixel-tech-grid-card {
 		position: relative;
 		overflow: hidden;
-		background: rgba(24, 25, 27, 0.85) !important;
-		backdrop-filter: blur(20px) saturate(180%);
-		-webkit-backdrop-filter: blur(20px) saturate(180%);
+		background: #201e29 !important;
 		color: #ffffff !important;
-		border-radius: var(--mdui-shape-corner-extra-large, 24px) !important;
+		border-radius: 9999px !important; /* Continuous Smooth Capsule / Pill */
 		border: none !important;
 		outline: none !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
 	}
 
 	:global(.mdui-theme-dark) .pixel-tech-grid-card {
-		background: rgba(20, 20, 24, 0.85) !important;
+		background: #191722 !important;
 	}
 
 	.pixel-tech-grid-card:hover {
@@ -180,7 +178,7 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 12px 18px;
+		padding: 12px 24px;
 		box-sizing: border-box;
 	}
 
