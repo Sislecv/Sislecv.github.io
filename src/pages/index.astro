@@ -13,6 +13,7 @@ import GitHubProjectsCard from "../components/GitHubProjectsCard.astro";
 import TalksCard from "../components/TalksCard.astro";
 import CustomCard from "../components/CustomCard.astro";
 import MasonryPostCard from "../components/MasonryPostCard.astro";
+import GravityMembraneBanner from "../components/GravityMembraneBanner.astro";
 import { homeTiles, customCards } from "../site.config";
 
 const posts = await getAllPosts();
@@ -21,6 +22,7 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 ---
 
 <Layout showFooterNav={false}>
+	<GravityMembraneBanner />
 	<div class="grid-toolbar">
 		<mdui-button id="layout-reset" variant="text" size="small" title="恢复官方默认布局">
 			<mdui-icon-restart-alt--outlined slot="icon" style="font-size: 18px"></mdui-icon-restart-alt--outlined>

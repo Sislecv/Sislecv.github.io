@@ -1,0 +1,475 @@
+---
+// GravityMembraneBanner.astro: A restrained, high-tension ASCII Gravity Membrane banner.
+// Pure kinetic geometry & gravitational well physics. Zero superfluous slogans/text.
+---
+
+<div class="gravity-banner-wrapper">
+	<div class="gravity-banner-card" id="gravity-banner-root">
+		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
+		<div class="gravity-telemetry">
+			<span class="telemetry-badge" id="telemetry-metric">G·MEMBRANE // TENSION: 1.00</span>
+		</div>
+	</div>
+</div>
+
+<style>
+	.gravity-banner-wrapper {
+		width: 100%;
+		margin-bottom: 16px;
+	}
+
+	.gravity-banner-card {
+		position: relative;
+		width: 100%;
+		height: 240px;
+		background: rgba(var(--mdui-color-surface-container-low, 20, 20, 24), 0.75);
+		border-radius: var(--bento-radius, 24px);
+		border: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.16);
+		overflow: hidden;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		user-select: none;
+		-webkit-user-select: none;
+		cursor: crosshair;
+		transition: border-color var(--md-duration-short, 150ms) var(--md-easing-standard, ease);
+	}
+
+	:global(.mdui-theme-dark) .gravity-banner-card {
+		background: rgba(12, 12, 16, 0.82);
+		border-color: rgba(255, 255, 255, 0.08);
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+	}
+
+	.gravity-banner-card:hover {
+		border-color: rgba(var(--mdui-color-primary, 11, 87, 208), 0.35);
+	}
+
+	#gravity-banner-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.gravity-telemetry {
+		position: absolute;
+		bottom: 12px;
+		right: 14px;
+		pointer-events: none;
+		opacity: 0.55;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+		font-size: 10px;
+		letter-spacing: 0.1em;
+		transition: opacity 0.2s ease;
+	}
+
+	.gravity-banner-card:hover .gravity-telemetry {
+		opacity: 0.9;
+	}
+
+	.telemetry-badge {
+		color: rgb(var(--mdui-color-on-surface-variant, 140, 140, 150));
+	}
+
+	@media (max-width: 600px) {
+		.gravity-banner-card {
+			height: 190px;
+			border-radius: 18px;
+		}
+		.gravity-telemetry {
+			font-size: 9px;
+			bottom: 8px;
+			right: 10px;
+		}
+	}
+</style>
+
+<script is:inline>
+	(function () {
+		const root = document.getElementById("gravity-banner-root");
+		const canvas = document.getElementById("gravity-banner-canvas");
+		const telemetry = document.getElementById("telemetry-metric");
+		if (!canvas || !root) return;
+
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+
+		// Font and ASCII ramps
+		const FONT_SIZE = 12;
+		const FONT_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace';
+		const CHAR_ASPECT = 0.6; // Width to height ratio in monospace
+		const CHAR_W = FONT_SIZE * CHAR_ASPECT;
+		const CHAR_H = FONT_SIZE;
+
+		// Restrained ASCII density gradient
+		const DENSITY_RAMP = " .·:;+=xX$#@";
+
+		let width = 0;
+		let height = 0;
+		let dpr = 1;
+
+		// Mouse & Physical state
+		let mouseX = -9999;
+		let mouseY = -9999;
+		let isHovered = false;
+		let isPressed = false;
+		let pressStrength = 0; // 0 to 1 smooth buildup
+		let shockwaveRadius = -1;
+		let shockwaveStrength = 0;
+
+		// Theme colors extracted dynamically
+		let colorPrimary = [11, 87, 208];
+		let colorOnSurface = [160, 160, 170];
+		let colorBg = [15, 15, 20];
+
+		function parseRgb(str, fallback) {
+			if (!str) return fallback;
+			const m = str.match(/[\d.]+/g);
+			if (m && m.length >= 3) {
+				return [parseFloat(m[0]), parseFloat(m[1]), parseFloat(m[2])];
+			}
+			return fallback;
+		}
+
+		function updateTheme() {
+			const cs = getComputedStyle(document.documentElement);
+			colorPrimary = parseRgb(cs.getPropertyValue("--mdui-color-primary").trim(), [11, 87, 208]);
+			colorOnSurface = parseRgb(cs.getPropertyValue("--mdui-color-on-surface").trim(), [160, 160, 170]);
+		}
+
+		function resize() {
+			dpr = Math.min(window.devicePixelRatio || 1, 2);
+			const rect = root.getBoundingClientRect();
+			width = rect.width;
+			height = rect.height;
+
+			canvas.width = Math.round(width * dpr);
+			canvas.height = Math.round(height * dpr);
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		}
+
+		// Physics grid setup
+		// 3D perspective grid of vertices [gx, gy] representing the membrane
+		const GRID_X = 42;
+		const GRID_Y = 22;
+
+		// Vertex positions: x, y, z (depth), original x, original y, vz (spring velocity), displacement
+		class Point {
+			constructor(ox, oy) {
+				this.ox = ox; // normalized [-1, 1]
+				this.oy = oy; // normalized [-1, 1]
+				this.x = 0;
+				this.y = 0;
+				this.z = 0;
+				this.vz = 0;
+			}
+		}
+
+		const points = [];
+		for (let j = 0; j < GRID_Y; j++) {
+			const row = [];
+			const ny = (j / (GRID_Y - 1)) * 2 - 1; // -1 to 1
+			for (let i = 0; i < GRID_X; i++) {
+				const nx = (i / (GRID_X - 1)) * 2 - 1; // -1 to 1
+				row.push(new Point(nx, ny));
+			}
+			points.push(row);
+		}
+
+		// Octahedron core in 3D: 6 vertices
+		const coreVertices = [
+			[0, 1.1, 0],   // top
+			[0, -1.1, 0],  // bottom
+			[-1, 0, 0],    // left
+			[1, 0, 0],     // right
+			[0, 0, -1],    // back
+			[0, 0, 1]      // front
+		];
+
+		const coreEdges = [
+			[0, 2], [0, 3], [0, 4], [0, 5],
+			[1, 2], [1, 3], [1, 4], [1, 5],
+			[2, 4], [4, 3], [3, 5], [5, 2]
+		];
+
+		let rotX = 0.35;
+		let rotY = 0;
+		let time = 0;
+
+		function render() {
+			time += 0.016;
+
+			// Smooth press transition
+			if (isPressed) {
+				pressStrength += (1 - pressStrength) * 0.12;
+			} else {
+				pressStrength += (0 - pressStrength) * 0.08;
+			}
+
+			// Shockwave propagation
+			if (shockwaveRadius >= 0) {
+				shockwaveRadius += 7;
+				shockwaveStrength *= 0.93;
+				if (shockwaveStrength < 0.01 || shockwaveRadius > Math.max(width, height) * 1.5) {
+					shockwaveRadius = -1;
+				}
+			}
+
+			// Auto rotation of central core with subtle mouse influence
+			rotY += 0.012 + (pressStrength * 0.025);
+			rotX = 0.38 + Math.sin(time * 0.6) * 0.06;
+
+			ctx.clearRect(0, 0, width, height);
+
+			const centerX = width * 0.5;
+			const centerY = height * 0.5;
+			const membranePitch = 0.68; // perspective pitch tilt
+
+			// Normalized mouse in canvas coordinates
+			const normMouseX = mouseX;
+			const normMouseY = mouseY;
+
+			// Update membrane points with gravity depression physics
+			const maxDepth = 65 + pressStrength * 85;
+			const wellRadius = 150 + pressStrength * 40;
+
+			// Update physics & projection
+			for (let j = 0; j < GRID_Y; j++) {
+				for (let i = 0; i < GRID_X; i++) {
+					const p = points[j][i];
+					
+					// Flat 3D plane coordinates
+					const px3d = p.ox * (width * 0.58);
+					const py3d = p.oy * (height * 0.75);
+
+					// Screen project with perspective
+					let sx = centerX + px3d;
+					let sy = centerY + py3d * membranePitch;
+
+					// Singularity gravitational pull from center
+					const distCenter = Math.hypot(px3d, py3d);
+					const centerDepression = Math.exp(-distCenter / 75) * (45 + pressStrength * 35);
+
+					// Mouse depression well
+					let mouseDepression = 0;
+					if (isHovered) {
+						const distMouse = Math.hypot(sx - normMouseX, sy - normMouseY);
+						mouseDepression = Math.exp(-Math.pow(distMouse / wellRadius, 2)) * maxDepth;
+					}
+
+					// Shockwave ripple ripple
+					let shockDisplacement = 0;
+					if (shockwaveRadius >= 0) {
+						const distOrigin = Math.hypot(sx - (isHovered ? normMouseX : centerX), sy - (isHovered ? normMouseY : centerY));
+						const delta = distOrigin - shockwaveRadius;
+						if (Math.abs(delta) < 40) {
+							shockDisplacement = Math.sin(delta * 0.15) * 16 * shockwaveStrength;
+						}
+					}
+
+					// Target Z displacement (downward gravity well)
+					const targetZ = -(centerDepression + mouseDepression + shockDisplacement);
+
+					// Damped spring physics on Z
+					const springK = 0.15;
+					const damping = 0.82;
+					p.vz += (targetZ - p.z) * springK;
+					p.vz *= damping;
+					p.z += p.vz;
+
+					// Final projected screen coords with perspective downward displacement
+					p.x = sx;
+					p.y = sy - p.z * 0.85; // downward warp
+				}
+			}
+
+			// Render ASCII grid lines & characters
+			ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center";
+
+			// Draw horizontal & vertical topological contours with ASCII chars
+			for (let j = 0; j < GRID_Y; j++) {
+				const rowT = j / (GRID_Y - 1);
+				const depthFade = 0.2 + rowT * 0.7; // depth gradient
+
+				for (let i = 0; i < GRID_X; i++) {
+					const p = points[j][i];
+					const zDisp = Math.abs(p.z);
+
+					// Character selection based on tension & depth
+					let char = "·";
+					let alpha = 0.15 * depthFade;
+					let isAccent = false;
+
+					if (zDisp > 45) {
+						char = "+";
+						alpha = Math.min(0.85, 0.35 + zDisp * 0.007);
+						isAccent = true;
+					} else if (zDisp > 20) {
+						char = ":";
+						alpha = Math.min(0.55, 0.2 + zDisp * 0.008);
+					} else if (i % 2 === 0 && j % 2 === 0) {
+						char = "+";
+						alpha = 0.22 * depthFade;
+					}
+
+					if (isAccent) {
+						ctx.fillStyle = `rgba(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]}, ${alpha})`;
+					} else {
+						ctx.fillStyle = `rgba(${colorOnSurface[0]}, ${colorOnSurface[1]}, ${colorOnSurface[2]}, ${alpha})`;
+					}
+
+					ctx.fillText(char, p.x, p.y);
+				}
+			}
+
+			// Render central 3D rotating ASCII Octahedron (Singularity core)
+			const coreScale = 38 + pressStrength * 8;
+			const cosY = Math.cos(rotY);
+			const sinY = Math.sin(rotY);
+			const cosX = Math.cos(rotX);
+			const sinX = Math.sin(rotX);
+
+			// Project 3D core vertices to screen
+			const projectedCore = coreVertices.map(([vx, vy, vz]) => {
+				// Rotate around Y
+				let x1 = vx * cosY - vz * sinY;
+				let z1 = vx * sinY + vz * cosY;
+				// Rotate around X
+				let y2 = vy * cosX - z1 * sinX;
+				let z2 = vy * sinX + z1 * cosX;
+
+				return {
+					x: centerX + x1 * coreScale,
+					y: centerY + y2 * coreScale - 8,
+					z: z2
+				};
+			});
+
+			// Draw core wireframe using dense ASCII ticks
+			for (const [v0Idx, v1Idx] of coreEdges) {
+				const a = projectedCore[v0Idx];
+				const b = projectedCore[v1Idx];
+
+				const dx = b.x - a.x;
+				const dy = b.y - a.y;
+				const dist = Math.hypot(dx, dy);
+				const steps = Math.max(3, Math.floor(dist / (CHAR_W * 1.1)));
+
+				for (let s = 0; s <= steps; s++) {
+					const t = s / steps;
+					const px = a.x + dx * t;
+					const py = a.y + dy * t;
+					const avgZ = a.z + (b.z - a.z) * t;
+
+					// Front faces are brighter, back faces are dimmer
+					const zNorm = (avgZ + 1.2) / 2.4; // 0 to 1
+					const brightness = Math.max(0.2, Math.min(1, zNorm));
+					const charIdx = Math.floor(brightness * (DENSITY_RAMP.length - 1));
+					const ch = DENSITY_RAMP[charIdx] || "·";
+
+					const alpha = 0.3 + brightness * 0.65;
+					if (brightness > 0.65 || pressStrength > 0.4) {
+						ctx.fillStyle = `rgba(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]}, ${alpha})`;
+					} else {
+						ctx.fillStyle = `rgba(${colorOnSurface[0]}, ${colorOnSurface[1]}, ${colorOnSurface[2]}, ${alpha})`;
+					}
+					ctx.fillText(ch, px, py);
+				}
+			}
+
+			// Center Singularity core pulse
+			const pulseChar = pressStrength > 0.6 ? "@" : (pressStrength > 0.2 ? "#" : "*");
+			ctx.fillStyle = `rgb(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]})`;
+			ctx.fillText(pulseChar, centerX, centerY - 8);
+
+			// Update subtle telemetry readouts (real-time scientific tension metric)
+			if (telemetry) {
+				const tensionVal = (1.0 + pressStrength * 3.42 + (shockwaveRadius >= 0 ? 0.8 : 0)).toFixed(2);
+				const statusTag = isPressed ? "COMPRESSED" : (isHovered ? "WARPED" : "EQUILIBRIUM");
+				telemetry.textContent = `G·MEMBRANE // TENSION: ${tensionVal} // ${statusTag}`;
+			}
+
+			requestAnimationFrame(render);
+		}
+
+		// Event handlers
+		root.addEventListener("mousemove", (e) => {
+			const rect = root.getBoundingClientRect();
+			mouseX = e.clientX - rect.left;
+			mouseY = e.clientY - rect.top;
+			isHovered = true;
+		});
+
+		root.addEventListener("mouseenter", (e) => {
+			const rect = root.getBoundingClientRect();
+			mouseX = e.clientX - rect.left;
+			mouseY = e.clientY - rect.top;
+			isHovered = true;
+		});
+
+		root.addEventListener("mouseleave", () => {
+			isHovered = false;
+			isPressed = false;
+			mouseX = -9999;
+			mouseY = -9999;
+		});
+
+		root.addEventListener("mousedown", (e) => {
+			if (e.button === 0) {
+				isPressed = true;
+			}
+		});
+
+		window.addEventListener("mouseup", () => {
+			if (isPressed) {
+				isPressed = false;
+				shockwaveRadius = 0;
+				shockwaveStrength = 1.0;
+			}
+		});
+
+		// Touch events for mobile devices
+		root.addEventListener("touchstart", (e) => {
+			if (e.touches.length > 0) {
+				const rect = root.getBoundingClientRect();
+				mouseX = e.touches[0].clientX - rect.left;
+				mouseY = e.touches[0].clientY - rect.top;
+				isHovered = true;
+				isPressed = true;
+			}
+		}, { passive: true });
+
+		root.addEventListener("touchmove", (e) => {
+			if (e.touches.length > 0) {
+				const rect = root.getBoundingClientRect();
+				mouseX = e.touches[0].clientX - rect.left;
+				mouseY = e.touches[0].clientY - rect.top;
+				isHovered = true;
+			}
+		}, { passive: true });
+
+		root.addEventListener("touchend", () => {
+			if (isPressed) {
+				isPressed = false;
+				shockwaveRadius = 0;
+				shockwaveStrength = 1.0;
+			}
+			isHovered = false;
+		});
+
+		window.addEventListener("resize", resize);
+
+		// Observe theme changes
+		updateTheme();
+		const observer = new MutationObserver(() => updateTheme());
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class", "style"]
+		});
+
+		resize();
+		requestAnimationFrame(render);
+	})();
+</script>
