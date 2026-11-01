@@ -1,48 +1,56 @@
 ---
-// GravityMembraneBanner.astro: A restrained, high-tension ASCII Gravity Membrane banner.
-// Pure kinetic geometry & gravitational well physics. Zero superfluous slogans/text.
+// GravityMembraneBanner.astro: Fullscreen Hero ASCII Gravity Membrane
+// Zero superfluous slogans/text. Pure kinetic geometry & gravitational well physics.
 ---
 
-<div class="gravity-banner-wrapper">
-	<div class="gravity-banner-card" id="gravity-banner-root">
+<div class="gravity-fullscreen-hero" id="gravity-hero-container">
+	<div class="gravity-hero-viewport" id="gravity-banner-root">
 		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
+
+		<!-- Subtle technical telemetry -->
 		<div class="gravity-telemetry">
-			<span class="telemetry-badge" id="telemetry-metric">G·MEMBRANE // TENSION: 1.00</span>
+			<span class="telemetry-badge" id="telemetry-metric">G·MEMBRANE // TENSION: 1.00 // EQUILIBRIUM</span>
 		</div>
+
+		<!-- Minimalist scroll indicator -->
+		<button class="gravity-scroll-down" id="gravity-scroll-trigger" aria-label="向下滚动至内容" title="向下滚动">
+			<div class="scroll-ascii-glyph">
+				<span class="glyph-line">|</span>
+				<span class="glyph-arrow">v</span>
+			</div>
+		</button>
 	</div>
 </div>
 
 <style>
-	.gravity-banner-wrapper {
-		width: 100%;
-		margin-bottom: 16px;
+	.gravity-fullscreen-hero {
+		position: relative;
+		width: 100vw;
+		margin-left: calc(-50vw + 50%);
+		margin-right: calc(-50vw + 50%);
+		height: 100vh;
+		min-height: 540px;
+		max-height: 1080px;
+		margin-top: -20px; /* Align to top flush */
+		margin-bottom: 28px;
+		overflow: hidden;
 	}
 
-	.gravity-banner-card {
+	.gravity-hero-viewport {
 		position: relative;
 		width: 100%;
-		height: 240px;
-		background: rgba(var(--mdui-color-surface-container-low, 20, 20, 24), 0.75);
-		border-radius: var(--bento-radius, 24px);
-		border: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.16);
-		overflow: hidden;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
+		height: 100%;
+		background: radial-gradient(circle at 50% 50%, rgba(var(--mdui-color-surface-container, 24, 24, 30), 0.5) 0%, rgba(var(--mdui-color-surface, 15, 15, 20), 0.95) 100%);
+		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.18);
 		user-select: none;
 		-webkit-user-select: none;
 		cursor: crosshair;
-		transition: border-color var(--md-duration-short, 150ms) var(--md-easing-standard, ease);
+		overflow: hidden;
 	}
 
-	:global(.mdui-theme-dark) .gravity-banner-card {
-		background: rgba(12, 12, 16, 0.82);
-		border-color: rgba(255, 255, 255, 0.08);
-		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-	}
-
-	.gravity-banner-card:hover {
-		border-color: rgba(var(--mdui-color-primary, 11, 87, 208), 0.35);
+	:global(.mdui-theme-dark) .gravity-hero-viewport {
+		background: radial-gradient(circle at 50% 50%, rgba(20, 20, 28, 0.6) 0%, rgba(10, 10, 14, 0.98) 100%);
+		border-bottom-color: rgba(255, 255, 255, 0.08);
 	}
 
 	#gravity-banner-canvas {
@@ -53,33 +61,83 @@
 
 	.gravity-telemetry {
 		position: absolute;
-		bottom: 12px;
-		right: 14px;
+		bottom: 22px;
+		right: 28px;
 		pointer-events: none;
-		opacity: 0.55;
+		opacity: 0.6;
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-		font-size: 10px;
-		letter-spacing: 0.1em;
+		font-size: 11px;
+		letter-spacing: 0.12em;
 		transition: opacity 0.2s ease;
+		z-index: 2;
 	}
 
-	.gravity-banner-card:hover .gravity-telemetry {
-		opacity: 0.9;
+	.gravity-hero-viewport:hover .gravity-telemetry {
+		opacity: 0.95;
 	}
 
 	.telemetry-badge {
 		color: rgb(var(--mdui-color-on-surface-variant, 140, 140, 150));
 	}
 
+	/* Minimalist ASCII scroll indicator */
+	.gravity-scroll-down {
+		position: absolute;
+		bottom: 24px;
+		left: 50%;
+		transform: translateX(-50%);
+		background: transparent;
+		border: none;
+		padding: 12px;
+		cursor: pointer;
+		color: rgb(var(--mdui-color-on-surface-variant, 140, 140, 150));
+		opacity: 0.6;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		z-index: 2;
+		outline: none;
+	}
+
+	.gravity-scroll-down:hover {
+		opacity: 1;
+		color: rgb(var(--mdui-color-primary, 11, 87, 208));
+		transform: translateX(-50%) translateY(3px);
+	}
+
+	.scroll-ascii-glyph {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.1;
+		animation: scroll-bob 2.2s ease-in-out infinite;
+	}
+
+	@keyframes scroll-bob {
+		0%, 100% {
+			transform: translateY(0);
+			opacity: 0.5;
+		}
+		50% {
+			transform: translateY(6px);
+			opacity: 1;
+		}
+	}
+
 	@media (max-width: 600px) {
-		.gravity-banner-card {
-			height: 190px;
-			border-radius: 18px;
+		.gravity-fullscreen-hero {
+			height: 82vh;
+			min-height: 480px;
+			margin-bottom: 20px;
 		}
 		.gravity-telemetry {
 			font-size: 9px;
-			bottom: 8px;
-			right: 10px;
+			bottom: 12px;
+			right: 14px;
+		}
+		.gravity-scroll-down {
+			bottom: 14px;
 		}
 	}
 </style>
@@ -89,19 +147,30 @@
 		const root = document.getElementById("gravity-banner-root");
 		const canvas = document.getElementById("gravity-banner-canvas");
 		const telemetry = document.getElementById("telemetry-metric");
+		const scrollBtn = document.getElementById("gravity-scroll-trigger");
 		if (!canvas || !root) return;
 
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// Font and ASCII ramps
-		const FONT_SIZE = 12;
-		const FONT_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace';
-		const CHAR_ASPECT = 0.6; // Width to height ratio in monospace
-		const CHAR_W = FONT_SIZE * CHAR_ASPECT;
-		const CHAR_H = FONT_SIZE;
+		// Scroll to content when clicking indicator
+		if (scrollBtn) {
+			scrollBtn.addEventListener("click", () => {
+				const hero = document.getElementById("gravity-hero-container");
+				if (hero) {
+					const targetY = hero.offsetTop + hero.offsetHeight - 16;
+					window.scrollTo({ top: targetY, behavior: "smooth" });
+				}
+			});
+		}
 
-		// Restrained ASCII density gradient
+		// Font and ASCII ramps
+		const FONT_SIZE = 13;
+		const FONT_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace';
+		const CHAR_ASPECT = 0.6;
+		const CHAR_W = FONT_SIZE * CHAR_ASPECT;
+
+		// Density ramp
 		const DENSITY_RAMP = " .·:;+=xX$#@";
 
 		let width = 0;
@@ -120,7 +189,6 @@
 		// Theme colors extracted dynamically
 		let colorPrimary = [11, 87, 208];
 		let colorOnSurface = [160, 160, 170];
-		let colorBg = [15, 15, 20];
 
 		function parseRgb(str, fallback) {
 			if (!str) return fallback;
@@ -137,23 +205,10 @@
 			colorOnSurface = parseRgb(cs.getPropertyValue("--mdui-color-on-surface").trim(), [160, 160, 170]);
 		}
 
-		function resize() {
-			dpr = Math.min(window.devicePixelRatio || 1, 2);
-			const rect = root.getBoundingClientRect();
-			width = rect.width;
-			height = rect.height;
+		// Density of the membrane grid (expanded for full-screen breadth)
+		let GRID_X = 58;
+		let GRID_Y = 32;
 
-			canvas.width = Math.round(width * dpr);
-			canvas.height = Math.round(height * dpr);
-			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-		}
-
-		// Physics grid setup
-		// 3D perspective grid of vertices [gx, gy] representing the membrane
-		const GRID_X = 42;
-		const GRID_Y = 22;
-
-		// Vertex positions: x, y, z (depth), original x, original y, vz (spring velocity), displacement
 		class Point {
 			constructor(ox, oy) {
 				this.ox = ox; // normalized [-1, 1]
@@ -165,25 +220,51 @@
 			}
 		}
 
-		const points = [];
-		for (let j = 0; j < GRID_Y; j++) {
-			const row = [];
-			const ny = (j / (GRID_Y - 1)) * 2 - 1; // -1 to 1
-			for (let i = 0; i < GRID_X; i++) {
-				const nx = (i / (GRID_X - 1)) * 2 - 1; // -1 to 1
-				row.push(new Point(nx, ny));
+		let points = [];
+		function initGrid() {
+			points = [];
+			for (let j = 0; j < GRID_Y; j++) {
+				const row = [];
+				const ny = (j / (GRID_Y - 1)) * 2 - 1;
+				for (let i = 0; i < GRID_X; i++) {
+					const nx = (i / (GRID_X - 1)) * 2 - 1;
+					row.push(new Point(nx, ny));
+				}
+				points.push(row);
 			}
-			points.push(row);
+		}
+		initGrid();
+
+		function resize() {
+			dpr = Math.min(window.devicePixelRatio || 1, 2);
+			const rect = root.getBoundingClientRect();
+			width = rect.width;
+			height = rect.height;
+
+			canvas.width = Math.round(width * dpr);
+			canvas.height = Math.round(height * dpr);
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+			// Adaptive grid density based on width
+			if (width < 600) {
+				GRID_X = 38;
+				GRID_Y = 24;
+				initGrid();
+			} else if (width > 1200) {
+				GRID_X = 64;
+				GRID_Y = 36;
+				initGrid();
+			}
 		}
 
 		// Octahedron core in 3D: 6 vertices
 		const coreVertices = [
-			[0, 1.1, 0],   // top
-			[0, -1.1, 0],  // bottom
-			[-1, 0, 0],    // left
-			[1, 0, 0],     // right
-			[0, 0, -1],    // back
-			[0, 0, 1]      // front
+			[0, 1.25, 0],   // top
+			[0, -1.25, 0],  // bottom
+			[-1.1, 0, 0],   // left
+			[1.1, 0, 0],    // right
+			[0, 0, -1.1],   // back
+			[0, 0, 1.1]     // front
 		];
 
 		const coreEdges = [
@@ -208,39 +289,39 @@
 
 			// Shockwave propagation
 			if (shockwaveRadius >= 0) {
-				shockwaveRadius += 7;
-				shockwaveStrength *= 0.93;
-				if (shockwaveStrength < 0.01 || shockwaveRadius > Math.max(width, height) * 1.5) {
+				shockwaveRadius += 10;
+				shockwaveStrength *= 0.94;
+				if (shockwaveStrength < 0.01 || shockwaveRadius > Math.max(width, height) * 1.6) {
 					shockwaveRadius = -1;
 				}
 			}
 
 			// Auto rotation of central core with subtle mouse influence
-			rotY += 0.012 + (pressStrength * 0.025);
-			rotX = 0.38 + Math.sin(time * 0.6) * 0.06;
+			rotY += 0.011 + (pressStrength * 0.028);
+			rotX = 0.36 + Math.sin(time * 0.5) * 0.08;
 
 			ctx.clearRect(0, 0, width, height);
 
 			const centerX = width * 0.5;
-			const centerY = height * 0.5;
-			const membranePitch = 0.68; // perspective pitch tilt
+			const centerY = height * 0.52;
+			const membranePitch = 0.65; // perspective pitch tilt
 
-			// Normalized mouse in canvas coordinates
 			const normMouseX = mouseX;
 			const normMouseY = mouseY;
 
-			// Update membrane points with gravity depression physics
-			const maxDepth = 65 + pressStrength * 85;
-			const wellRadius = 150 + pressStrength * 40;
+			// Dynamic depth and well size scaled to fullscreen dimensions
+			const maxDepth = (height * 0.18) + pressStrength * 120;
+			const wellRadius = (Math.min(width, height) * 0.3) + pressStrength * 60;
 
 			// Update physics & projection
-			for (let j = 0; j < GRID_Y; j++) {
-				for (let i = 0; i < GRID_X; i++) {
-					const p = points[j][i];
+			for (let j = 0; j < points.length; j++) {
+				const row = points[j];
+				for (let i = 0; i < row.length; i++) {
+					const p = row[i];
 					
-					// Flat 3D plane coordinates
-					const px3d = p.ox * (width * 0.58);
-					const py3d = p.oy * (height * 0.75);
+					// Flat 3D plane coordinates spanning fullscreen breadth
+					const px3d = p.ox * (width * 0.55);
+					const py3d = p.oy * (height * 0.72);
 
 					// Screen project with perspective
 					let sx = centerX + px3d;
@@ -248,7 +329,7 @@
 
 					// Singularity gravitational pull from center
 					const distCenter = Math.hypot(px3d, py3d);
-					const centerDepression = Math.exp(-distCenter / 75) * (45 + pressStrength * 35);
+					const centerDepression = Math.exp(-distCenter / (Math.min(width, height) * 0.16)) * (65 + pressStrength * 55);
 
 					// Mouse depression well
 					let mouseDepression = 0;
@@ -257,13 +338,13 @@
 						mouseDepression = Math.exp(-Math.pow(distMouse / wellRadius, 2)) * maxDepth;
 					}
 
-					// Shockwave ripple ripple
+					// Shockwave ripple
 					let shockDisplacement = 0;
 					if (shockwaveRadius >= 0) {
 						const distOrigin = Math.hypot(sx - (isHovered ? normMouseX : centerX), sy - (isHovered ? normMouseY : centerY));
 						const delta = distOrigin - shockwaveRadius;
-						if (Math.abs(delta) < 40) {
-							shockDisplacement = Math.sin(delta * 0.15) * 16 * shockwaveStrength;
+						if (Math.abs(delta) < 55) {
+							shockDisplacement = Math.sin(delta * 0.12) * 22 * shockwaveStrength;
 						}
 					}
 
@@ -271,15 +352,15 @@
 					const targetZ = -(centerDepression + mouseDepression + shockDisplacement);
 
 					// Damped spring physics on Z
-					const springK = 0.15;
-					const damping = 0.82;
+					const springK = 0.14;
+					const damping = 0.83;
 					p.vz += (targetZ - p.z) * springK;
 					p.vz *= damping;
 					p.z += p.vz;
 
-					// Final projected screen coords with perspective downward displacement
+					// Final projected screen coords
 					p.x = sx;
-					p.y = sy - p.z * 0.85; // downward warp
+					p.y = sy - p.z * 0.88;
 				}
 			}
 
@@ -289,26 +370,25 @@
 			ctx.textAlign = "center";
 
 			// Draw horizontal & vertical topological contours with ASCII chars
-			for (let j = 0; j < GRID_Y; j++) {
-				const rowT = j / (GRID_Y - 1);
-				const depthFade = 0.2 + rowT * 0.7; // depth gradient
+			for (let j = 0; j < points.length; j++) {
+				const rowT = j / (points.length - 1);
+				const depthFade = 0.18 + rowT * 0.75;
 
-				for (let i = 0; i < GRID_X; i++) {
+				for (let i = 0; i < points[j].length; i++) {
 					const p = points[j][i];
 					const zDisp = Math.abs(p.z);
 
-					// Character selection based on tension & depth
 					let char = "·";
-					let alpha = 0.15 * depthFade;
+					let alpha = 0.16 * depthFade;
 					let isAccent = false;
 
-					if (zDisp > 45) {
+					if (zDisp > 55) {
 						char = "+";
-						alpha = Math.min(0.85, 0.35 + zDisp * 0.007);
+						alpha = Math.min(0.9, 0.4 + zDisp * 0.006);
 						isAccent = true;
-					} else if (zDisp > 20) {
+					} else if (zDisp > 26) {
 						char = ":";
-						alpha = Math.min(0.55, 0.2 + zDisp * 0.008);
+						alpha = Math.min(0.65, 0.25 + zDisp * 0.007);
 					} else if (i % 2 === 0 && j % 2 === 0) {
 						char = "+";
 						alpha = 0.22 * depthFade;
@@ -325,7 +405,7 @@
 			}
 
 			// Render central 3D rotating ASCII Octahedron (Singularity core)
-			const coreScale = 38 + pressStrength * 8;
+			const coreScale = (Math.min(width, height) * 0.09) + pressStrength * 16;
 			const cosY = Math.cos(rotY);
 			const sinY = Math.sin(rotY);
 			const cosX = Math.cos(rotX);
@@ -333,16 +413,14 @@
 
 			// Project 3D core vertices to screen
 			const projectedCore = coreVertices.map(([vx, vy, vz]) => {
-				// Rotate around Y
 				let x1 = vx * cosY - vz * sinY;
 				let z1 = vx * sinY + vz * cosY;
-				// Rotate around X
 				let y2 = vy * cosX - z1 * sinX;
 				let z2 = vy * sinX + z1 * cosX;
 
 				return {
 					x: centerX + x1 * coreScale,
-					y: centerY + y2 * coreScale - 8,
+					y: centerY + y2 * coreScale - 10,
 					z: z2
 				};
 			});
@@ -355,7 +433,7 @@
 				const dx = b.x - a.x;
 				const dy = b.y - a.y;
 				const dist = Math.hypot(dx, dy);
-				const steps = Math.max(3, Math.floor(dist / (CHAR_W * 1.1)));
+				const steps = Math.max(3, Math.floor(dist / (CHAR_W * 1.15)));
 
 				for (let s = 0; s <= steps; s++) {
 					const t = s / steps;
@@ -363,14 +441,13 @@
 					const py = a.y + dy * t;
 					const avgZ = a.z + (b.z - a.z) * t;
 
-					// Front faces are brighter, back faces are dimmer
-					const zNorm = (avgZ + 1.2) / 2.4; // 0 to 1
+					const zNorm = (avgZ + 1.25) / 2.5;
 					const brightness = Math.max(0.2, Math.min(1, zNorm));
 					const charIdx = Math.floor(brightness * (DENSITY_RAMP.length - 1));
 					const ch = DENSITY_RAMP[charIdx] || "·";
 
-					const alpha = 0.3 + brightness * 0.65;
-					if (brightness > 0.65 || pressStrength > 0.4) {
+					const alpha = 0.35 + brightness * 0.65;
+					if (brightness > 0.65 || pressStrength > 0.35) {
 						ctx.fillStyle = `rgba(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]}, ${alpha})`;
 					} else {
 						ctx.fillStyle = `rgba(${colorOnSurface[0]}, ${colorOnSurface[1]}, ${colorOnSurface[2]}, ${alpha})`;
@@ -382,11 +459,11 @@
 			// Center Singularity core pulse
 			const pulseChar = pressStrength > 0.6 ? "@" : (pressStrength > 0.2 ? "#" : "*");
 			ctx.fillStyle = `rgb(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]})`;
-			ctx.fillText(pulseChar, centerX, centerY - 8);
+			ctx.fillText(pulseChar, centerX, centerY - 10);
 
-			// Update subtle telemetry readouts (real-time scientific tension metric)
+			// Real-time scientific tension metric
 			if (telemetry) {
-				const tensionVal = (1.0 + pressStrength * 3.42 + (shockwaveRadius >= 0 ? 0.8 : 0)).toFixed(2);
+				const tensionVal = (1.0 + pressStrength * 4.25 + (shockwaveRadius >= 0 ? 0.95 : 0)).toFixed(2);
 				const statusTag = isPressed ? "COMPRESSED" : (isHovered ? "WARPED" : "EQUILIBRIUM");
 				telemetry.textContent = `G·MEMBRANE // TENSION: ${tensionVal} // ${statusTag}`;
 			}
@@ -430,7 +507,7 @@
 			}
 		});
 
-		// Touch events for mobile devices
+		// Mobile touch interaction
 		root.addEventListener("touchstart", (e) => {
 			if (e.touches.length > 0) {
 				const rect = root.getBoundingClientRect();
@@ -461,7 +538,6 @@
 
 		window.addEventListener("resize", resize);
 
-		// Observe theme changes
 		updateTheme();
 		const observer = new MutationObserver(() => updateTheme());
 		observer.observe(document.documentElement, {
