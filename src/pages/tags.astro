@@ -4,29 +4,49 @@ import { getAllPosts, getTags } from "../lib/posts";
 
 const posts = await getAllPosts();
 const tags = [...getTags(posts).entries()];
+
+// Color themes rotation
+const TAG_THEMES = [
+	"tag-theme-mint",
+	"tag-theme-peach",
+	"tag-theme-lilac",
+	"tag-theme-honey",
+	"tag-theme-sky",
+	"tag-theme-sage",
+	"tag-theme-rose",
+];
 ---
 
 <Layout title="标签" description={`共 ${tags.length} 个标签`}>
 	<div class="bento">
 		{
-			tags.map(([tag, count]) => (
-				<div class="col-3">
-					<mdui-card clickable href={`/tags/${encodeURIComponent(tag)}/`} variant="filled" class="bento-card reveal">
-						<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px; padding: 20px 12px">
-							<mdui-icon-tag--outlined style="font-size: 30px; color: var(--mdui-color-primary)"></mdui-icon-tag--outlined>
-							<div style="font-weight: 600">{tag}</div>
-							<div style="font-size: 0.75rem; color: var(--mdui-color-on-surface-variant)">
-								{count} 篇
+			tags.map(([tag, count], idx) => {
+				const theme = TAG_THEMES[idx % TAG_THEMES.length];
+				return (
+					<div class="col-3">
+						<mdui-card
+							clickable
+							href={`/tags/${encodeURIComponent(tag)}/`}
+							variant="filled"
+							class:list={["bento-card", "tag-tonal-card", theme, "reveal"]}
+						>
+							<div class="tag-card-watermark" aria-hidden="true">#{idx + 1}</div>
+							<div class="card-body tag-card-body">
+								<mdui-icon-tag--outlined class="tag-symbol"></mdui-icon-tag--outlined>
+								<div class="tag-name">{tag}</div>
+								<div class="tag-count-pill">
+									<span class="count-num-art">{count}</span> 篇
+								</div>
 							</div>
-						</div>
-					</mdui-card>
-				</div>
-			))
+						</mdui-card>
+					</div>
+				);
+			})
 		}
 		{
 			tags.length === 0 && (
 				<div class="col-12">
-					<mdui-card variant="filled">
+					<mdui-card variant="filled" class="bento-card">
 						<div class="card-body" style="align-items: center; text-align: center; padding: 48px 20px">
 							<div style="font-weight: 600">暂无标签</div>
 						</div>
@@ -36,3 +56,139 @@ const tags = [...getTags(posts).entries()];
 		}
 	</div>
 </Layout>
+
+<style>
+	.tag-tonal-card {
+		position: relative;
+		overflow: hidden;
+		border: none !important;
+		outline: none !important;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
+	}
+
+	.tag-tonal-card:hover {
+		transform: translateY(-3px);
+	}
+
+	.tag-card-watermark {
+		position: absolute;
+		right: 4px;
+		bottom: -10px;
+		font-family: var(--font-double-line), monospace;
+		font-size: 3.5rem;
+		font-weight: 400;
+		line-height: 0.85;
+		opacity: 0.07;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.25s ease;
+	}
+
+	.tag-tonal-card:hover .tag-card-watermark {
+		opacity: 0.12;
+	}
+
+	.tag-card-body {
+		position: relative;
+		z-index: 2;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 24px 14px;
+	}
+
+	.tag-symbol {
+		font-size: 28px;
+		opacity: 0.85;
+	}
+
+	.tag-name {
+		font-weight: 700;
+		font-size: 1.05rem;
+		letter-spacing: -0.01em;
+	}
+
+	.tag-count-pill {
+		font-size: 0.78rem;
+		font-weight: 600;
+		padding: 2px 10px;
+		border-radius: 9999px;
+		background: rgba(0, 0, 0, 0.06);
+		display: inline-flex;
+		align-items: center;
+		gap: 3px;
+	}
+	:global(.mdui-theme-dark) .tag-count-pill {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.count-num-art {
+		font-family: var(--font-double-line), monospace;
+		font-size: 0.95rem;
+	}
+
+	/* Pinterest Solid Tonal Themes */
+	.tag-theme-mint {
+		background: #daf0e3 !important;
+		color: #0e3020 !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-mint {
+		background: #14281e !important;
+		color: #daf0e3 !important;
+	}
+
+	.tag-theme-peach {
+		background: #fceee9 !important;
+		color: #3b190f !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-peach {
+		background: #2f1b1c !important;
+		color: #fceee9 !important;
+	}
+
+	.tag-theme-lilac {
+		background: #ede7f6 !important;
+		color: #2a1140 !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-lilac {
+		background: #241a2f !important;
+		color: #ede7f6 !important;
+	}
+
+	.tag-theme-honey {
+		background: #fef3e2 !important;
+		color: #382402 !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-honey {
+		background: #2e2416 !important;
+		color: #fef3e2 !important;
+	}
+
+	.tag-theme-sky {
+		background: #e2edf5 !important;
+		color: #112836 !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-sky {
+		background: #16242e !important;
+		color: #e2edf5 !important;
+	}
+
+	.tag-theme-sage {
+		background: #e5ebe4 !important;
+		color: #172619 !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-sage {
+		background: #1c261e !important;
+		color: #e5ebe4 !important;
+	}
+
+	.tag-theme-rose {
+		background: #fde8ed !important;
+		color: #38121a !important;
+	}
+	:global(.mdui-theme-dark) .tag-theme-rose {
+		background: #2e161c !important;
+		color: #fde8ed !important;
+	}
+</style>

@@ -12,43 +12,53 @@ for (const post of posts) {
 	byYear.get(year)!.push(post);
 }
 const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
+
+// Color theme rotation for year cards (Pinterest Minimal Solid Tonal Palette)
+const YEAR_THEMES = ["theme-sage", "theme-peach", "theme-lilac", "theme-mint"];
 ---
 
 <Layout title="归档" description={`全部 ${posts.length} 篇文章`}>
 	<div class="bento">
 		<div class="col-8" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
 			{
-				years.map(([year, yearPosts]) => (
-					<mdui-card variant="filled" class="bento-card reveal">
-						<div class="card-body">
-							<div style="display: flex; align-items: center; justify-content: space-between">
-								<h2 style="margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--mdui-color-primary)">
-									<mdui-icon-history--outlined style="font-size: 20px; vertical-align: -3px"></mdui-icon-history--outlined>
-									{year}
-								</h2>
-								<span style="font-size: 0.8rem; color: var(--mdui-color-on-surface-variant)">
-									{yearPosts.length} 篇
-								</span>
+				years.map(([year, yearPosts], idx) => {
+					const themeClass = YEAR_THEMES[idx % YEAR_THEMES.length];
+					return (
+						<mdui-card variant="filled" class:list={["bento-card", "archive-year-card", themeClass, "reveal"]}>
+							<!-- Monoton Double-line Year Watermark -->
+							<div class="archive-watermark" aria-hidden="true">{year}</div>
+
+							<div class="card-body" style="position: relative; z-index: 2;">
+								<div style="display: flex; align-items: center; justify-content: space-between">
+									<h2 class="year-header-title">
+										<mdui-icon-history--outlined style="font-size: 20px; vertical-align: -3px"></mdui-icon-history--outlined>
+										<span class="year-num-art">{year}</span>
+									</h2>
+									<span class="year-count-pill">
+										{yearPosts.length} 篇
+									</span>
+								</div>
+								<mdui-list style="margin-top: 10px; background: transparent">
+									{
+										yearPosts.map((post) => (
+											<mdui-list-item
+												href={getPostUrl(getPostSlug(post))}
+												rounded
+												headline={post.data.title}
+												description={`${formatDate(post.data.published)}${post.data.category ? ` · ${post.data.category}` : ""}`}
+												class="archive-list-item"
+											></mdui-list-item>
+										))
+									}
+								</mdui-list>
 							</div>
-							<mdui-list style="margin-top: 8px">
-								{
-									yearPosts.map((post) => (
-										<mdui-list-item
-											href={getPostUrl(getPostSlug(post))}
-											rounded
-											headline={post.data.title}
-											description={`${formatDate(post.data.published)}${post.data.category ? ` · ${post.data.category}` : ""}`}
-										></mdui-list-item>
-									))
-								}
-							</mdui-list>
-						</div>
-					</mdui-card>
-				))
+						</mdui-card>
+					);
+				})
 			}
 			{
 				posts.length === 0 && (
-					<mdui-card variant="filled">
+					<mdui-card variant="filled" class="bento-card">
 						<div class="card-body" style="align-items: center; text-align: center; padding: 48px 20px">
 							<div style="font-weight: 600">暂无文章</div>
 						</div>
@@ -58,25 +68,29 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 		</div>
 
 		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
-			<mdui-card clickable href="/tags/" variant="elevated" class="bento-card">
-				<div class="card-body">
+			<!-- Tags Side Card: Soft Lilac / Sky Blue -->
+			<mdui-card clickable href="/tags/" variant="filled" class="bento-card archive-side-card card-sky">
+				<div class="archive-watermark" aria-hidden="true">TAGS</div>
+				<div class="card-body" style="position: relative; z-index: 2;">
 					<h2 class="card-title">
 						<mdui-icon-tag--outlined></mdui-icon-tag--outlined>
 						标签
 					</h2>
-					<div style="font-size: 0.85rem; color: var(--mdui-color-on-surface-variant)">
+					<div class="side-card-desc">
 						按主题浏览全部文章
 					</div>
 				</div>
 			</mdui-card>
 
-			<mdui-card variant="elevated" class="bento-card">
-				<div class="card-body">
+			<!-- Categories Side Card: Vanilla Amber Honey -->
+			<mdui-card variant="filled" class="bento-card archive-side-card card-honey">
+				<div class="archive-watermark" aria-hidden="true">TOPIC</div>
+				<div class="card-body" style="position: relative; z-index: 2;">
 					<h2 class="card-title">
 						<mdui-icon-folder--outlined></mdui-icon-folder--outlined>
 						分类
 					</h2>
-					<div class="tag-cloud" style="margin-top: 8px">
+					<div class="tag-cloud" style="margin-top: 10px">
 						{
 							categories.map(([cat, count]) => (
 								<a href={`/archive/#cat-${encodeURIComponent(cat)}`}>
@@ -95,3 +109,162 @@ const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
 		</div>
 	</div>
 </Layout>
+
+<style>
+	.archive-year-card,
+	.archive-side-card {
+		position: relative;
+		overflow: hidden;
+		border: none !important;
+		outline: none !important;
+	}
+
+	/* Double-line Monoton Watermark */
+	.archive-watermark {
+		position: absolute;
+		right: 12px;
+		bottom: -15px;
+		font-family: var(--font-double-line), monospace;
+		font-size: 5rem;
+		font-weight: 400;
+		line-height: 0.85;
+		letter-spacing: 0.05em;
+		opacity: 0.06;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.archive-year-card:hover .archive-watermark,
+	.archive-side-card:hover .archive-watermark {
+		opacity: 0.1;
+	}
+
+	.year-header-title {
+		margin: 0;
+		font-size: 1.2rem;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.year-num-art {
+		font-family: var(--font-double-line), var(--font-display);
+		font-size: 1.35rem;
+		letter-spacing: 0.04em;
+	}
+
+	.year-count-pill {
+		font-size: 0.78rem;
+		font-weight: 600;
+		padding: 3px 10px;
+		border-radius: 9999px;
+		background: rgba(0, 0, 0, 0.06);
+	}
+	:global(.mdui-theme-dark) .year-count-pill {
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	/* Color Themes: Pinterest Solid Tonal Palette */
+	/* Theme Sage */
+	.theme-sage {
+		background: #e5ebe4 !important;
+		color: #172619 !important;
+	}
+	:global(.mdui-theme-dark) .theme-sage {
+		background: #1c261e !important;
+		color: #e5ebe4 !important;
+	}
+	.theme-sage .archive-watermark {
+		color: #172619;
+	}
+	:global(.mdui-theme-dark) .theme-sage .archive-watermark {
+		color: #e5ebe4;
+	}
+
+	/* Theme Peach */
+	.theme-peach {
+		background: #fceee9 !important;
+		color: #3b190f !important;
+	}
+	:global(.mdui-theme-dark) .theme-peach {
+		background: #2f1b1c !important;
+		color: #fceee9 !important;
+	}
+	.theme-peach .archive-watermark {
+		color: #3b190f;
+	}
+	:global(.mdui-theme-dark) .theme-peach .archive-watermark {
+		color: #fceee9;
+	}
+
+	/* Theme Lilac */
+	.theme-lilac {
+		background: #ede7f6 !important;
+		color: #2a1140 !important;
+	}
+	:global(.mdui-theme-dark) .theme-lilac {
+		background: #241a2f !important;
+		color: #ede7f6 !important;
+	}
+	.theme-lilac .archive-watermark {
+		color: #2a1140;
+	}
+	:global(.mdui-theme-dark) .theme-lilac .archive-watermark {
+		color: #ede7f6;
+	}
+
+	/* Theme Mint */
+	.theme-mint {
+		background: #daf0e3 !important;
+		color: #0e3020 !important;
+	}
+	:global(.mdui-theme-dark) .theme-mint {
+		background: #14281e !important;
+		color: #daf0e3 !important;
+	}
+	.theme-mint .archive-watermark {
+		color: #0e3020;
+	}
+	:global(.mdui-theme-dark) .theme-mint .archive-watermark {
+		color: #daf0e3;
+	}
+
+	/* Side Cards */
+	.card-sky {
+		background: #e2edf5 !important;
+		color: #112836 !important;
+	}
+	:global(.mdui-theme-dark) .card-sky {
+		background: #16242e !important;
+		color: #e2edf5 !important;
+	}
+	.card-sky .archive-watermark {
+		color: #112836;
+	}
+	:global(.mdui-theme-dark) .card-sky .archive-watermark {
+		color: #e2edf5;
+	}
+
+	.card-honey {
+		background: #fef3e2 !important;
+		color: #382402 !important;
+	}
+	:global(.mdui-theme-dark) .card-honey {
+		background: #2e2416 !important;
+		color: #fef3e2 !important;
+	}
+	.card-honey .archive-watermark {
+		color: #382402;
+	}
+	:global(.mdui-theme-dark) .card-honey .archive-watermark {
+		color: #fef3e2;
+	}
+
+	.side-card-desc {
+		font-size: 0.85rem;
+		opacity: 0.8;
+		margin-top: 4px;
+	}
+</style>

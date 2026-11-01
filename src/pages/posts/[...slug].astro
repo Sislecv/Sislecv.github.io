@@ -27,6 +27,8 @@ const coverImage = resolveMediaUrl(post.data.image);
 	<div class="article-grid">
 		<article>
 			<mdui-card variant="elevated" class="article-card">
+				<!-- Double-line Monoton Article Watermark -->
+				<div class="article-watermark" aria-hidden="true">POST</div>
 				{
 					coverImage && (
 						<div class="article-cover-wrap">
@@ -120,7 +122,22 @@ const coverImage = resolveMediaUrl(post.data.image);
 
 <style>
 	.article-card {
+		position: relative;
 		overflow: hidden;
+	}
+	.article-watermark {
+		position: absolute;
+		right: 18px;
+		top: 18px;
+		font-family: var(--font-double-line), monospace;
+		font-size: 5rem;
+		font-weight: 400;
+		line-height: 0.85;
+		color: rgb(var(--mdui-color-on-surface));
+		opacity: 0.045;
+		letter-spacing: 0.05em;
+		pointer-events: none;
+		user-select: none;
 	}
 	.article-cover-wrap {
 		width: 100%;
@@ -151,5 +168,38 @@ const coverImage = resolveMediaUrl(post.data.image);
 	}
 	.next-card:hover .nav-arrow {
 		transform: translateX(4px);
+	}
+
+	/* Nav Cards Solid Tonal Colors */
+	.prev-card {
+		background: #daf0e3 !important;
+		color: #0e3020 !important;
+		border: none !important;
+	}
+	:global(.mdui-theme-dark) .prev-card {
+		background: #14281e !important;
+		color: #daf0e3 !important;
+	}
+	.prev-card .nav-direction {
+		color: #1b633d !important;
+	}
+	:global(.mdui-theme-dark) .prev-card .nav-direction {
+		color: #8be0b0 !important;
+	}
+
+	.next-card {
+		background: #fceee9 !important;
+		color: #3b190f !important;
+		border: none !important;
+	}
+	:global(.mdui-theme-dark) .next-card {
+		background: #2f1b1c !important;
+		color: #fceee9 !important;
+	}
+	.next-card .nav-direction {
+		color: #9c3f25 !important;
+	}
+	:global(.mdui-theme-dark) .next-card .nav-direction {
+		color: #ffb4a0 !important;
 	}
 </style>

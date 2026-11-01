@@ -41,22 +41,22 @@ const IMAGES = await getFeaturedGalleryImages();
 
 	.editorial-watermark {
 		position: absolute;
-		right: -10px;
-		bottom: -18px;
-		font-family: var(--font-display), var(--font-sans);
-		font-size: 5.8rem;
-		font-weight: 900;
+		right: -8px;
+		bottom: -15px;
+		font-family: var(--font-double-line), var(--font-display);
+		font-size: 5rem;
+		font-weight: 400;
 		line-height: 0.85;
 		color: #0d2833;
 		opacity: 0.055;
-		letter-spacing: -0.06em;
+		letter-spacing: 0.05em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease;
 	}
 	:global(.mdui-theme-dark) .editorial-watermark {
 		color: #d4e7ee;
-		opacity: 0.08;
+		opacity: 0.09;
 	}
 
 	.card-editorial-gallery:hover .editorial-watermark {

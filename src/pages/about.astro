@@ -6,18 +6,21 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 <Layout title="关于" description="关于我">
 	<div class="bento">
 		<div class="col-8">
-			<mdui-card clickable variant="elevated" class="bento-card">
-				<div class="card-body" style="padding: 28px">
-					<h1 style="margin: 0 0 12px; font-size: 1.5rem; display: flex; align-items: center; gap: 8px">
-						<mdui-icon-person--outlined style="color: var(--mdui-color-primary)"></mdui-icon-person--outlined>
+			<mdui-card clickable variant="filled" class="bento-card about-main-card">
+				<!-- Double-line Monoton Watermark -->
+				<div class="about-watermark" aria-hidden="true">ABOUT</div>
+
+				<div class="card-body" style="padding: 32px; position: relative; z-index: 2;">
+					<h1 class="about-title">
+						<mdui-icon-person--outlined class="about-title-icon"></mdui-icon-person--outlined>
 						关于我
 					</h1>
-					<div class="mdui-prose">
-						<p>你好，我是 {SITE.author}。欢迎来到我的博客。</p>
-						<p>这里记录我折腾代码与技术的过程。</p>
-						<p>博客使用 Astro + MDUI (Material Design 3) 构建，Bento 卡片式布局，部署于 GitHub Pages。</p>
+					<div class="mdui-prose about-prose">
+						<p>你好，我是 <strong>{SITE.author}</strong>。欢迎来到我的个人博客。</p>
+						<p>这里记录我折腾代码与数字体验的思考与实践。</p>
+						<p>博客使用 Astro + MDUI (Material Design 3) 构建，Bento 极简纯色设计，部署于 GitHub Pages。</p>
 					</div>
-					<div style="display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap">
+					<div style="display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap">
 						{
 							SOCIAL_LINKS.map((link) => (
 								<a href={link.url} target={link.url.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
@@ -45,26 +48,27 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 		</div>
 
 		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
-			<mdui-card clickable variant="filled" class="bento-card">
-				<div class="card-body" style="align-items: center; text-align: center; padding: 24px 16px; gap: 10px">
+			<mdui-card clickable variant="filled" class="bento-card about-side-profile">
+				<div class="about-watermark" aria-hidden="true">USER</div>
+				<div class="card-body" style="align-items: center; text-align: center; padding: 28px 18px; gap: 10px; position: relative; z-index: 2;">
 					<img
 						src={AVATAR}
 						alt={SITE.author}
-						width="80"
-						height="80"
+						width="84"
+						height="84"
 						class="about-avatar"
 					/>
-					<div style="font-weight: 700; font-size: 1.15rem">{SITE.author}</div>
-					<div style="font-size: 0.82rem; color: var(--mdui-color-on-surface-variant)">
+					<div class="about-profile-name">{SITE.author}</div>
+					<div class="about-profile-desc">
 						{SITE.description}
 					</div>
 				</div>
 			</mdui-card>
 
-			<mdui-card clickable href="/archive/" variant="filled" class="bento-card">
-				<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 6px">
-					<mdui-icon-edit--outlined style="font-size: 30px; color: var(--mdui-color-primary)"></mdui-icon-edit--outlined>
-					<div style="font-weight: 600">浏览文章</div>
+			<mdui-card clickable href="/archive/" variant="filled" class="bento-card about-side-action">
+				<div class="card-body" style="align-items: center; text-align: center; justify-content: center; gap: 8px; padding: 20px">
+					<mdui-icon-edit--outlined style="font-size: 32px"></mdui-icon-edit--outlined>
+					<div style="font-weight: 700; font-size: 1rem">浏览全部文章</div>
 				</div>
 			</mdui-card>
 		</div>
@@ -72,13 +76,112 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 </Layout>
 
 <style>
+	.about-main-card,
+	.about-side-profile,
+	.about-side-action {
+		position: relative;
+		overflow: hidden;
+		border: none !important;
+		outline: none !important;
+	}
+
+	.about-watermark {
+		position: absolute;
+		right: 14px;
+		bottom: -18px;
+		font-family: var(--font-double-line), monospace;
+		font-size: 5.5rem;
+		font-weight: 400;
+		line-height: 0.85;
+		letter-spacing: 0.05em;
+		opacity: 0.05;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.about-main-card:hover .about-watermark,
+	.about-side-profile:hover .about-watermark {
+		opacity: 0.09;
+	}
+
+	/* Main Card: Soft Sage / Cream */
+	.about-main-card {
+		background: #e5ebe4 !important;
+		color: #172619 !important;
+	}
+	:global(.mdui-theme-dark) .about-main-card {
+		background: #1c261e !important;
+		color: #e5ebe4 !important;
+	}
+	.about-main-card .about-watermark {
+		color: #172619;
+	}
+	:global(.mdui-theme-dark) .about-main-card .about-watermark {
+		color: #e5ebe4;
+	}
+
+	.about-title {
+		margin: 0 0 16px;
+		font-size: 1.6rem;
+		font-weight: 800;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		letter-spacing: -0.02em;
+	}
+	.about-title-icon {
+		font-size: 28px;
+	}
+
+	/* Side Profile Card: Soft Lilac */
+	.about-side-profile {
+		background: #ede7f6 !important;
+		color: #2a1140 !important;
+	}
+	:global(.mdui-theme-dark) .about-side-profile {
+		background: #241a2f !important;
+		color: #ede7f6 !important;
+	}
+	.about-side-profile .about-watermark {
+		color: #2a1140;
+	}
+	:global(.mdui-theme-dark) .about-side-profile .about-watermark {
+		color: #ede7f6;
+	}
+
+	.about-profile-name {
+		font-family: var(--font-display), var(--font-sans);
+		font-weight: 800;
+		font-size: 1.3rem;
+		letter-spacing: -0.02em;
+	}
+	.about-profile-desc {
+		font-size: 0.82rem;
+		opacity: 0.8;
+	}
+
+	/* Side Action Card: Warm Honey */
+	.about-side-action {
+		background: #fef3e2 !important;
+		color: #382402 !important;
+	}
+	:global(.mdui-theme-dark) .about-side-action {
+		background: #2e2416 !important;
+		color: #fef3e2 !important;
+	}
+
 	.about-avatar {
 		border-radius: 50%;
-		background: var(--mdui-color-surface-container-highest);
-		outline: 1px solid rgba(var(--mdui-color-outline), 0.2);
+		background: rgba(0, 0, 0, 0.05);
+		outline: 1px solid rgba(0, 0, 0, 0.1);
 		transition: transform var(--md-duration-short, 150ms) var(--md-easing-standard, ease);
 	}
-	.bento-card:hover .about-avatar {
-		transform: scale(1.04);
+	:global(.mdui-theme-dark) .about-avatar {
+		background: rgba(255, 255, 255, 0.08);
+		outline: 1px solid rgba(255, 255, 255, 0.15);
+	}
+	.about-side-profile:hover .about-avatar {
+		transform: scale(1.05);
 	}
 </style>

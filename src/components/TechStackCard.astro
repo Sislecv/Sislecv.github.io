@@ -1,16 +1,19 @@
 ---
-// TechStackCard.astro: Unified Style Large Tech Stack Icons with Seamless Auto-Marquee
+// TechStackCard.astro: Truly Seamless Infinite Marquee with Unified Large Icons
 import { techStack } from "../site.config";
-const STACK = techStack;
+
+// Duplicate icons to ensure the marquee group is wider than any modern screen
+const BASE_STACK = techStack;
+const MARQUEE_SET = [...BASE_STACK, ...BASE_STACK];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card tech-stack-marquee-card">
 	<div class="tech-marquee-wrapper">
 		<div class="marquee-track">
-			<!-- Group 1 -->
-			<div class="marquee-group">
+			<!-- Part 1 -->
+			<div class="marquee-set">
 				{
-					STACK.map((s) => (
+					MARQUEE_SET.map((s) => (
 						<a
 							class="tech-badge-item"
 							href={s.url}
@@ -27,10 +30,10 @@ const STACK = techStack;
 				}
 			</div>
 
-			<!-- Group 2 (Duplicate for Seamless Loop) -->
-			<div class="marquee-group" aria-hidden="true">
+			<!-- Part 2 (Exact duplicate for seamless mathematical 50% loop) -->
+			<div class="marquee-set" aria-hidden="true">
 				{
-					STACK.map((s) => (
+					MARQUEE_SET.map((s) => (
 						<a
 							class="tech-badge-item"
 							href={s.url}
@@ -83,36 +86,38 @@ const STACK = techStack;
 		display: flex;
 		align-items: center;
 		overflow: hidden;
-		mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
-		-webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+		mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
 	}
 
+	/* Whole track moves smoothly by 50% (exactly 1 set width) */
 	.marquee-track {
 		display: flex;
 		width: max-content;
 		align-items: center;
+		animation: techSeamlessMarquee 26s linear infinite;
 		will-change: transform;
 	}
 
-	.marquee-group {
-		display: flex;
-		align-items: center;
-		gap: 28px;
-		padding-right: 28px;
-		animation: techMarqueeScroll 18s linear infinite;
-	}
-
-	.tech-marquee-wrapper:hover .marquee-group {
+	.tech-marquee-wrapper:hover .marquee-track {
 		animation-play-state: paused;
 	}
 
-	@keyframes techMarqueeScroll {
-		from {
-			transform: translateX(0);
+	@keyframes techSeamlessMarquee {
+		0% {
+			transform: translate3d(0, 0, 0);
 		}
-		to {
-			transform: translateX(-100%);
+		100% {
+			transform: translate3d(-50%, 0, 0);
 		}
+	}
+
+	.marquee-set {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		padding-right: 28px; /* Must match gap for gap-perfect seamlessness */
+		flex-shrink: 0;
 	}
 
 	/* Unified Icon Style: Consistent shape, size, proportion, and elevation */
@@ -124,6 +129,7 @@ const STACK = techStack;
 		outline: none;
 		border-radius: 18px;
 		transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+		flex-shrink: 0;
 	}
 
 	.tech-badge-item:hover {
@@ -165,10 +171,9 @@ const STACK = techStack;
 	}
 
 	@media (max-width: 640px) {
-		.marquee-group {
+		.marquee-set {
 			gap: 18px;
 			padding-right: 18px;
-			animation-duration: 14s;
 		}
 		.tech-badge-inner {
 			width: 44px;
