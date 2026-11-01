@@ -1,31 +1,14 @@
 ---
-// Google I/O Perspective Grid & Tech Stack Widget
+// TechStackCard.astro: Clean Minimalist Infinite Marquee (Zero background distractions or text)
 import { techStack } from "../site.config";
 const STACK = techStack;
 
-// Repeat 4x per track group to easily exceed any viewport width
+// Repeat 4x per track group for seamless continuous loop
 const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card pixel-tech-grid-card">
-	<!-- Google I/O 3D Horizon Perspective Grid -->
-	<div class="perspective-horizon" aria-hidden="true">
-		<div class="grid-plane grid-top"></div>
-		<div class="grid-plane grid-bottom"></div>
-		<!-- Floating Code Capsule < > -->
-		<div class="floating-code-capsule">
-			<span class="code-pill cp-red"></span>
-			<span class="code-pill cp-blue"></span>
-		</div>
-	</div>
-
 	<div class="tech-card-content">
-		<!-- Minimal top indicator -->
-		<div class="tech-top-indicator">
-			<span class="tech-status-dot"></span>
-			<span class="tech-label-code">&lt;stack/&gt;</span>
-		</div>
-
 		<!-- True Seamless Infinite Tech Icon Marquee -->
 		<div class="stack-viewport">
 			<div class="stack-marquee-slider">
@@ -55,7 +38,6 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 								target="_blank"
 								rel="noreferrer"
 								tabindex="-1"
-								title={s.name}
 							>
 								<img src={s.icon} alt="" loading="lazy" class="stack-icon" />
 							</a>
@@ -73,7 +55,7 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 		overflow: hidden;
 		background: #201e29 !important;
 		color: #ffffff !important;
-		border-radius: 9999px !important; /* Continuous Smooth Capsule / Pill */
+		border-radius: 9999px !important; /* Smooth Continuous Capsule */
 		border: none !important;
 		outline: none !important;
 		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
@@ -87,135 +69,31 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 		transform: translateY(-2px);
 	}
 
-	/* 3D Horizon Perspective Grid */
-	.perspective-horizon {
-		position: absolute;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		width: 55%;
-		pointer-events: none;
-		perspective: 260px;
-		overflow: hidden;
-		opacity: 0.4;
-		mask-image: linear-gradient(to right, transparent 0%, black 35%);
-		-webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
-		transition: opacity var(--md-duration-short, 200ms) ease;
-	}
-
-	.pixel-tech-grid-card:hover .perspective-horizon {
-		opacity: 0.6;
-	}
-
-	.grid-plane {
-		position: absolute;
-		left: 0;
-		right: 0;
-		height: 100%;
-		background-image:
-			linear-gradient(to right, rgba(255, 255, 255, 0.16) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-		background-size: 28px 20px;
-	}
-
-	.grid-bottom {
-		bottom: 0;
-		transform-origin: center bottom;
-		transform: rotateX(65deg);
-	}
-
-	.grid-top {
-		top: 0;
-		transform-origin: center top;
-		transform: rotateX(-65deg);
-	}
-
-	/* Floating colorful bracket < */
-	.floating-code-capsule {
-		position: absolute;
-		right: 24px;
-		top: 50%;
-		transform: translateY(-50%);
-		width: 28px;
-		height: 34px;
-		z-index: 2;
-		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
-		transition: transform var(--md-duration-short, 200ms) ease;
-	}
-
-	.pixel-tech-grid-card:hover .floating-code-capsule {
-		transform: translateY(-50%) scale(1.1);
-	}
-
-	.code-pill {
-		position: absolute;
-		width: 9px;
-		height: 22px;
-		border-radius: 9999px;
-	}
-
-	.cp-red {
-		background: #ea4335;
-		top: 0;
-		right: 6px;
-		transform: rotate(-35deg);
-		transform-origin: bottom center;
-	}
-
-	.cp-blue {
-		background: #4285f4;
-		bottom: 0;
-		right: 6px;
-		transform: rotate(35deg);
-		transform-origin: top center;
-	}
-
 	/* Content Layer */
 	.tech-card-content {
 		position: relative;
-		z-index: 3;
+		z-index: 2;
 		height: 100%;
 		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 12px 24px;
-		box-sizing: border-box;
-	}
-
-	.tech-top-indicator {
-		display: flex;
 		align-items: center;
-		gap: 6px;
-	}
-
-	.tech-status-dot {
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		background: #34a853;
-		box-shadow: 0 0 6px #34a853;
-	}
-
-	.tech-label-code {
-		font-family: var(--font-pixel), monospace;
-		font-size: 0.68rem;
-		font-weight: 700;
-		color: rgba(255, 255, 255, 0.7);
-		letter-spacing: 0.08em;
+		justify-content: center;
+		padding: 0 28px;
+		box-sizing: border-box;
 	}
 
 	.stack-viewport {
 		overflow: hidden;
 		width: 100%;
-		mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
-		-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
-		margin: auto 0;
+		position: relative;
+		mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+		-webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
 	}
 
 	.stack-marquee-slider {
 		display: flex;
 		width: max-content;
-		animation: stack-infinite-slide 28s linear infinite;
+		animation: seamlessMarquee 32s linear infinite;
+		will-change: transform;
 	}
 
 	.pixel-tech-grid-card:hover .stack-marquee-slider {
@@ -225,45 +103,54 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 	.track-group {
 		display: flex;
 		align-items: center;
-		gap: 20px;
-		padding-right: 20px; /* equal gap between groups */
-		flex-shrink: 0;
+		gap: 32px;
+		padding-right: 32px;
 	}
 
-	/* Crisp, high-contrast enlarged icon pod container */
 	.stack-item {
-		flex-shrink: 0;
-		width: 64px;
-		height: 64px;
-		border-radius: 18px;
-		background: #ffffff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-		transition: transform var(--md-duration-short, 150ms) ease,
-		            box-shadow var(--md-duration-short, 150ms) ease;
+		transition: transform var(--md-duration-short, 150ms) ease;
 	}
 
 	.stack-item:hover {
-		transform: scale(1.15) translateY(-3px);
-		box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+		transform: scale(1.15);
 	}
 
 	.stack-icon {
-		width: 42px;
-		height: 42px;
-		object-fit: contain;
+		width: 38px;
+		height: 38px;
 		display: block;
+		object-fit: contain;
+		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+		transition: filter 0.2s ease;
 	}
 
-	/* Continuous 100% seamless slide */
-	@keyframes stack-infinite-slide {
+	.stack-item:hover .stack-icon {
+		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
+	}
+
+	@keyframes seamlessMarquee {
 		0% {
-			transform: translateX(0);
+			transform: translate3d(0, 0, 0);
 		}
 		100% {
-			transform: translateX(-50%);
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.stack-icon {
+			width: 32px;
+			height: 32px;
+		}
+		.track-group {
+			gap: 22px;
+			padding-right: 22px;
+		}
+		.tech-card-content {
+			padding: 0 18px;
 		}
 	}
 </style>

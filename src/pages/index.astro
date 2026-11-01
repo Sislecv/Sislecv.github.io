@@ -179,10 +179,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		transform: translateY(-2px);
 	}
 
-	/* Widget 1: Primary Tonal (Solid Coral / Rose Quartz) */
+	/* Widget 1: Primary Tonal (Solid Coral / Pill Shape) */
 	.chart-coral {
 		background: #ffdad9 !important;
 		color: #410009 !important;
+		border-radius: 9999px !important; /* Playful Pill Shape */
 	}
 	:global(.mdui-theme-dark) .chart-coral {
 		background: #5c141d !important;
@@ -243,10 +244,11 @@ const uniqueTags = new Set(posts.flatMap((p) => p.data.tags || []));
 		color: #76d697 !important;
 	}
 
-	/* Widget 3: Warm Honey / Amber Tonal (Solid Amber) */
+	/* Widget 3: Warm Honey / Amber Tonal (Asymmetric Pebble Shape) */
 	.chart-amber {
 		background: #ffdea5 !important;
 		color: #271900 !important;
+		border-radius: 40px 14px 40px 14px !important; /* Playful Pebble / Leaf */
 	}
 	:global(.mdui-theme-dark) .chart-amber {
 		background: #452b00 !important;
