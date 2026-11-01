@@ -5,7 +5,7 @@ import { SITE, SOCIAL_LINKS } from "../consts";
 <footer class="blog-footer">
 	<div>
 		<a href="/" class="footer-brand">
-			© {new Date().getFullYear()} <span class="footer-author-art">{SITE.author}</span>
+			© <span class="footer-year-art">{new Date().getFullYear()}</span> <span class="footer-author">{SITE.author}</span>
 		</a>
 	</div>
 	<div style="display: flex; gap: 16px">
@@ -25,13 +25,19 @@ import { SITE, SOCIAL_LINKS } from "../consts";
 		font-size: 0.95rem;
 		display: inline-flex;
 		align-items: center;
-		gap: 4px;
+		gap: 6px;
 	}
-	.footer-author-art {
-		font-family: var(--font-double-line), var(--font-sans);
-		font-size: 1.15rem;
-		letter-spacing: 0.05em;
+	.footer-year-art {
+		font-family: var(--font-double-line), monospace;
+		font-size: 1.25rem;
+		letter-spacing: 0.08em;
 		color: rgb(var(--mdui-color-primary));
+	}
+	.footer-author {
+		font-family: var(--font-display), var(--font-sans);
+		font-weight: 700;
+		font-size: 1rem;
+		color: rgb(var(--mdui-color-on-surface));
 	}
 	.footer-link {
 		font-size: 0.88rem;

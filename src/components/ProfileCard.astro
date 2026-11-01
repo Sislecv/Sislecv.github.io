@@ -58,30 +58,31 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 	/* Subtle tiled editorial background text */
 	.editorial-watermark {
 		position: absolute;
-		right: -12px;
-		bottom: -20px;
-		font-family: var(--font-display), var(--font-sans);
-		font-size: 6.2rem;
-		font-weight: 900;
+		right: -10px;
+		bottom: -15px;
+		font-family: var(--font-double-line), var(--font-display);
+		font-size: 5.4rem;
+		font-weight: 400;
 		line-height: 0.85;
 		color: rgb(var(--mdui-color-on-surface));
-		opacity: 0.045;
-		letter-spacing: -0.06em;
+		opacity: 0.05;
+		letter-spacing: 0.04em;
 		pointer-events: none;
 		user-select: none;
 		transition: opacity 0.3s ease, transform 0.3s ease;
 	}
 
 	.card-editorial-profile:hover .editorial-watermark {
-		opacity: 0.08;
+		opacity: 0.09;
 		transform: translateY(-4px);
 	}
 
 	.profile-name {
-		font-family: var(--font-double-line), var(--font-sans);
-		font-size: 1.55rem;
+		font-family: var(--font-display), var(--font-sans);
+		font-size: 1.6rem;
+		font-weight: 800;
 		line-height: 1.15;
-		letter-spacing: 0.04em;
+		letter-spacing: -0.02em;
 		color: rgb(var(--mdui-color-primary));
 	}
 	.profile-desc {

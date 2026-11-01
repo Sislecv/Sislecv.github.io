@@ -1,0 +1,7 @@
+<svg role="img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Oh My Posh</title>
+  <!-- Outer shell / frame of terminal prompt (White) -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M4 2H20V22H4V2ZM8 6H16V18H8V6Z" fill="#FFFFFF"/>
+  <!-- Inner bottom core block (Terminal grey / accent) -->
+  <rect x="8" y="10" width="8" height="8" fill="#8E8B8B"/>
+</svg>
