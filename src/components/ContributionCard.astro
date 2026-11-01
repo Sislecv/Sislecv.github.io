@@ -41,7 +41,10 @@ const levelColor = (count: number) =>
 				: "#9be9a8";
 ---
 
-<mdui-card clickable href="/archive/" variant="elevated" class="bento-card">
+<mdui-card clickable href="/archive/" variant="elevated" class="bento-card card-editorial-contrib">
+	<!-- Editorial Typographic Watermark -->
+	<div class="editorial-watermark" aria-hidden="true">CADENCE</div>
+
 	<div class="card-body contrib-body">
 		<div class="contrib-grid">
 			{
@@ -59,3 +62,33 @@ const levelColor = (count: number) =>
 		</div>
 	</div>
 </mdui-card>
+
+<style>
+	.card-editorial-contrib {
+		position: relative;
+		overflow: hidden;
+		background: rgba(var(--mdui-color-surface-container), 0.7) !important;
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+	}
+
+	.editorial-watermark {
+		position: absolute;
+		left: 14px;
+		bottom: -16px;
+		font-family: var(--font-display), var(--font-sans);
+		font-size: 5.5rem;
+		font-weight: 900;
+		line-height: 1;
+		color: rgb(var(--mdui-color-on-surface));
+		opacity: 0.035;
+		letter-spacing: -0.06em;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.card-editorial-contrib:hover .editorial-watermark {
+		opacity: 0.07;
+	}
+</style>

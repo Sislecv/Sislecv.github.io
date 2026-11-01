@@ -3,7 +3,10 @@ import { theme } from "../site.config";
 const SCHEMES = theme.schemes;
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card">
+<mdui-card clickable variant="elevated" class="bento-card card-editorial-appearance">
+	<!-- Editorial Typographic Watermark -->
+	<div class="editorial-watermark" aria-hidden="true">THEME</div>
+
 	<div class="card-body">
 		<div class="appearance-row" style="padding: 0">
 			<mdui-icon-light-mode--outlined style="font-size: 20px"></mdui-icon-light-mode--outlined>
@@ -86,6 +89,34 @@ const SCHEMES = theme.schemes;
 </script>
 
 <style>
+	.card-editorial-appearance {
+		position: relative;
+		overflow: hidden;
+		background: rgba(var(--mdui-color-surface-container), 0.75) !important;
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+	}
+
+	.editorial-watermark {
+		position: absolute;
+		left: -6px;
+		top: -12px;
+		font-family: var(--font-display), var(--font-sans);
+		font-size: 3.5rem;
+		font-weight: 900;
+		line-height: 1;
+		color: rgb(var(--mdui-color-on-surface));
+		opacity: 0.04;
+		letter-spacing: -0.05em;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.card-editorial-appearance:hover .editorial-watermark {
+		opacity: 0.08;
+	}
+
 	.scheme-dot.is-active {
 		outline: 2px solid rgb(var(--mdui-color-primary));
 		outline-offset: 3px;

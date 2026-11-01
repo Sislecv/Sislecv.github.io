@@ -10,7 +10,10 @@ const { posts } = Astro.props;
 const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card">
+<mdui-card clickable variant="elevated" class="bento-card card-editorial-tagcloud">
+	<!-- Editorial Typographic Watermark -->
+	<div class="editorial-watermark" aria-hidden="true">TAGS</div>
+
 	<div class="card-body" style="justify-content: flex-start">
 		<div class="tag-cloud" style="margin-top: 4px">
 			{
@@ -23,3 +26,33 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 		</div>
 	</div>
 </mdui-card>
+
+<style>
+	.card-editorial-tagcloud {
+		position: relative;
+		overflow: hidden;
+		background: rgba(var(--mdui-color-surface-container), 0.7) !important;
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+	}
+
+	.editorial-watermark {
+		position: absolute;
+		right: 10px;
+		bottom: -15px;
+		font-family: var(--font-display), var(--font-sans);
+		font-size: 5rem;
+		font-weight: 900;
+		line-height: 1;
+		color: rgb(var(--mdui-color-on-surface));
+		opacity: 0.04;
+		letter-spacing: -0.05em;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease;
+	}
+
+	.card-editorial-tagcloud:hover .editorial-watermark {
+		opacity: 0.08;
+	}
+</style>

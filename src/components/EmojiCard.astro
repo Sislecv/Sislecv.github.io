@@ -3,7 +3,10 @@
 import { status } from "../site.config";
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card">
+<mdui-card clickable variant="elevated" class="bento-card card-editorial-emoji">
+	<!-- Editorial Typographic Watermark -->
+	<div class="editorial-watermark" aria-hidden="true">MOOD</div>
+
 	<div class="card-body status-card-body">
 		<!-- Top Row: Optional Status Badges -->
 		<div class="status-badges-row">
@@ -49,6 +52,35 @@ import { status } from "../site.config";
 </mdui-card>
 
 <style>
+	.card-editorial-emoji {
+		position: relative;
+		overflow: hidden;
+		background: rgba(var(--mdui-color-secondary-container), 0.38) !important;
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+	}
+
+	.card-editorial-emoji .editorial-watermark {
+		position: absolute;
+		left: -6px;
+		bottom: -12px;
+		font-family: var(--font-display), var(--font-sans);
+		font-size: 3.8rem;
+		font-weight: 900;
+		line-height: 1;
+		color: rgb(var(--mdui-color-on-secondary-container));
+		opacity: 0.05;
+		letter-spacing: -0.04em;
+		pointer-events: none;
+		user-select: none;
+		transition: opacity 0.3s ease, transform 0.3s ease;
+	}
+
+	.card-editorial-emoji:hover .editorial-watermark {
+		opacity: 0.09;
+		transform: translateY(-3px);
+	}
+
 	.status-card-body {
 		height: 100%;
 		display: flex;
