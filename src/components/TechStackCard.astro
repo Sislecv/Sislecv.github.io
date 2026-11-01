@@ -1,51 +1,25 @@
 ---
-// TechStackCard.astro: Clean Minimalist Infinite Marquee (Zero background distractions or text)
+// TechStackCard.astro: Clean Minimalist Tiled Tech Stack Icons (Spacious, large, centered, zero background or text)
 import { techStack } from "../site.config";
 const STACK = techStack;
-
-// Repeat 4x per track group for seamless continuous loop
-const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 ---
 
 <mdui-card clickable variant="filled" class="bento-card pixel-tech-grid-card">
-	<div class="tech-card-content">
-		<!-- True Seamless Infinite Tech Icon Marquee -->
-		<div class="stack-viewport">
-			<div class="stack-marquee-slider">
-				<!-- Group 1 -->
-				<div class="track-group">
-					{
-						GROUP_A.map((s) => (
-							<a
-								class="stack-item"
-								href={s.url}
-								target="_blank"
-								rel="noreferrer"
-								title={s.name}
-							>
-								<img src={s.icon} alt={s.name} loading="lazy" class="stack-icon" />
-							</a>
-						))
-					}
-				</div>
-				<!-- Duplicate Group 2 for 100% Seamless Loop -->
-				<div class="track-group" aria-hidden="true">
-					{
-						GROUP_A.map((s) => (
-							<a
-								class="stack-item"
-								href={s.url}
-								target="_blank"
-								rel="noreferrer"
-								tabindex="-1"
-							>
-								<img src={s.icon} alt="" loading="lazy" class="stack-icon" />
-							</a>
-						))
-					}
-				</div>
-			</div>
-		</div>
+	<div class="tech-tiled-content">
+		{
+			STACK.map((s) => (
+				<a
+					class="stack-tiled-item"
+					href={s.url}
+					target="_blank"
+					rel="noreferrer"
+					title={s.name}
+					aria-label={s.name}
+				>
+					<img src={s.icon} alt={s.name} loading="lazy" class="stack-tiled-icon" />
+				</a>
+			))
+		}
 	</div>
 </mdui-card>
 
@@ -69,88 +43,58 @@ const GROUP_A = [...STACK, ...STACK, ...STACK, ...STACK];
 		transform: translateY(-2px);
 	}
 
-	/* Content Layer */
-	.tech-card-content {
+	/* Spacious Tiled Layout (平铺大图标) */
+	.tech-tiled-content {
 		position: relative;
 		z-index: 2;
 		height: 100%;
+		width: 100%;
 		display: flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0 28px;
+		justify-content: space-evenly;
+		padding: 0 36px;
 		box-sizing: border-box;
 	}
 
-	.stack-viewport {
-		overflow: hidden;
-		width: 100%;
-		position: relative;
-		mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-		-webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-	}
-
-	.stack-marquee-slider {
-		display: flex;
-		width: max-content;
-		animation: seamlessMarquee 32s linear infinite;
-		will-change: transform;
-	}
-
-	.pixel-tech-grid-card:hover .stack-marquee-slider {
-		animation-play-state: paused;
-	}
-
-	.track-group {
-		display: flex;
-		align-items: center;
-		gap: 32px;
-		padding-right: 32px;
-	}
-
-	.stack-item {
+	.stack-tiled-item {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: transform var(--md-duration-short, 150ms) ease;
+		padding: 10px;
+		border-radius: 18px;
+		transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+		outline: none;
 	}
 
-	.stack-item:hover {
-		transform: scale(1.15);
+	.stack-tiled-item:hover {
+		transform: scale(1.22);
 	}
 
-	.stack-icon {
-		width: 38px;
-		height: 38px;
+	.stack-tiled-icon {
+		width: 56px;
+		height: 56px;
+		max-width: 100%;
+		max-height: 100%;
 		display: block;
 		object-fit: contain;
-		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+		filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.45));
 		transition: filter 0.2s ease;
 	}
 
-	.stack-item:hover .stack-icon {
-		filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
-	}
-
-	@keyframes seamlessMarquee {
-		0% {
-			transform: translate3d(0, 0, 0);
-		}
-		100% {
-			transform: translate3d(-50%, 0, 0);
-		}
+	.stack-tiled-item:hover .stack-tiled-icon {
+		filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
 	}
 
 	@media (max-width: 640px) {
-		.stack-icon {
-			width: 32px;
-			height: 32px;
+		.tech-tiled-content {
+			padding: 0 16px;
 		}
-		.track-group {
-			gap: 22px;
-			padding-right: 22px;
+		.stack-tiled-icon {
+			width: 44px;
+			height: 44px;
 		}
-		.tech-card-content {
-			padding: 0 18px;
+		.stack-tiled-item {
+			padding: 6px;
 		}
 	}
 </style>
