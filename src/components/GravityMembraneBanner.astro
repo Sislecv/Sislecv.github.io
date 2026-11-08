@@ -1,21 +1,23 @@
 ---
-// GravityMembraneBanner.astro: Fullscreen Hero ASCII Gravity Membrane
-// Zero superfluous slogans/text. Pure kinetic geometry & gravitational well physics.
+// GravityMembraneBanner.astro: Interactive Fullscreen ASCII Ocean Fluid Simulation
+// True hydrodynamic wave synthesis (Gerstner waves + fluid particle drift + foam dynamics)
+// Dynamic multi-tiered oceanic color gradient reflecting depth, crest, and turbulence.
 ---
 
-<div class="gravity-fullscreen-hero" id="gravity-hero-container">
-	<div class="gravity-hero-viewport" id="gravity-banner-root">
-		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
+<div class="ocean-fluid-hero" id="ocean-banner-container">
+	<div class="ocean-hero-viewport" id="ocean-banner-root">
+		<canvas id="ocean-banner-canvas" aria-hidden="true"></canvas>
 
-		<!-- Subtle technical telemetry -->
-		<div class="gravity-telemetry">
-			<span class="telemetry-badge" id="telemetry-metric">G·MEMBRANE // TENSION: 1.00 // EQUILIBRIUM</span>
+		<!-- Minimalist ocean telemetry -->
+		<div class="ocean-telemetry">
+			<span class="telemetry-badge" id="ocean-telemetry-metric">SIM·OCEAN // SWELL: 1.85m // T: 4.2s // SEA STATE: 3</span>
 		</div>
 
-		<!-- Minimalist scroll indicator -->
-		<button class="gravity-scroll-down" id="gravity-scroll-trigger" aria-label="向下滚动至内容" title="向下滚动">
+		<!-- Minimalist ASCII scroll indicator -->
+		<button class="ocean-scroll-down" id="ocean-scroll-trigger" aria-label="向下滚动至内容" title="向下滚动">
 			<div class="scroll-ascii-glyph">
 				<span class="glyph-line">|</span>
+				<span class="glyph-wave">~</span>
 				<span class="glyph-arrow">v</span>
 			</div>
 		</button>
@@ -23,24 +25,24 @@
 </div>
 
 <style>
-	.gravity-fullscreen-hero {
+	.ocean-fluid-hero {
 		position: relative;
 		width: 100vw;
 		margin-left: calc(-50vw + 50%);
 		margin-right: calc(-50vw + 50%);
 		height: 100vh;
-		min-height: 540px;
-		max-height: 1080px;
+		min-height: 560px;
+		max-height: 1120px;
 		margin-top: -20px; /* Align to top flush */
 		margin-bottom: 28px;
 		overflow: hidden;
 	}
 
-	.gravity-hero-viewport {
+	.ocean-hero-viewport {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle at 50% 50%, rgba(var(--mdui-color-surface-container, 24, 24, 30), 0.5) 0%, rgba(var(--mdui-color-surface, 15, 15, 20), 0.95) 100%);
+		background: radial-gradient(circle at 50% 60%, rgba(10, 25, 45, 0.85) 0%, rgba(4, 12, 24, 0.98) 100%);
 		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.18);
 		user-select: none;
 		-webkit-user-select: none;
@@ -48,40 +50,41 @@
 		overflow: hidden;
 	}
 
-	:global(.mdui-theme-dark) .gravity-hero-viewport {
-		background: radial-gradient(circle at 50% 50%, rgba(20, 20, 28, 0.6) 0%, rgba(10, 10, 14, 0.98) 100%);
+	:global(.mdui-theme-dark) .ocean-hero-viewport {
+		background: radial-gradient(circle at 50% 65%, rgba(6, 18, 36, 0.9) 0%, rgba(2, 6, 14, 0.99) 100%);
 		border-bottom-color: rgba(255, 255, 255, 0.08);
 	}
 
-	#gravity-banner-canvas {
+	#ocean-banner-canvas {
 		display: block;
 		width: 100%;
 		height: 100%;
 	}
 
-	.gravity-telemetry {
+	.ocean-telemetry {
 		position: absolute;
 		bottom: 22px;
 		right: 28px;
 		pointer-events: none;
-		opacity: 0.6;
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+		opacity: 0.7;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 		font-size: 11px;
 		letter-spacing: 0.12em;
 		transition: opacity 0.2s ease;
 		z-index: 2;
 	}
 
-	.gravity-hero-viewport:hover .gravity-telemetry {
+	.ocean-hero-viewport:hover .ocean-telemetry {
 		opacity: 0.95;
 	}
 
 	.telemetry-badge {
-		color: rgb(var(--mdui-color-on-surface-variant, 140, 140, 150));
+		color: #38bdf8;
+		text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
 	}
 
 	/* Minimalist ASCII scroll indicator */
-	.gravity-scroll-down {
+	.ocean-scroll-down {
 		position: absolute;
 		bottom: 24px;
 		left: 50%;
@@ -90,16 +93,16 @@
 		border: none;
 		padding: 12px;
 		cursor: pointer;
-		color: rgb(var(--mdui-color-on-surface-variant, 140, 140, 150));
-		opacity: 0.6;
-		transition: opacity 0.2s ease, transform 0.2s ease;
+		color: #38bdf8;
+		opacity: 0.65;
+		transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
 		z-index: 2;
 		outline: none;
 	}
 
-	.gravity-scroll-down:hover {
+	.ocean-scroll-down:hover {
 		opacity: 1;
-		color: rgb(var(--mdui-color-primary, 11, 87, 208));
+		color: #67e8f9;
 		transform: translateX(-50%) translateY(3px);
 	}
 
@@ -111,32 +114,38 @@
 		font-size: 13px;
 		font-weight: 600;
 		line-height: 1.1;
-		animation: scroll-bob 2.2s ease-in-out infinite;
+		animation: ocean-bob 2.4s ease-in-out infinite;
 	}
 
-	@keyframes scroll-bob {
+	.glyph-wave {
+		font-size: 11px;
+		margin: -1px 0;
+		color: #22d3ee;
+	}
+
+	@keyframes ocean-bob {
 		0%, 100% {
 			transform: translateY(0);
 			opacity: 0.5;
 		}
 		50% {
-			transform: translateY(6px);
+			transform: translateY(7px);
 			opacity: 1;
 		}
 	}
 
 	@media (max-width: 600px) {
-		.gravity-fullscreen-hero {
+		.ocean-fluid-hero {
 			height: 82vh;
 			min-height: 480px;
 			margin-bottom: 20px;
 		}
-		.gravity-telemetry {
+		.ocean-telemetry {
 			font-size: 9px;
 			bottom: 12px;
 			right: 14px;
 		}
-		.gravity-scroll-down {
+		.ocean-scroll-down {
 			bottom: 14px;
 		}
 	}
@@ -144,19 +153,19 @@
 
 <script is:inline>
 	(function () {
-		const root = document.getElementById("gravity-banner-root");
-		const canvas = document.getElementById("gravity-banner-canvas");
-		const telemetry = document.getElementById("telemetry-metric");
-		const scrollBtn = document.getElementById("gravity-scroll-trigger");
+		const root = document.getElementById("ocean-banner-root");
+		const canvas = document.getElementById("ocean-banner-canvas");
+		const telemetry = document.getElementById("ocean-telemetry-metric");
+		const scrollBtn = document.getElementById("ocean-scroll-trigger");
 		if (!canvas || !root) return;
 
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// Scroll to content when clicking indicator
+		// Scroll to content on trigger
 		if (scrollBtn) {
 			scrollBtn.addEventListener("click", () => {
-				const hero = document.getElementById("gravity-hero-container");
+				const hero = document.getElementById("ocean-banner-container");
 				if (hero) {
 					const targetY = hero.offsetTop + hero.offsetHeight - 16;
 					window.scrollTo({ top: targetY, behavior: "smooth" });
@@ -164,76 +173,33 @@
 			});
 		}
 
-		// Font and ASCII ramps
-		const FONT_SIZE = 13;
+		// Font and ASCII parameters
+		const FONT_SIZE = 12.5;
 		const FONT_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace';
-		const CHAR_ASPECT = 0.6;
-		const CHAR_W = FONT_SIZE * CHAR_ASPECT;
-
-		// Density ramp
-		const DENSITY_RAMP = " .·:;+=xX$#@";
 
 		let width = 0;
 		let height = 0;
 		let dpr = 1;
 
-		// Mouse & Physical state
+		// Mouse & Fluid Interaction
 		let mouseX = -9999;
 		let mouseY = -9999;
+		let prevMouseX = -9999;
+		let prevMouseY = -9999;
+		let mouseSpeed = 0;
 		let isHovered = false;
 		let isPressed = false;
-		let pressStrength = 0; // 0 to 1 smooth buildup
-		let shockwaveRadius = -1;
-		let shockwaveStrength = 0;
+		let pressEnergy = 0;
 
-		// Theme colors extracted dynamically
-		let colorPrimary = [11, 87, 208];
-		let colorOnSurface = [160, 160, 170];
+		// Splash waves / Shockwaves from clicks/touches
+		const splashes = [];
 
-		function parseRgb(str, fallback) {
-			if (!str) return fallback;
-			const m = str.match(/[\d.]+/g);
-			if (m && m.length >= 3) {
-				return [parseFloat(m[0]), parseFloat(m[1]), parseFloat(m[2])];
-			}
-			return fallback;
-		}
+		// Fluid wake particles (bubbles & water disturbance behind mouse)
+		const wakeTrails = [];
 
-		function updateTheme() {
-			const cs = getComputedStyle(document.documentElement);
-			colorPrimary = parseRgb(cs.getPropertyValue("--mdui-color-primary").trim(), [11, 87, 208]);
-			colorOnSurface = parseRgb(cs.getPropertyValue("--mdui-color-on-surface").trim(), [160, 160, 170]);
-		}
-
-		// Density of the membrane grid (expanded for full-screen breadth)
-		let GRID_X = 58;
-		let GRID_Y = 32;
-
-		class Point {
-			constructor(ox, oy) {
-				this.ox = ox; // normalized [-1, 1]
-				this.oy = oy; // normalized [-1, 1]
-				this.x = 0;
-				this.y = 0;
-				this.z = 0;
-				this.vz = 0;
-			}
-		}
-
-		let points = [];
-		function initGrid() {
-			points = [];
-			for (let j = 0; j < GRID_Y; j++) {
-				const row = [];
-				const ny = (j / (GRID_Y - 1)) * 2 - 1;
-				for (let i = 0; i < GRID_X; i++) {
-					const nx = (i / (GRID_X - 1)) * 2 - 1;
-					row.push(new Point(nx, ny));
-				}
-				points.push(row);
-			}
-		}
-		initGrid();
+		// Ocean Grid Resolution
+		let GRID_COLS = 68;
+		let GRID_ROWS = 36;
 
 		function resize() {
 			dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -245,233 +211,286 @@
 			canvas.height = Math.round(height * dpr);
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-			// Adaptive grid density based on width
 			if (width < 600) {
-				GRID_X = 38;
-				GRID_Y = 24;
-				initGrid();
-			} else if (width > 1200) {
-				GRID_X = 64;
-				GRID_Y = 36;
-				initGrid();
+				GRID_COLS = 44;
+				GRID_ROWS = 26;
+			} else if (width > 1400) {
+				GRID_COLS = 80;
+				GRID_ROWS = 40;
+			} else {
+				GRID_COLS = 68;
+				GRID_ROWS = 34;
 			}
 		}
 
-		// Octahedron core in 3D: 6 vertices
-		const coreVertices = [
-			[0, 1.25, 0],   // top
-			[0, -1.25, 0],  // bottom
-			[-1.1, 0, 0],   // left
-			[1.1, 0, 0],    // right
-			[0, 0, -1.1],   // back
-			[0, 0, 1.1]     // front
+		// Multi-layered Gerstner Wave Synthesis & Fluid Dynamics
+		// Gerstner Wave Component: [dirX, dirY, wavelength, amplitude, speed, steepness]
+		const waveComponents = [
+			// 1. Primary oceanic swell: deep, powerful, diagonal forward drift
+			{ dx: 0.78, dy: 0.62, lambda: 180, amp: 26, speed: 1.25, Q: 0.65 },
+			// 2. Secondary crossing wave: diamond interference patterns
+			{ dx: -0.65, dy: 0.76, lambda: 125, amp: 16, speed: 1.6, Q: 0.55 },
+			// 3. Counter chop / wind ripple: creates wave crest details
+			{ dx: 0.95, dy: 0.31, lambda: 72, amp: 8.5, speed: 2.1, Q: 0.45 },
+			// 4. Fine turbulent capillary ripples
+			{ dx: -0.35, dy: 0.94, lambda: 36, amp: 4.2, speed: 2.8, Q: 0.35 }
 		];
 
-		const coreEdges = [
-			[0, 2], [0, 3], [0, 4], [0, 5],
-			[1, 2], [1, 3], [1, 4], [1, 5],
-			[2, 4], [4, 3], [3, 5], [5, 2]
-		];
+		// Ocean Depth & Light Color Palettes (RGB)
+		// Deep Abyss -> Ocean Body -> Sunlit Aquamarine -> Crest Sky Blue -> Pure White Foam
+		const COLOR_ABYSS = [10, 32, 60];        // Deep ocean trough (波谷深海)
+		const COLOR_DEEP = [14, 88, 140];        // Deep blue (海水体)
+		const COLOR_AQUA = [6, 182, 212];        // Sunlit turquoise (向阳碧青)
+		const COLOR_EMERALD = [20, 210, 160];    // Vibrant emerald surge (海浪卷曲微光)
+		const COLOR_CREST = [125, 211, 252];     // Bright wave crest (波峰浅天蓝)
+		const COLOR_FOAM = [255, 255, 255];      // Whitecap foam (海浪翻涌碎浪白沫)
 
-		let rotX = 0.35;
-		let rotY = 0;
+		function lerpRgb(c1, c2, t) {
+			const clampedT = Math.max(0, Math.min(1, t));
+			return [
+				Math.round(c1[0] + (c2[0] - c1[0]) * clampedT),
+				Math.round(c1[1] + (c2[1] - c1[1]) * clampedT),
+				Math.round(c1[2] + (c2[2] - c1[2]) * clampedT)
+			];
+		}
+
+		// ASCII Glyphs reflecting wave height & curvature
+		// Trough: . · | Mid-body: ~ - ≈ = | Steep: ^ * + s | Crest & Foam: # % @ W
+		const FOAM_GLYPHS = ["@", "%", "#", "W", "*"];
+		const CREST_GLYPHS = ["^", "*", "+", "≈", "~"];
+		const BODY_GLYPHS = ["~", "≈", "-", "=", ":"];
+		const TROUGH_GLYPHS = ["·", ".", " "];
+
 		let time = 0;
 
 		function render() {
-			time += 0.016;
+			time += 0.018;
 
-			// Smooth press transition
-			if (isPressed) {
-				pressStrength += (1 - pressStrength) * 0.12;
+			// Handle mouse speed & wake generation
+			if (isHovered && prevMouseX > -1000) {
+				const dist = Math.hypot(mouseX - prevMouseX, mouseY - prevMouseY);
+				mouseSpeed = mouseSpeed * 0.82 + dist * 0.18;
+				
+				// Generate wake ripples
+				if (mouseSpeed > 3.5) {
+					wakeTrails.push({
+						x: mouseX,
+						y: mouseY,
+						life: 1.0,
+						decay: 0.02 + Math.random() * 0.015,
+						radius: 12 + mouseSpeed * 0.8
+					});
+					if (wakeTrails.length > 35) wakeTrails.shift();
+				}
 			} else {
-				pressStrength += (0 - pressStrength) * 0.08;
+				mouseSpeed *= 0.85;
 			}
+			prevMouseX = mouseX;
+			prevMouseY = mouseY;
 
-			// Shockwave propagation
-			if (shockwaveRadius >= 0) {
-				shockwaveRadius += 10;
-				shockwaveStrength *= 0.94;
-				if (shockwaveStrength < 0.01 || shockwaveRadius > Math.max(width, height) * 1.6) {
-					shockwaveRadius = -1;
+			// Update click splash shockwaves
+			for (let i = splashes.length - 1; i >= 0; i--) {
+				const sp = splashes[i];
+				sp.radius += 6.5;
+				sp.strength *= 0.945;
+				if (sp.strength < 0.02 || sp.radius > Math.max(width, height) * 1.5) {
+					splashes.splice(i, 1);
 				}
 			}
 
-			// Auto rotation of central core with subtle mouse influence
-			rotY += 0.011 + (pressStrength * 0.028);
-			rotX = 0.36 + Math.sin(time * 0.5) * 0.08;
+			// Update wake trails
+			for (let i = wakeTrails.length - 1; i >= 0; i--) {
+				const w = wakeTrails[i];
+				w.life -= w.decay;
+				w.radius += 1.2;
+				if (w.life <= 0) {
+					wakeTrails.splice(i, 1);
+				}
+			}
+
+			// Smooth press energy
+			if (isPressed) {
+				pressEnergy += (1 - pressEnergy) * 0.15;
+			} else {
+				pressEnergy += (0 - pressEnergy) * 0.08;
+			}
 
 			ctx.clearRect(0, 0, width, height);
 
-			const centerX = width * 0.5;
-			const centerY = height * 0.52;
-			const membranePitch = 0.65; // perspective pitch tilt
-
-			const normMouseX = mouseX;
-			const normMouseY = mouseY;
-
-			// Dynamic depth and well size scaled to fullscreen dimensions
-			const maxDepth = (height * 0.18) + pressStrength * 120;
-			const wellRadius = (Math.min(width, height) * 0.3) + pressStrength * 60;
-
-			// Update physics & projection
-			for (let j = 0; j < points.length; j++) {
-				const row = points[j];
-				for (let i = 0; i < row.length; i++) {
-					const p = row[i];
-					
-					// Flat 3D plane coordinates spanning fullscreen breadth
-					const px3d = p.ox * (width * 0.55);
-					const py3d = p.oy * (height * 0.72);
-
-					// Screen project with perspective
-					let sx = centerX + px3d;
-					let sy = centerY + py3d * membranePitch;
-
-					// Singularity gravitational pull from center
-					const distCenter = Math.hypot(px3d, py3d);
-					const centerDepression = Math.exp(-distCenter / (Math.min(width, height) * 0.16)) * (65 + pressStrength * 55);
-
-					// Mouse depression well
-					let mouseDepression = 0;
-					if (isHovered) {
-						const distMouse = Math.hypot(sx - normMouseX, sy - normMouseY);
-						mouseDepression = Math.exp(-Math.pow(distMouse / wellRadius, 2)) * maxDepth;
-					}
-
-					// Shockwave ripple
-					let shockDisplacement = 0;
-					if (shockwaveRadius >= 0) {
-						const distOrigin = Math.hypot(sx - (isHovered ? normMouseX : centerX), sy - (isHovered ? normMouseY : centerY));
-						const delta = distOrigin - shockwaveRadius;
-						if (Math.abs(delta) < 55) {
-							shockDisplacement = Math.sin(delta * 0.12) * 22 * shockwaveStrength;
-						}
-					}
-
-					// Target Z displacement (downward gravity well)
-					const targetZ = -(centerDepression + mouseDepression + shockDisplacement);
-
-					// Damped spring physics on Z
-					const springK = 0.14;
-					const damping = 0.83;
-					p.vz += (targetZ - p.z) * springK;
-					p.vz *= damping;
-					p.z += p.vz;
-
-					// Final projected screen coords
-					p.x = sx;
-					p.y = sy - p.z * 0.88;
-				}
-			}
-
-			// Render ASCII grid lines & characters
 			ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
 			ctx.textBaseline = "middle";
 			ctx.textAlign = "center";
 
-			// Draw horizontal & vertical topological contours with ASCII chars
-			for (let j = 0; j < points.length; j++) {
-				const rowT = j / (points.length - 1);
-				const depthFade = 0.18 + rowT * 0.75;
+			// Ocean perspective geometry
+			// Horizon starts at 22% from top, waves roll toward bottom foreground
+			const horizonY = height * 0.18;
+			const oceanDepth = height - horizonY;
+			const centerX = width * 0.5;
 
-				for (let i = 0; i < points[j].length; i++) {
-					const p = points[j][i];
-					const zDisp = Math.abs(p.z);
+			// Track maximum peak for telemetry
+			let maxWaveH = 0;
+			let totalEnergy = 0;
 
-					let char = "·";
-					let alpha = 0.16 * depthFade;
-					let isAccent = false;
+			// Iterate 3D Ocean Surface Grid (row: 0=distant horizon -> GRID_ROWS=near camera)
+			for (let r = 0; r < GRID_ROWS; r++) {
+				const rowT = r / (GRID_ROWS - 1); // 0 (horizon) -> 1 (foreground)
+				
+				// Non-linear depth distribution: more resolution in foreground swells
+				const depthFactor = Math.pow(rowT, 1.35);
+				const baseScreenY = horizonY + depthFactor * oceanDepth;
 
-					if (zDisp > 55) {
-						char = "+";
-						alpha = Math.min(0.9, 0.4 + zDisp * 0.006);
-						isAccent = true;
-					} else if (zDisp > 26) {
-						char = ":";
-						alpha = Math.min(0.65, 0.25 + zDisp * 0.007);
-					} else if (i % 2 === 0 && j % 2 === 0) {
-						char = "+";
-						alpha = 0.22 * depthFade;
+				// Width spans wider as it gets closer (perspective cone)
+				const spanWidth = width * (0.85 + rowT * 0.45);
+				const rowStartX = centerX - spanWidth * 0.5;
+
+				// Far waves are smaller, near waves are immense and towering
+				const perspectiveScale = 0.35 + depthFactor * 0.95;
+
+				for (let c = 0; c < GRID_COLS; c++) {
+					const colT = c / (GRID_COLS - 1);
+					const baseScreenX = rowStartX + colT * spanWidth;
+
+					// World space wave coordinates
+					const wx = (colT - 0.5) * spanWidth;
+					const wy = depthFactor * oceanDepth * 2.2;
+
+					// Gerstner Wave Displacement Synthesis
+					let totalZ = 0;
+					let dispX = 0;
+					let dispY = 0;
+					let waveSlope = 0;
+
+					for (let w = 0; w < waveComponents.length; w++) {
+						const comp = waveComponents[w];
+						const k = (2 * Math.PI) / comp.lambda;
+						const phase = k * (comp.dx * wx + comp.dy * wy) - time * comp.speed;
+
+						const sinP = Math.sin(phase);
+						const cosP = Math.cos(phase);
+
+						// Wave height (Z)
+						const h = comp.amp * cosP;
+						totalZ += h;
+
+						// Horizontal displacement (water particle orbital motion)
+						dispX -= comp.Q * comp.amp * comp.dx * sinP;
+						dispY -= comp.Q * comp.amp * comp.dy * sinP;
+
+						// Wave steepness/slope for crest foam detection
+						waveSlope += k * comp.amp * sinP;
 					}
 
-					if (isAccent) {
-						ctx.fillStyle = `rgba(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]}, ${alpha})`;
+					// Mouse disturbance interaction
+					if (isHovered) {
+						const dMouse = Math.hypot(baseScreenX - mouseX, baseScreenY - mouseY);
+						const mouseRadius = 140 + mouseSpeed * 3;
+						if (dMouse < mouseRadius) {
+							const mouseProximity = 1 - dMouse / mouseRadius;
+							const pushOut = Math.sin(mouseProximity * Math.PI) * (20 + mouseSpeed * 1.5 + pressEnergy * 45);
+							totalZ += pushOut;
+							waveSlope += mouseProximity * 1.4;
+						}
+					}
+
+					// Wake disturbance from past movement
+					for (let i = 0; i < wakeTrails.length; i++) {
+						const w = wakeTrails[i];
+						const d = Math.hypot(baseScreenX - w.x, baseScreenY - w.y);
+						if (d < w.radius) {
+							const ripple = Math.cos((d / w.radius) * Math.PI * 2) * 14 * w.life;
+							totalZ += ripple;
+							waveSlope += Math.abs(ripple) * 0.08;
+						}
+					}
+
+					// Splash shockwave rings
+					for (let i = 0; i < splashes.length; i++) {
+						const sp = splashes[i];
+						const d = Math.hypot(baseScreenX - sp.x, baseScreenY - sp.y);
+						const diff = d - sp.radius;
+						if (Math.abs(diff) < 60) {
+							const ringWave = Math.sin((diff / 60) * Math.PI) * 28 * sp.strength;
+							totalZ += ringWave;
+							waveSlope += Math.abs(ringWave) * 0.12;
+						}
+					}
+
+					// Shoaling: swells rise taller and sharper near the observer
+					totalZ *= perspectiveScale;
+
+					if (Math.abs(totalZ) > maxWaveH) maxWaveH = Math.abs(totalZ);
+					totalEnergy += Math.abs(totalZ);
+
+					// Screen projected coordinate
+					const projX = baseScreenX + dispX * perspectiveScale;
+					const projY = baseScreenY + dispY * perspectiveScale * 0.4 - totalZ;
+
+					// Normalized elevation in range [-1, 1] mapped to [0, 1]
+					const maxExpectedAmp = 42 * perspectiveScale;
+					const normH = Math.max(0, Math.min(1, (totalZ + maxExpectedAmp * 0.7) / (maxExpectedAmp * 1.7)));
+
+					// Foam intensity: combines steepness (slope) + peak height
+					const isPeak = totalZ > maxExpectedAmp * 0.55;
+					const foamFactor = Math.max(0, Math.min(1, (waveSlope * 0.45) + (isPeak ? 0.45 : 0)));
+
+					// Atmospheric horizon depth fading
+					const horizonFade = 0.25 + depthFactor * 0.75;
+
+					// Multi-tiered Color Blending based on depth and foam
+					let rgb;
+					let alpha = Math.min(1.0, (0.35 + normH * 0.65) * horizonFade);
+					let glyph = "·";
+
+					if (foamFactor > 0.65 || normH > 0.88) {
+						// Wave Crest Foam (白浪沫)
+						rgb = lerpRgb(COLOR_CREST, COLOR_FOAM, (foamFactor - 0.65) / 0.35);
+						const gIdx = Math.floor(Math.random() * FOAM_GLYPHS.length);
+						glyph = FOAM_GLYPHS[gIdx];
+						alpha = Math.min(1.0, 0.85 + foamFactor * 0.15);
+					} else if (normH > 0.68) {
+						// Wave Peak / Upward Surge (浪尖天蓝向青碧)
+						const t = (normH - 0.68) / 0.2;
+						rgb = lerpRgb(COLOR_EMERALD, COLOR_CREST, t);
+						glyph = CREST_GLYPHS[c % CREST_GLYPHS.length];
+						alpha = 0.75 + t * 0.2;
+					} else if (normH > 0.42) {
+						// Sunlit Ocean Body (明澈青碧)
+						const t = (normH - 0.42) / 0.26;
+						rgb = lerpRgb(COLOR_AQUA, COLOR_EMERALD, t);
+						glyph = BODY_GLYPHS[(c + r) % BODY_GLYPHS.length];
+						alpha = 0.55 + t * 0.25;
+					} else if (normH > 0.2) {
+						// Deep Body Water (海水层)
+						const t = (normH - 0.2) / 0.22;
+						rgb = lerpRgb(COLOR_DEEP, COLOR_AQUA, t);
+						glyph = BODY_GLYPHS[r % BODY_GLYPHS.length];
+						alpha = 0.38 + t * 0.2;
 					} else {
-						ctx.fillStyle = `rgba(${colorOnSurface[0]}, ${colorOnSurface[1]}, ${colorOnSurface[2]}, ${alpha})`;
+						// Trough Abyss (深邃海谷)
+						const t = normH / 0.2;
+						rgb = lerpRgb(COLOR_ABYSS, COLOR_DEEP, t);
+						glyph = TROUGH_GLYPHS[(c + r) % TROUGH_GLYPHS.length];
+						alpha = 0.18 + t * 0.2;
 					}
 
-					ctx.fillText(char, p.x, p.y);
+					// Render ASCII Character
+					ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+					ctx.fillText(glyph, projX, projY);
 				}
 			}
 
-			// Render central 3D rotating ASCII Octahedron (Singularity core)
-			const coreScale = (Math.min(width, height) * 0.09) + pressStrength * 16;
-			const cosY = Math.cos(rotY);
-			const sinY = Math.sin(rotY);
-			const cosX = Math.cos(rotX);
-			const sinX = Math.sin(rotX);
-
-			// Project 3D core vertices to screen
-			const projectedCore = coreVertices.map(([vx, vy, vz]) => {
-				let x1 = vx * cosY - vz * sinY;
-				let z1 = vx * sinY + vz * cosY;
-				let y2 = vy * cosX - z1 * sinX;
-				let z2 = vy * sinX + z1 * cosX;
-
-				return {
-					x: centerX + x1 * coreScale,
-					y: centerY + y2 * coreScale - 10,
-					z: z2
-				};
-			});
-
-			// Draw core wireframe using dense ASCII ticks
-			for (const [v0Idx, v1Idx] of coreEdges) {
-				const a = projectedCore[v0Idx];
-				const b = projectedCore[v1Idx];
-
-				const dx = b.x - a.x;
-				const dy = b.y - a.y;
-				const dist = Math.hypot(dx, dy);
-				const steps = Math.max(3, Math.floor(dist / (CHAR_W * 1.15)));
-
-				for (let s = 0; s <= steps; s++) {
-					const t = s / steps;
-					const px = a.x + dx * t;
-					const py = a.y + dy * t;
-					const avgZ = a.z + (b.z - a.z) * t;
-
-					const zNorm = (avgZ + 1.25) / 2.5;
-					const brightness = Math.max(0.2, Math.min(1, zNorm));
-					const charIdx = Math.floor(brightness * (DENSITY_RAMP.length - 1));
-					const ch = DENSITY_RAMP[charIdx] || "·";
-
-					const alpha = 0.35 + brightness * 0.65;
-					if (brightness > 0.65 || pressStrength > 0.35) {
-						ctx.fillStyle = `rgba(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]}, ${alpha})`;
-					} else {
-						ctx.fillStyle = `rgba(${colorOnSurface[0]}, ${colorOnSurface[1]}, ${colorOnSurface[2]}, ${alpha})`;
-					}
-					ctx.fillText(ch, px, py);
-				}
-			}
-
-			// Center Singularity core pulse
-			const pulseChar = pressStrength > 0.6 ? "@" : (pressStrength > 0.2 ? "#" : "*");
-			ctx.fillStyle = `rgb(${colorPrimary[0]}, ${colorPrimary[1]}, ${colorPrimary[2]})`;
-			ctx.fillText(pulseChar, centerX, centerY - 10);
-
-			// Real-time scientific tension metric
+			// Ocean Telemetry Info Update
 			if (telemetry) {
-				const tensionVal = (1.0 + pressStrength * 4.25 + (shockwaveRadius >= 0 ? 0.95 : 0)).toFixed(2);
-				const statusTag = isPressed ? "COMPRESSED" : (isHovered ? "WARPED" : "EQUILIBRIUM");
-				telemetry.textContent = `G·MEMBRANE // TENSION: ${tensionVal} // ${statusTag}`;
+				const swellH = (1.2 + (maxWaveH * 0.035) + pressEnergy * 1.5).toFixed(2);
+				const seaState = maxWaveH > 35 ? "4 (MODERATE)" : (maxWaveH > 20 ? "3 (SLIGHT)" : "2 (SMOOTH)");
+				const turb = (mouseSpeed > 5 ? "CHOPPY // WAKE ACTIVE" : (isPressed ? "SURGE" : "SWELL"));
+				telemetry.textContent = `SIM·OCEAN // SWELL: ${swellH}m // T: 4.2s // SEA STATE: ${seaState} // ${turb}`;
 			}
 
 			requestAnimationFrame(render);
 		}
 
-		// Event handlers
+		// Interactive Event Listeners
 		root.addEventListener("mousemove", (e) => {
 			const rect = root.getBoundingClientRect();
 			mouseX = e.clientX - rect.left;
@@ -496,18 +515,20 @@
 		root.addEventListener("mousedown", (e) => {
 			if (e.button === 0) {
 				isPressed = true;
+				splashes.push({
+					x: mouseX,
+					y: mouseY,
+					radius: 8,
+					strength: 1.0
+				});
 			}
 		});
 
 		window.addEventListener("mouseup", () => {
-			if (isPressed) {
-				isPressed = false;
-				shockwaveRadius = 0;
-				shockwaveStrength = 1.0;
-			}
+			isPressed = false;
 		});
 
-		// Mobile touch interaction
+		// Mobile Touch
 		root.addEventListener("touchstart", (e) => {
 			if (e.touches.length > 0) {
 				const rect = root.getBoundingClientRect();
@@ -515,6 +536,12 @@
 				mouseY = e.touches[0].clientY - rect.top;
 				isHovered = true;
 				isPressed = true;
+				splashes.push({
+					x: mouseX,
+					y: mouseY,
+					radius: 10,
+					strength: 1.0
+				});
 			}
 		}, { passive: true });
 
@@ -528,22 +555,11 @@
 		}, { passive: true });
 
 		root.addEventListener("touchend", () => {
-			if (isPressed) {
-				isPressed = false;
-				shockwaveRadius = 0;
-				shockwaveStrength = 1.0;
-			}
+			isPressed = false;
 			isHovered = false;
 		});
 
 		window.addEventListener("resize", resize);
-
-		updateTheme();
-		const observer = new MutationObserver(() => updateTheme());
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ["class", "style"]
-		});
 
 		resize();
 		requestAnimationFrame(render);
