@@ -1,18 +1,20 @@
 ---
-// GravityMembraneBanner.astro: Fixed-Grid Active Fluid Reservoir Banner
+// GravityMembraneBanner.astro: Authentic Yusuke Endoh (IOCCC 2012) SPH Fluid Simulation Banner
 // Features:
-// - Fine fullscreen fixed-position square MDUI cards (smaller size, perfectly square)
-// - Baseline fluid depth at rest strictly occupies 1/5 (20%) of banner height
-// - Highly realistic stochastic fluid dynamics: wave crest collisions, wave breaking, and physical airborne splashes that lift, arc and fall
-// - Colors strictly appear ONLY where water exists (submerged body or airborne splashes); empty air has zero color reaction
-// - Lighter, translucent, elegant Material Theme color palette
-// - Physical mouse flicking and clicking creates vigorous splashing and droplets
+// - Authentic SPH (Smoothed Particle Hydrodynamics) 2D fluid physics engine based on Yusuke Endoh's classic IOCCC 2012 fluid simulation
+// - Zero artificial "spray/firework" particle fountains: completely coherent, physical fluid body that flows, surges, curls and sloshes
+// - Baseline fluid resting depth strictly occupies 1/5 (20%) of the container height
+// - Fluid allows full-screen traversal when vigorously agitated or climbing walls
+// - Fixed-position square MDUI cards: strictly non-rotating, refined small square cells
+// - Cells toggle on/off purely through fluid particle occupancy (like terminal ASCII characters)
+// - Colors appear strictly ONLY where water physically exists; air has zero color reaction
+// - Translucent, refined Material Theme gradient palette
 // - Upper area open for custom user content (via slot)
 ---
 
 <div class="gravity-fullscreen-hero" id="gravity-hero-container">
 	<div class="gravity-hero-viewport" id="gravity-banner-root">
-		<!-- Canvas simulating active fluid card matrix -->
+		<!-- Canvas simulating SPH fluid voxel card matrix -->
 		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
 
 		<!-- Upper spacious zone: reserved for user-defined content / elements -->
@@ -31,7 +33,7 @@
 </div>
 
 <style>
-	/* Preserving original fullscreen hero dimensions strictly */
+	/* Fullscreen hero dimensions */
 	.gravity-fullscreen-hero {
 		position: relative;
 		width: 100vw;
@@ -40,7 +42,7 @@
 		height: 100vh;
 		min-height: 540px;
 		max-height: 1080px;
-		margin-top: -20px; /* Align to top flush */
+		margin-top: -20px;
 		margin-bottom: 28px;
 		overflow: hidden;
 	}
@@ -68,13 +70,12 @@
 		height: 100%;
 	}
 
-	/* Upper spacious container slot for custom user elements */
 	.banner-content-container {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 38%; /* Upper area open for custom titles/badges/cards */
+		height: 38%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -85,7 +86,6 @@
 		box-sizing: border-box;
 	}
 
-	/* Minimalist ASCII scroll indicator */
 	.gravity-scroll-down {
 		position: absolute;
 		bottom: 24px;
@@ -151,7 +151,6 @@
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// Scroll to content on trigger
 		if (scrollBtn) {
 			scrollBtn.addEventListener("click", () => {
 				const hero = document.getElementById("gravity-hero-container");
@@ -166,7 +165,7 @@
 		let height = 0;
 		let dpr = 1;
 
-		// Mouse & Touch interaction state
+		// Mouse state
 		let mouseX = -9999;
 		let mouseY = -9999;
 		let prevMouseX = -9999;
@@ -175,11 +174,9 @@
 		let mouseVy = 0;
 		let mouseSpeed = 0;
 		let isHovered = false;
+		let mouseImpulse = false;
 
-		// Interactive expanding ripples (only affect submerged water)
-		const ripples = [];
-
-		// Theme colors extracted dynamically from Material tokens
+		// Theme colors
 		let primaryColor = [11, 87, 208];
 
 		function parseRgb(str, fallback) {
@@ -197,58 +194,106 @@
 		}
 
 		// Fixed Matrix Configuration
-		// All cell positions (cx, cy) and dimensions (cardSize) are 100% strictly SQUARE and fixed
 		let cols = 0;
 		let rows = 0;
-		let step = 24; // Smaller, refined square cell step
-		let cardSize = 20; // Exact square dimension (width == height)
+		let step = 24; // Small refined square cell size
+		let cardSize = 20;
 		let cardRadius = 4;
 		let gridStartX = 0;
 		let gridStartY = 0;
 
-		// Water configuration:
-		// Baseline fluid depth: strictly 1/5 (20%) of height at rest
-		let baseSurfaceY = 0;
-		let surfaceOffsets = [];
-		let surfaceVelocities = [];
+		// SPH Particle Engine Arrays
+		// Modeled after Yusuke Endoh's IOCCC SPH formulation
+		let px, py, vx, vy, isWall, rho;
+		let totalParticles = 0;
+		let fluidCount = 0;
 
-		// Physical splash droplet particles (lift, arc, fall, and splash into water)
-		const splashes = [];
+		// SPH physical parameters in grid coordinate space
+		const H = 2.4; // Interaction smoothing radius (grid units)
+		const H2 = H * H;
+		const P = 0.85; // Incompressible pressure coefficient
+		const V = 0.38; // Fluid viscosity coefficient
+		const G = 0.22; // Gravity downwards
 
 		// Fixed grid cell activation and energy state matrices
 		let cellAlpha = [];
 		let cellEnergy = [];
 
 		function initGridAndFluid() {
-			// Baseline water depth: strictly 1/5 (20%) of banner height
-			const waterDepth = height * 0.20;
-			baseSurfaceY = height - waterDepth; // y = 0.80 * height
-
-			// Square cell sizing: slightly smaller, crisp square cards
-			step = width < 640 ? 20 : (width < 1100 ? 23 : 25);
+			// Small square cell dimensioning
+			step = width < 640 ? 20 : (width < 1100 ? 22 : 25);
 			cardSize = Math.round(step * 0.82);
 			cardRadius = Math.max(2, Math.round(cardSize * 0.20));
 
 			cols = Math.ceil(width / step);
 			rows = Math.ceil(height / step);
 
-			// Center the grid symmetrically
 			gridStartX = (width - cols * step) * 0.5;
 			gridStartY = (height - rows * step) * 0.5;
 
-			surfaceOffsets = new Float32Array(cols);
-			surfaceVelocities = new Float32Array(cols);
+			const _px = [];
+			const _py = [];
+			const _vx = [];
+			const _vy = [];
+			const _isWall = [];
+			const _rho = [];
 
+			// 1. Static boundary wall particles (prevent penetration, provide natural SPH repulsive cushion)
+			// Left boundary
+			for (let y = 0; y <= rows + 1; y += 0.9) {
+				_px.push(1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(0.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			}
+			// Right boundary
+			for (let y = 0; y <= rows + 1; y += 0.9) {
+				_px.push(cols - 1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(cols); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			}
+			// Bottom boundary
+			for (let x = 0; x <= cols; x += 0.9) {
+				_px.push(x); _py.push(rows - 0.5); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(x); _py.push(rows + 0.5); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			}
+
+			// 2. Coherent Fluid particles strictly filling bottom 1/5 (20%) at rest
+			// Y starts from rows * 0.80 down to rows - 1.2
+			const fluidStartY = rows * 0.80;
+			const targetFluid = Math.min(420, Math.max(160, Math.floor(cols * (rows * 0.20) * 1.15)));
+			let added = 0;
+
+			const pSpacing = 0.82;
+			for (let y = fluidStartY; y < rows - 1.2 && added < targetFluid; y += pSpacing) {
+				for (let x = 2.5; x < cols - 2.5 && added < targetFluid; x += pSpacing) {
+					_px.push(x + (Math.random() - 0.5) * 0.1);
+					_py.push(y + (Math.random() - 0.5) * 0.1);
+					_vx.push(0);
+					_vy.push(0);
+					_isWall.push(0);
+					_rho.push(0);
+					added++;
+				}
+			}
+
+			fluidCount = added;
+			totalParticles = _px.length;
+
+			px = new Float32Array(_px);
+			py = new Float32Array(_py);
+			vx = new Float32Array(_vx);
+			vy = new Float32Array(_vy);
+			isWall = new Uint8Array(_isWall);
+			rho = new Float32Array(_rho);
+
+			// Initialize grid matrix
 			cellAlpha = [];
 			cellEnergy = [];
 			for (let r = 0; r < rows; r++) {
 				const aRow = new Float32Array(cols);
 				const eRow = new Float32Array(cols);
-				const cy = gridStartY + r * step + step * 0.5;
-
+				const cy = r;
 				for (let c = 0; c < cols; c++) {
-					// Initially only cells in the bottom 1/5 are submerged
-					if (cy >= baseSurfaceY - step * 0.25) {
+					// Solid at bottom 1/5
+					if (cy >= fluidStartY - 0.5) {
 						aRow[c] = 1.0;
 					} else {
 						aRow[c] = 0.0;
@@ -258,9 +303,6 @@
 				cellAlpha.push(aRow);
 				cellEnergy.push(eRow);
 			}
-
-			ripples.length = 0;
-			splashes.length = 0;
 		}
 
 		function resize() {
@@ -276,28 +318,26 @@
 			initGridAndFluid();
 		}
 
-		// Theme Color and Gradient Palette:
-		// Lighter, more translucent, vibrant Material water tone
+		// Light, translucent Material tone
 		function getThemeGradientColor(energyRatio, depthRatio) {
 			const [pr, pg, pb] = primaryColor;
 
-			// Lighter base tone at the container bed (boosted with white/ambient light)
+			// Lighter base tone at container bed
 			const deepR = Math.round(pr * 0.55 + (255 - pr) * 0.35);
 			const deepG = Math.round(pg * 0.55 + (255 - pg) * 0.35);
 			const deepB = Math.round(pb * 0.55 + (255 - pb) * 0.45);
 
-			// Medium vibrant primary light
+			// Mid body tone
 			const midR = Math.round(pr * 0.75 + (255 - pr) * 0.50);
 			const midG = Math.round(pg * 0.75 + (255 - pg) * 0.50);
 			const midB = Math.round(pb * 0.75 + (255 - pb) * 0.60);
 
-			// Radiant, pale crest & splash highlight (bright pastel crest)
-			const crestR = Math.round(pr * 0.30 + 255 * 0.70);
-			const crestG = Math.round(pg * 0.30 + 255 * 0.70);
-			const crestB = Math.round(pb * 0.20 + 255 * 0.80);
+			// Bright crest/surge highlight
+			const crestR = Math.round(pr * 0.25 + 255 * 0.75);
+			const crestG = Math.round(pg * 0.25 + 255 * 0.75);
+			const crestB = Math.round(pb * 0.15 + 255 * 0.85);
 
-			// t blends depth with energy excitation
-			const t = Math.max(0, Math.min(1.0, (1.0 - depthRatio) * 0.50 + energyRatio * 0.65));
+			const t = Math.max(0, Math.min(1.0, (1.0 - depthRatio) * 0.52 + energyRatio * 0.65));
 
 			let r, g, b;
 			if (t < 0.5) {
@@ -315,7 +355,6 @@
 			return [r, g, b];
 		}
 
-		// Draw fixed-position, non-rotating SQUARE MDUI Card tile
 		function drawCardTile(cx, cy, size, r, g, b, alpha, outlineAlpha) {
 			const half = size * 0.5;
 			const cr = cardRadius;
@@ -339,7 +378,6 @@
 			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
 			ctx.fill();
 
-			// Clean, light Material stroke
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = `rgba(255, 255, 255, ${outlineAlpha})`;
 			ctx.stroke();
@@ -347,269 +385,190 @@
 
 		let time = 0;
 
-		function updatePhysics() {
-			time += 0.011;
+		function updateSPHPhysics() {
+			time += 0.016;
 
-			// Mouse tracking
+			// Mouse velocity & coordinates in grid units
+			let mouseGridX = -9999;
+			let mouseGridY = -9999;
+			let mSpeed = 0;
 			if (isHovered && prevMouseX > -1000) {
 				const dist = Math.hypot(mouseX - prevMouseX, mouseY - prevMouseY);
-				mouseSpeed = mouseSpeed * 0.8 + dist * 0.2;
-				mouseVx = (mouseX - prevMouseX) * 0.7;
-				mouseVy = (mouseY - prevMouseY) * 0.7;
-
-				// Spawn water ripples ONLY if mouse is near or in the water
-				if (mouseY > baseSurfaceY - 80 && mouseSpeed > 3.0 && Math.random() < 0.4) {
-					ripples.push({
-						x: mouseX,
-						y: Math.max(mouseY, baseSurfaceY),
-						radius: 6,
-						strength: Math.min(1.0, mouseSpeed * 0.12),
-						decay: 0.024
-					});
-					if (ripples.length > 20) ripples.shift();
-				}
-
-				// Vigorously flicking/lifting out of water creates bursts of airborne splashes
-				if (mouseY > baseSurfaceY - 60 && mouseVy < -2.4 && Math.random() < 0.45) {
-					const burstCount = 3 + Math.floor(Math.random() * 5);
-					for (let k = 0; k < burstCount; k++) {
-						const isHigh = Math.random() < 0.22; // Some burst high up across the screen
-						splashes.push({
-							x: mouseX + (Math.random() - 0.5) * 32,
-							y: Math.max(mouseY, baseSurfaceY - 30),
-							vx: mouseVx * 0.35 + (Math.random() - 0.5) * 7.5,
-							vy: isHigh ? -(12.0 + Math.random() * 7.0) : -(5.5 + Math.random() * 5.0),
-							life: 1.0
-						});
-					}
-				}
-			} else {
-				mouseSpeed *= 0.88;
-				mouseVx *= 0.85;
-				mouseVy *= 0.85;
+				mSpeed = Math.min(12, dist / step);
+				mouseVx = (mouseX - prevMouseX) / step;
+				mouseVy = (mouseY - prevMouseY) / step;
+				mouseGridX = (mouseX - gridStartX) / step;
+				mouseGridY = (mouseY - gridStartY) / step;
 			}
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			// Update water ripples
-			for (let i = ripples.length - 1; i >= 0; i--) {
-				const rp = ripples[i];
-				rp.radius += 4.5;
-				rp.strength -= rp.decay;
-				if (rp.strength <= 0) {
-					ripples.splice(i, 1);
-				}
-			}
+			// Large natural sloshing swing (gentle perpetual reservoir sway)
+			// Smooth stochastic gravity tilt: sloshes whole fluid body without artificial fireworks
+			const sway1 = Math.sin(time * 0.85) * Math.cos(time * 0.42);
+			const sway2 = Math.sin(time * 1.55 + 0.6) * 0.35;
+			const gx = (sway1 + sway2) * 0.22; // Substantial natural sloshing acceleration
 
-			// 1. Natural, Stochastic Wave & Water Sloshing Physics
-			// Enhanced autonomous wave sloshing amplitude without mouse interaction
-			const waveNoise1 = Math.sin(time * 0.65) * Math.cos(time * 0.32);
-			const waveNoise2 = Math.sin(time * 1.25 + 0.8) * 0.45;
-			const currentSlosh = (waveNoise1 + waveNoise2) * 1.35; // Larger natural sloshing swing
+			// Pass 1: Compute density field for all particles
+			for (let i = 0; i < totalParticles; i++) {
+				let r = isWall[i] ? 8.5 : 0.0;
+				const xi = px[i];
+				const yi = py[i];
 
-			const maxWaveClimb = height * 0.42; // Substantially larger wave climb along container walls
-			const tension = 0.042;
-			const springK = 0.018;
-			const damping = 0.978;
-
-			for (let c = 0; c < cols; c++) {
-				const colNorm = (c / (cols - 1)) * 2.0 - 1.0; // [-1.0, 1.0]
-				const absCol = Math.abs(colNorm);
-
-				// Fluid wall run-up & dynamic slamming reflection
-				const wallSide = colNorm < 0 ? -1.0 : 1.0;
-				const isPushingWall = (wallSide * currentSlosh) < 0;
-
-				let wallTarget = 0;
-				if (isPushingWall) {
-					const surgeProfile = Math.pow(absCol, 2.2);
-					wallTarget = -Math.abs(currentSlosh) * maxWaveClimb * surgeProfile;
-				} else {
-					const drawProfile = Math.pow(absCol, 1.3);
-					wallTarget = Math.abs(currentSlosh) * (height * 0.12) * drawProfile;
-				}
-
-				// Cross traveling swells & turbulence across the reservoir
-				const swell1 = Math.sin(c * 0.18 - time * 1.9 + waveNoise2) * (height * 0.032);
-				const swell2 = Math.cos(c * 0.32 + time * 1.5) * (height * 0.022);
-				const swell3 = Math.sin(c * 0.10 + time * 0.9) * (height * 0.026);
-
-				const targetWaveOffset = wallTarget + swell1 + swell2 + swell3;
-
-				const left = c > 0 ? surfaceOffsets[c - 1] : surfaceOffsets[c];
-				const right = c < cols - 1 ? surfaceOffsets[c + 1] : surfaceOffsets[c];
-
-				// Discrete wave equation with restoring force
-				const waveForce = -springK * (surfaceOffsets[c] - targetWaveOffset) + tension * (left + right - 2.0 * surfaceOffsets[c]);
-				surfaceVelocities[c] = (surfaceVelocities[c] + waveForce) * damping;
-			}
-
-			// Integrate wave velocities & generate realistic wall crash bursts
-			for (let c = 0; c < cols; c++) {
-				surfaceOffsets[c] += surfaceVelocities[c];
-
-				// Ceiling clamp for main water body
-				const minOffset = -(height * 0.46);
-				if (surfaceOffsets[c] < minOffset) {
-					surfaceOffsets[c] = minOffset;
-					surfaceVelocities[c] = 0;
-				}
-
-				// Optimized Wall Collision Splash Ejection:
-				// When surging wave hits left or right screen boundary, cast generous spray clusters inward!
-				const isWall = c <= 4 || c >= cols - 5;
-				const isCrestSurge = surfaceVelocities[c] < -1.4 || surfaceOffsets[c] < -(height * 0.18);
-
-				if (isWall && isCrestSurge && Math.random() < 0.22) {
-					// Substantial burst of flying droplets
-					const sprayCount = 4 + Math.floor(Math.random() * 8);
-					const inwardDir = c <= 4 ? 1 : -1;
-					for (let k = 0; k < sprayCount; k++) {
-						const isHigh = Math.random() < 0.26; // High spray arcs up across the screen
-						splashes.push({
-							x: c * step + (Math.random() - 0.5) * step,
-							y: baseSurfaceY + surfaceOffsets[c] - Math.random() * 10,
-							vx: inwardDir * (2.0 + Math.random() * 6.5), // Project inward into the reservoir
-							vy: isHigh ? -(13.0 + Math.random() * 8.0) : -(6.0 + Math.random() * 6.0),
-							life: 1.0
-						});
+				for (let j = 0; j < totalParticles; j++) {
+					const dx = xi - px[j];
+					const dy = yi - py[j];
+					const d2 = dx * dx + dy * dy;
+					if (d2 < H2) {
+						const w = 1.0 - Math.sqrt(d2) / H;
+						r += w * w;
 					}
 				}
+				rho[i] = Math.max(r, 0.4);
 			}
 
-			// 2. Physical mouse disturbance on water surface
-			if (isHovered && mouseY > baseSurfaceY - 60) {
-				const mouseCol = Math.max(0, Math.min(cols - 1, Math.round(mouseX / step)));
-				const influenceRadius = Math.max(2, Math.round(3 + mouseSpeed * 0.35));
+			// Pass 2: SPH Navier-Stokes Pressure & Viscosity Force Integration
+			for (let i = 0; i < totalParticles; i++) {
+				if (isWall[i]) continue;
 
-				for (let dc = -influenceRadius; dc <= influenceRadius; dc++) {
-					const c = mouseCol + dc;
-					if (c >= 0 && c < cols) {
-						const factor = 1.0 - Math.abs(dc) / influenceRadius;
-						surfaceVelocities[c] += (mouseVy * 0.28) * factor;
+				let fx = gx;
+				let fy = G;
+				const xi = px[i];
+				const yi = py[i];
+				const vxi = vx[i];
+				const vyi = vy[i];
+				const rho_i = rho[i];
+
+				for (let j = 0; j < totalParticles; j++) {
+					if (i === j) continue;
+					const dx = xi - px[j];
+					const dy = yi - py[j];
+					const d2 = dx * dx + dy * dy;
+					if (d2 < H2 && d2 > 0.0001) {
+						const dist = Math.sqrt(d2);
+						const w = 1.0 - dist / H;
+
+						// Yusuke Endoh pressure state equation (repulsive when density exceeds 3.0)
+						const p_term = w * (dist * (3.0 - rho_i - rho[j]) * P);
+						// Fluid viscosity
+						const v_term_x = (vx[j] - vxi) * V * w;
+						const v_term_y = (vy[j] - vyi) * V * w;
+
+						fx += (-(dx / dist) * p_term + v_term_x) / rho_i;
+						fy += (-(dy / dist) * p_term + v_term_y) / rho_i;
 					}
 				}
-			}
 
-			// 3. Update physical splashes (Ballistic parabolic trajectory: rise, arc, fall, splash into water)
-			for (let i = splashes.length - 1; i >= 0; i--) {
-				const sp = splashes[i];
-				sp.vy += 0.48; // Realistic gravity acceleration
-				sp.vx *= 0.992; // Air drag
-				sp.x += sp.vx;
-				sp.y += sp.vy;
-				sp.life -= 0.014;
+				// Mouse displacement and interaction (pushes water aside and carries waves upwards)
+				if (isHovered && mouseGridY > 0) {
+					const mdx = xi - mouseGridX;
+					const mdy = yi - mouseGridY;
+					const mdist2 = mdx * mdx + mdy * mdy;
+					const mRadius = 4.2; // Mouse influence radius in grid units
+					if (mdist2 < mRadius * mRadius && mdist2 > 0.01) {
+						const mdist = Math.sqrt(mdist2);
+						const mfactor = 1.0 - mdist / mRadius;
+						// Push away from cursor
+						fx += (mdx / mdist) * 1.8 * mfactor;
+						fy += (mdy / mdist) * 1.8 * mfactor;
+						// Transfer mouse momentum into water
+						fx += mouseVx * 0.65 * mfactor;
+						fy += mouseVy * 0.65 * mfactor;
 
-				const spCol = Math.floor(sp.x / step);
-				const waterLevel = (spCol >= 0 && spCol < cols) ? (baseSurfaceY + surfaceOffsets[spCol]) : baseSurfaceY;
-
-				// Land back into water: splashing down!
-				if (sp.y >= waterLevel && sp.vy > 0) {
-					if (spCol >= 0 && spCol < cols) {
-						surfaceVelocities[spCol] += Math.min(2.8, sp.vy * 0.22); // Impact impulse on water surface
-
-						// Secondary rebound spray
-						if (sp.vy > 8.0 && Math.random() < 0.25) {
-							splashes.push({
-								x: sp.x + (Math.random() - 0.5) * 16,
-								y: waterLevel - 4,
-								vx: (Math.random() - 0.5) * 4.0,
-								vy: -(2.5 + Math.random() * 3.5),
-								life: 0.6
-							});
+						if (mouseImpulse) {
+							// Burst on click
+							fx += (mdx / mdist) * 4.5 * mfactor;
+							fy += (mdy / mdist) * 4.5 * mfactor;
 						}
 					}
-					splashes.splice(i, 1);
-				} else if (sp.life <= 0 || sp.x < 0 || sp.x > width) {
-					splashes.splice(i, 1);
 				}
+
+				// Velocity integration with fluid damping
+				vx[i] = (vx[i] + fx * 0.12) * 0.985;
+				vy[i] = (vy[i] + fy * 0.12) * 0.985;
+
+				px[i] += vx[i];
+				py[i] += vy[i];
+
+				// Physical boundary safety constraints (walls)
+				if (px[i] < 1.2) { px[i] = 1.2; vx[i] = -vx[i] * 0.25; }
+				if (px[i] > cols - 1.2) { px[i] = cols - 1.2; vx[i] = -vx[i] * 0.25; }
+				if (py[i] < 0.6) { py[i] = 0.6; vy[i] = 0; }
+				if (py[i] > rows - 0.8) { py[i] = rows - 0.8; vy[i] = -vy[i] * 0.15; }
 			}
+
+			mouseImpulse = false;
 		}
 
 		function render() {
-			updatePhysics();
+			updateSPHPhysics();
 
 			ctx.clearRect(0, 0, width, height);
 
-			// Spatial occupancy map for physical splash droplets
-			const splashOccupancy = new Uint8Array(rows * cols);
-			for (let i = 0; i < splashes.length; i++) {
-				const sp = splashes[i];
-				const c = Math.floor((sp.x - gridStartX) / step);
-				const r = Math.floor((sp.y - gridStartY) / step);
-				if (c >= 0 && c < cols && r >= 0 && r < rows) {
-					splashOccupancy[r * cols + c] = 1;
+			// 1. Grid Occupancy & Velocity Rasterization (SPH Particles -> Fixed Voxel Matrix)
+			const occupancy = new Float32Array(cols * rows);
+			const cellVel = new Float32Array(cols * rows);
+
+			for (let i = 0; i < totalParticles; i++) {
+				if (isWall[i]) continue;
+				const gx = px[i];
+				const gy = py[i];
+				const baseC = Math.round(gx);
+				const baseR = Math.round(gy);
+				const speed = Math.hypot(vx[i], vy[i]);
+
+				// Splat particle onto surrounding square matrix cells
+				for (let dr = -1; dr <= 1; dr++) {
+					const r = baseR + dr;
+					if (r < 0 || r >= rows) continue;
+					for (let dc = -1; dc <= 1; dc++) {
+						const c = baseC + dc;
+						if (c < 0 || c >= cols) continue;
+						const d = Math.hypot(gx - c, gy - r);
+						if (d < 1.35) {
+							const w = (1.35 - d) / 1.35;
+							const idx = r * cols + c;
+							occupancy[idx] += w * 0.95;
+							cellVel[idx] = Math.max(cellVel[idx], speed);
+						}
+					}
 				}
 			}
 
-			// Render the fixed grid matrix:
-			// STRICT RULE: Color changes occur ONLY where water exists. No water = zero color change.
+			// 2. Render Fixed Square MDUI Cards
+			// STRICT: Cells render and change color ONLY where water physically exists!
 			for (let r = 0; r < rows; r++) {
 				const cy = gridStartY + r * step + step * 0.5;
-				// Depth ratio relative to full reservoir
-				const depthRatio = Math.max(0, Math.min(1.0, (cy - height * 0.35) / (height * 0.65)));
+				// Depth ratio relative to fluid bed
+				const depthRatio = Math.max(0, Math.min(1.0, r / rows));
 
 				for (let c = 0; c < cols; c++) {
 					const cx = gridStartX + c * step + step * 0.5;
-
-					// Dynamic surface Y at this column (sloshing + wall climb)
-					const currentSurfaceY = baseSurfaceY + surfaceOffsets[c];
-
-					// Check if this cell contains water (submerged in physical wave or occupied by flying splash)
-					const isSubmerged = cy >= (currentSurfaceY - step * 0.30);
-					const hasSplash = splashOccupancy[r * cols + c] === 1;
-					const hasWater = isSubmerged || hasSplash;
+					const idx = r * cols + c;
+					const occ = occupancy[idx];
+					const hasWater = occ > 0.42;
 
 					if (!hasWater) {
-						// STRICT: Empty air cell. Zero color reaction, no mouse hover glow.
-						cellAlpha[r][c] += (0.0 - cellAlpha[r][c]) * 0.32;
+						// STRICT: Empty air. No color, no hover glow, fade to zero.
+						cellAlpha[r][c] += (0.0 - cellAlpha[r][c]) * 0.40;
 						cellEnergy[r][c] = 0.0;
 					} else {
-						// 1. Natural internal fluid convection currents
-						const naturalFlow = Math.sin(r * 0.45 + time * 1.5) * 0.35 + Math.cos(c * 0.35 - time * 1.2) * 0.35;
-						const surfaceMovement = Math.abs(surfaceVelocities[c]) * 0.20;
-						let kineticEnergy = Math.min(0.85, surfaceMovement + Math.abs(naturalFlow) * 0.35 + (hasSplash ? 0.90 : 0.0));
-
-						// 2. Interactive mouse color excitement (ONLY applies to water-filled cells)
-						let interactionEnergy = 0;
-						if (isHovered) {
-							const dx = cx - mouseX;
-							const dy = cy - mouseY;
-							const dist = Math.hypot(dx, dy);
-							const mouseRadius = 140;
-
-							if (dist < mouseRadius) {
-								const proximity = 1.0 - dist / mouseRadius;
-								interactionEnergy += Math.pow(proximity, 1.4) * (0.65 + mouseSpeed * 0.08);
-							}
-						}
-
-						// Ripples propagating inside water
-						for (let j = 0; j < ripples.length; j++) {
-							const rp = ripples[j];
-							const d = Math.hypot(cx - rp.x, cy - rp.y);
-							const diff = Math.abs(d - rp.radius);
-							if (diff < 42) {
-								const ring = Math.cos((diff / 42) * Math.PI * 0.5) * rp.strength;
-								interactionEnergy += ring * 0.75;
-							}
-						}
-
-						const totalEnergy = Math.max(0, Math.min(1.0, kineticEnergy + interactionEnergy));
+						// Natural fluid kinetic energy based on SPH velocity
+						const vSpeed = cellVel[idx];
+						const fluidKinetic = Math.min(1.0, vSpeed * 0.65 + (occ > 1.2 ? 0.35 : 0.15));
 
 						cellAlpha[r][c] += (1.0 - cellAlpha[r][c]) * 0.45;
-						cellEnergy[r][c] += (totalEnergy - cellEnergy[r][c]) * 0.22;
+						cellEnergy[r][c] += (fluidKinetic - cellEnergy[r][c]) * 0.25;
 					}
 
 					const currentA = cellAlpha[r][c];
 
 					if (currentA > 0.04) {
-						// Lighter, translucent Material tone
+						// Render translucent Material square tile
 						const [cr, cg, cb] = getThemeGradientColor(cellEnergy[r][c], depthRatio);
-						const cardAlpha = Math.max(0.52, Math.min(0.88, currentA));
-						const outlineA = Math.max(0.14, Math.min(0.40, 0.14 + cellEnergy[r][c] * 0.26));
+						const cardAlpha = Math.max(0.55, Math.min(0.92, currentA));
+						const outlineA = Math.max(0.14, Math.min(0.42, 0.14 + cellEnergy[r][c] * 0.28));
 
-						// Strictly fixed square position and shape
 						drawCardTile(cx, cy, cardSize, cr, cg, cb, cardAlpha, outlineA);
 					}
 				}
@@ -641,35 +600,7 @@
 
 		root.addEventListener("mousedown", (e) => {
 			if (e.button === 0) {
-				const rect = root.getBoundingClientRect();
-				const clickX = e.clientX - rect.left;
-				const clickY = e.clientY - rect.top;
-
-				// Click produces vigorous splash burst when hitting water
-				if (clickY > baseSurfaceY - 60) {
-					ripples.push({
-						x: clickX,
-						y: Math.max(clickY, baseSurfaceY),
-						radius: 8,
-						strength: 1.3,
-						decay: 0.02
-					});
-
-					const c = Math.max(0, Math.min(cols - 1, Math.round(clickX / step)));
-					surfaceVelocities[c] -= 14.0;
-
-					const count = 8 + Math.floor(Math.random() * 8);
-					for (let k = 0; k < count; k++) {
-						const isHigh = Math.random() < 0.28;
-						splashes.push({
-							x: clickX + (Math.random() - 0.5) * 36,
-							y: Math.max(clickY, baseSurfaceY - 30),
-							vx: (Math.random() - 0.5) * 9.0,
-							vy: isHigh ? -(13.0 + Math.random() * 7.0) : -(5.5 + Math.random() * 5.5),
-							life: 1.0
-						});
-					}
-				}
+				mouseImpulse = true;
 			}
 		});
 
@@ -680,30 +611,7 @@
 				mouseX = e.touches[0].clientX - rect.left;
 				mouseY = e.touches[0].clientY - rect.top;
 				isHovered = true;
-
-				if (mouseY > baseSurfaceY - 60) {
-					ripples.push({
-						x: mouseX,
-						y: Math.max(mouseY, baseSurfaceY),
-						radius: 8,
-						strength: 1.3,
-						decay: 0.02
-					});
-					const c = Math.max(0, Math.min(cols - 1, Math.round(mouseX / step)));
-					surfaceVelocities[c] -= 14.0;
-
-					const count = 7 + Math.floor(Math.random() * 7);
-					for (let k = 0; k < count; k++) {
-						const isHigh = Math.random() < 0.28;
-						splashes.push({
-							x: mouseX + (Math.random() - 0.5) * 36,
-							y: Math.max(mouseY, baseSurfaceY - 30),
-							vx: (Math.random() - 0.5) * 9.0,
-							vy: isHigh ? -(13.0 + Math.random() * 7.0) : -(5.5 + Math.random() * 5.5),
-							life: 1.0
-						});
-					}
-				}
+				mouseImpulse = true;
 			}
 		}, { passive: true });
 
