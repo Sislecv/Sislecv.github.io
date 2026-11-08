@@ -256,8 +256,8 @@
 		let particleCount = 420;
 
 		function initGridAndFluid() {
-			// Grid covers the lower 58% of the container (leaving upper space for splashing & custom content)
-			gridStartY = height * 0.44;
+			// Grid covers the lower ~62% of the container (leaving upper space for splashing & custom content)
+			gridStartY = height * 0.38;
 			const activeH = height - gridStartY - 12;
 
 			const targetStepX = width < 640 ? 36 : (width < 1100 ? 44 : 48);
@@ -267,7 +267,7 @@
 			stepX = width / cols;
 			cardW = Math.round(stepX * 0.82);
 
-			rows = Math.max(6, Math.floor(activeH / targetStepY));
+			rows = Math.max(8, Math.floor(activeH / targetStepY));
 			stepY = activeH / rows;
 			cardH = Math.round(stepY * 0.82);
 			cardRadius = Math.round(Math.min(cardW, cardH) * 0.28);
@@ -280,18 +280,19 @@
 				cellSpeed.push(new Float32Array(cols));
 			}
 
-			// Initialize particles: settled immediately at container bottom (NO dropping from above)
-			particles = [];
-			particleCount = width < 640 ? 280 : 420;
-
-			const bottomBedDepth = rows * stepY * 0.45; // Water depth in bottom ~45% of active grid
-			const fluidBedTop = height - bottomBedDepth - 16;
+			// Water settles to fill ~2/5 (40%) of the total Banner height
+			const waterDepth = height * 0.40; // Exactly 2/5 of banner
+			const fluidBedTop = height - waterDepth - 16;
 			const usableW = width - 32;
 
-			const pCols = Math.ceil(Math.sqrt(particleCount * (usableW / bottomBedDepth)));
+			// Increase particles proportionally to fill the 2/5 volume comfortably
+			particleCount = width < 640 ? 480 : 760;
+			particles = [];
+
+			const pCols = Math.ceil(Math.sqrt(particleCount * (usableW / waterDepth)));
 			const pRows = Math.ceil(particleCount / pCols);
 			const dx = usableW / pCols;
-			const dy = bottomBedDepth / pRows;
+			const dy = waterDepth / pRows;
 
 			for (let r = 0; r < pRows; r++) {
 				for (let c = 0; c < pCols; c++) {
@@ -564,7 +565,7 @@
 			// Telemetry status
 			if (telemetry) {
 				const statusTag = isHovered && mouseSpeed > 3 ? "SPLASHING & CRASHING" : "SLOSHING DYNAMICS";
-				telemetry.textContent = `FLUID·VOXEL // ACTIVE TILES: ${activeCardsCount} // PARTICLES: ${particleCount} // ${statusTag}`;
+				telemetry.textContent = `FLUID·VOXEL // RESERVOIR: 40% (2/5) // ACTIVE TILES: ${activeCardsCount} // ${statusTag}`;
 			}
 
 			let mouseSpeed = Math.hypot(mouseVx, mouseVy);
