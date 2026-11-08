@@ -1,23 +1,27 @@
 ---
-// GravityMembraneBanner.astro: Material Card-based SPH Fluid Dynamics Simulation
-// Inspried by Yusuke Endoh's classic SPH fluid physics.
-// The banner acts as a spacious, partially-filled container with fluid sloshing at the bottom,
-// leaving the upper area open for custom content (via slot).
+// GravityMembraneBanner.astro: Material Card-based Fluid Dynamics Banner
+// Features:
+// - Fixed-position MDUI card grid at container bottom (no rotating/scattering)
+// - Dynamic sizing & fluid swelling (cards expand/contract with fluid momentum)
+// - Strict Material Theme color & gradient transitions
+// - Perpetual, continuous fluid flow even without interaction
+// - Immediate initialization at bottom (no dropping down from top)
+// - Upper spacious container slot for custom user elements
 ---
 
 <div class="gravity-fullscreen-hero" id="gravity-hero-container">
 	<div class="gravity-hero-viewport" id="gravity-banner-root">
-		<!-- Canvas simulating fluid particles at bottom of container -->
+		<!-- Canvas rendering the fluid MDUI-card grid at bottom -->
 		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
 
-		<!-- Upper spacious zone: open for custom user content / elements -->
+		<!-- Upper spacious zone: reserved for user-defined content / elements -->
 		<div class="banner-content-container">
 			<slot />
 		</div>
 
 		<!-- Subtle technical telemetry at bottom corner -->
 		<div class="fluid-telemetry">
-			<span class="telemetry-badge" id="fluid-telemetry-metric">SPH·FLUID // PARTICLES: 520 // PRESSURE: EQUILIBRIUM</span>
+			<span class="telemetry-badge" id="fluid-telemetry-metric">FLUID·GRID // MATERIAL DESIGN // CONTINUOUS FLOW</span>
 		</div>
 
 		<!-- Minimalist scroll down indicator -->
@@ -49,16 +53,16 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle at 50% 35%, rgba(24, 25, 34, 0.96) 0%, rgba(10, 11, 16, 0.99) 100%);
+		background: radial-gradient(circle at 50% 30%, rgba(24, 25, 34, 0.96) 0%, rgba(10, 11, 16, 0.99) 100%);
 		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.18);
 		user-select: none;
 		-webkit-user-select: none;
-		cursor: crosshair;
+		cursor: default;
 		overflow: hidden;
 	}
 
 	:global(.mdui-theme-dark) .gravity-hero-viewport {
-		background: radial-gradient(circle at 50% 35%, rgba(18, 19, 28, 0.96) 0%, rgba(7, 8, 12, 0.99) 100%);
+		background: radial-gradient(circle at 50% 30%, rgba(18, 19, 28, 0.96) 0%, rgba(7, 8, 12, 0.99) 100%);
 		border-bottom-color: rgba(255, 255, 255, 0.08);
 	}
 
@@ -74,7 +78,7 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 60%; /* Upper 60% open for user content */
+		height: 58%; /* Upper 58% open for user content */
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -103,8 +107,8 @@
 	}
 
 	.telemetry-badge {
-		color: #38bdf8;
-		text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+		color: rgb(var(--mdui-color-primary, 11, 87, 208));
+		text-shadow: 0 0 10px rgba(var(--mdui-color-primary, 11, 87, 208), 0.35);
 	}
 
 	/* Minimalist ASCII scroll indicator */
@@ -117,8 +121,8 @@
 		border: none;
 		padding: 12px;
 		cursor: pointer;
-		color: #38bdf8;
-		opacity: 0.6;
+		color: rgb(var(--mdui-color-primary, 11, 87, 208));
+		opacity: 0.65;
 		transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
 		z-index: 5;
 		outline: none;
@@ -126,7 +130,6 @@
 
 	.gravity-scroll-down:hover {
 		opacity: 1;
-		color: #67e8f9;
 		transform: translateX(-50%) translateY(3px);
 	}
 
@@ -200,65 +203,69 @@
 		let mouseY = -9999;
 		let prevMouseX = -9999;
 		let prevMouseY = -9999;
-		let mouseVx = 0;
-		let mouseVy = 0;
+		let mouseSpeed = 0;
 		let isHovered = false;
-		let isPressed = false;
-		let splashTrigger = false;
 
-		// SPH Fluid Physics Constants
-		const H = 32.0;           // Interaction smoothing radius
-		const H2 = H * H;
-		const REST_DENS = 0.0016; // Rest density
-		const GAS_CONST = 240.0;  // Pressure constant
-		const VISC = 0.45;        // Fluid viscosity
-		const GRAV = 0.26;        // Downward gravity towards container bottom
-		const DT = 0.65;          // Time step
+		// Active interactive ripples triggered by mouse movement or clicks
+		const ripples = [];
 
-		// Spatial hash grid for O(N) neighbor queries
-		const CELL_SIZE = H;
-		let gridCols = 0;
-		let gridRows = 0;
-		let grid = [];
+		// Theme colors extracted dynamically from Material tokens
+		let primaryColor = [11, 87, 208];
 
-		class SPHParticle {
-			constructor(x, y) {
-				this.x = x;
-				this.y = y;
-				this.vx = (Math.random() - 0.5) * 1.5;
-				this.vy = Math.random() * 0.5;
-				this.fx = 0;
-				this.fy = 0;
-				this.rho = REST_DENS;
-				this.pressure = 0;
-				this.speed = 0;
-				this.angle = 0;
+		function parseRgb(str, fallback) {
+			if (!str) return fallback;
+			const m = str.match(/[\d.]+/g);
+			if (m && m.length >= 3) {
+				return [parseFloat(m[0]), parseFloat(m[1]), parseFloat(m[2])];
+			}
+			return fallback;
+		}
+
+		function updateTheme() {
+			const cs = getComputedStyle(document.documentElement);
+			primaryColor = parseRgb(cs.getPropertyValue("--mdui-color-primary").trim(), [11, 87, 208]);
+		}
+
+		// Fixed MDUI Grid Node representing a stable mini-card tile at container bottom
+		class FixedCardTile {
+			constructor(gx, gy, col, row) {
+				this.originX = gx;
+				this.originY = gy;
+				this.col = col;
+				this.row = row;
+				this.x = gx;
+				this.y = gy;
+				this.energy = 0;
+				this.currentW = 34;
+				this.currentH = 34;
 			}
 		}
 
-		let particles = [];
-		const PARTICLE_COUNT = 480;
+		let tiles = [];
+		let stepX = 48;
+		let stepY = 48;
+		let cols = 0;
+		let rows = 0;
 
-		function initParticles() {
-			particles = [];
-			// Fluid initially occupies the bottom 28% of the container, spanning full width
-			const bottomDepth = height * 0.28;
-			const startY = height - bottomDepth;
-			const paddingX = 24;
-			const usableWidth = width - paddingX * 2;
+		function initGrid() {
+			tiles = [];
+			// Water sits completely at the bottom of the container (lower ~42% of banner)
+			const fluidTopY = height * 0.58;
+			const fluidHeight = height - fluidTopY - 16; // 16px bottom padding
 
-			// Arrange particles in staggered grid at container bottom
-			const cols = Math.ceil(Math.sqrt(PARTICLE_COUNT * (usableWidth / bottomDepth)));
-			const rows = Math.ceil(PARTICLE_COUNT / cols);
-			const stepX = usableWidth / cols;
-			const stepY = (bottomDepth - 20) / rows;
+			// Card spacing: adaptive between 42px and 52px
+			const targetStep = width < 640 ? 38 : (width < 1100 ? 46 : 52);
+			cols = Math.floor(width / targetStep);
+			stepX = width / cols;
+
+			rows = Math.max(3, Math.floor(fluidHeight / targetStep));
+			stepY = fluidHeight / rows;
 
 			for (let r = 0; r < rows; r++) {
+				const gy = fluidTopY + r * stepY + stepY * 0.5;
 				for (let c = 0; c < cols; c++) {
-					if (particles.length >= PARTICLE_COUNT) break;
-					const px = paddingX + c * stepX + (r % 2) * (stepX * 0.5) + (Math.random() - 0.5) * 4;
-					const py = startY + r * stepY + (Math.random() - 0.5) * 4;
-					particles.push(new SPHParticle(px, py));
+					const gx = c * stepX + stepX * 0.5;
+					tiles.push(new FixedCardTile(gx, gy, c, r));
 				}
 			}
 		}
@@ -273,299 +280,212 @@
 			canvas.height = Math.round(height * dpr);
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-			gridCols = Math.ceil(width / CELL_SIZE) + 2;
-			gridRows = Math.ceil(height / CELL_SIZE) + 2;
-
-			initParticles();
+			initGrid();
 		}
 
-		// Material Design Palette for Fluid Depth & Kinetic Energy:
-		// Deep Bed: Deep Sapphire / Navy [20, 60, 140]
-		// Mid Water: Bright Cyan / Turquoise [6, 182, 212]
-		// Surface & Wavelets: Vibrant Mint [16, 185, 129]
-		// Airborne Splashes / Agitation: Coral Rose [244, 63, 94] to Golden Amber [251, 191, 36]
-		function getFluidParticleColor(yPos, speedRatio) {
-			const depthRatio = Math.max(0, Math.min(1, (height - yPos) / (height * 0.45))); // 0=bottom, 1=high surface/air
+		// Theme Color and Gradient Interpolation:
+		// Base: Deep rich shade of theme color
+		// Mid: Standard pure theme color
+		// Peak / Crest: High-illuminance sunlit tint (tinted towards crisp white-blue)
+		function getThemeGradientColor(t) {
+			const clampedT = Math.max(0, Math.min(1, t));
+			const [pr, pg, pb] = primaryColor;
+
+			// Base deep tone
+			const deepR = Math.round(pr * 0.35);
+			const deepG = Math.round(pg * 0.4);
+			const deepB = Math.round(pb * 0.55);
+
+			// Peak highlighted tint
+			const peakR = Math.round(pr + (255 - pr) * 0.65);
+			const peakG = Math.round(pg + (255 - pg) * 0.65);
+			const peakB = Math.round(pb + (255 - pb) * 0.75);
 
 			let r, g, b;
-			if (speedRatio > 0.45 || depthRatio > 0.75) {
-				// Airborne splash or high energy agitation
-				const t = Math.min(1, (speedRatio - 0.3) * 1.5);
-				r = Math.round(244 + (251 - 244) * t);
-				g = Math.round(63 + (191 - 63) * t);
-				b = Math.round(94 + (36 - 94) * t);
-			} else if (depthRatio > 0.35) {
-				// Mid water toward surface: Mint to Cyan
-				const t = (depthRatio - 0.35) / 0.4;
-				r = Math.round(6 + (16 - 6) * t);
-				g = Math.round(182 + (185 - 182) * t);
-				b = Math.round(212 + (129 - 212) * t);
+			if (clampedT < 0.5) {
+				// Deep to Primary
+				const subT = clampedT / 0.5;
+				r = Math.round(deepR + (pr - deepR) * subT);
+				g = Math.round(deepG + (pg - deepG) * subT);
+				b = Math.round(deepB + (pb - deepB) * subT);
 			} else {
-				// Deep bottom bed: Deep Navy into Ocean Cyan
-				const t = depthRatio / 0.35;
-				r = Math.round(20 + (6 - 20) * t);
-				g = Math.round(60 + (182 - 60) * t);
-				b = Math.round(140 + (212 - 140) * t);
+				// Primary to Highlight Peak
+				const subT = (clampedT - 0.5) / 0.5;
+				r = Math.round(pr + (peakR - pr) * subT);
+				g = Math.round(pg + (peakG - pg) * subT);
+				b = Math.round(pb + (peakB - pb) * subT);
 			}
 
 			return [r, g, b];
 		}
 
-		// Draw single MDUI mini-card tile
-		function drawMiniCard(cx, cy, w, h, radius, rotAngle, r, g, b, alpha) {
-			ctx.save();
-			ctx.translate(cx, cy);
-			ctx.rotate(rotAngle);
-
+		// Draw a solid, perfectly horizontal mini MDUI Card (NO rotation, clean Material shape)
+		function drawFixedCard(cx, cy, w, h, radius, r, g, b, alpha, outlineAlpha) {
 			const halfW = w * 0.5;
 			const halfH = h * 0.5;
 			const cr = Math.min(radius, halfW, halfH);
 
 			ctx.beginPath();
 			if (typeof ctx.roundRect === "function") {
-				ctx.roundRect(-halfW, -halfH, w, h, cr);
+				ctx.roundRect(cx - halfW, cy - halfH, w, h, cr);
 			} else {
-				ctx.moveTo(-halfW + cr, -halfH);
-				ctx.lineTo(halfW - cr, -halfH);
-				ctx.quadraticCurveTo(halfW, -halfH, halfW, -halfH + cr);
-				ctx.lineTo(halfW, halfH - cr);
-				ctx.quadraticCurveTo(halfW, halfH, halfW - cr, halfH);
-				ctx.lineTo(-halfW + cr, halfH);
-				ctx.quadraticCurveTo(-halfW, halfH, -halfW, halfH - cr);
-				ctx.lineTo(-halfW, -halfH + cr);
-				ctx.quadraticCurveTo(-halfW, -halfH, -halfW + cr, -halfH);
+				ctx.moveTo(cx - halfW + cr, cy - halfH);
+				ctx.lineTo(cx + halfW - cr, cy - halfH);
+				ctx.quadraticCurveTo(cx + halfW, cy - halfH, cx + halfW, cy - halfH + cr);
+				ctx.lineTo(cx + halfW, cy + halfH - cr);
+				ctx.quadraticCurveTo(cx + halfW, cy + halfH, cx + halfW - cr, cy + halfH);
+				ctx.lineTo(cx - halfW + cr, cy + halfH);
+				ctx.quadraticCurveTo(cx - halfW, cy + halfH, cx - halfW, cy + halfH - cr);
+				ctx.lineTo(cx - halfW, cy - halfH + cr);
+				ctx.quadraticCurveTo(cx - halfW, cy - halfH, cx - halfW + cr, cy - halfH);
 				ctx.closePath();
 			}
 
-			// Solid Card Fill
+			// Card Solid Fill
 			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
 			ctx.fill();
 
-			// 1px Material subtle outline
+			// 1px Material Design Card Edge Outline
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(0.3, alpha * 0.35)})`;
+			ctx.strokeStyle = `rgba(255, 255, 255, ${outlineAlpha})`;
 			ctx.stroke();
-
-			ctx.restore();
 		}
 
-		function updatePhysics() {
-			// Track mouse velocity
+		let time = 0;
+
+		function render() {
+			time += 0.016;
+
+			// Mouse velocity calculation
 			if (isHovered && prevMouseX > -1000) {
-				mouseVx = (mouseX - prevMouseX) * 0.6;
-				mouseVy = (mouseY - prevMouseY) * 0.6;
+				const dist = Math.hypot(mouseX - prevMouseX, mouseY - prevMouseY);
+				mouseSpeed = mouseSpeed * 0.8 + dist * 0.2;
+
+				if (mouseSpeed > 3.0) {
+					ripples.push({
+						x: mouseX,
+						y: mouseY,
+						radius: 10,
+						strength: Math.min(1.0, mouseSpeed * 0.12),
+						decay: 0.025
+					});
+					if (ripples.length > 25) ripples.shift();
+				}
 			} else {
-				mouseVx *= 0.85;
-				mouseVy *= 0.85;
+				mouseSpeed *= 0.85;
 			}
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			// Clear spatial grid
-			const totalCells = gridCols * gridRows;
-			grid = new Array(totalCells);
-			for (let k = 0; k < totalCells; k++) grid[k] = [];
-
-			// Insert particles into grid cells
-			for (let i = 0; i < particles.length; i++) {
-				const p = particles[i];
-				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(p.x / CELL_SIZE)));
-				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(p.y / CELL_SIZE)));
-				const idx = gy * gridCols + gx;
-				grid[idx].push(i);
+			// Update interactive wave ripples
+			for (let i = ripples.length - 1; i >= 0; i--) {
+				const rp = ripples[i];
+				rp.radius += 5.5;
+				rp.strength -= rp.decay;
+				if (rp.strength <= 0) {
+					ripples.splice(i, 1);
+				}
 			}
-
-			// Precomputed kernel coefficients
-			const POLY6 = 315.0 / (64.0 * Math.PI * Math.pow(H, 9));
-			const SPIKY_GRAD = -45.0 / (Math.PI * Math.pow(H, 6));
-			const VISC_LAP = 45.0 / (Math.PI * Math.pow(H, 6));
-
-			// 1. Calculate Density and Pressure
-			for (let i = 0; i < particles.length; i++) {
-				const pi = particles[i];
-				let rho = 0;
-
-				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(pi.x / CELL_SIZE)));
-				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(pi.y / CELL_SIZE)));
-
-				// Neighbor 3x3 search
-				for (let dy = -1; dy <= 1; dy++) {
-					const ny = gy + dy;
-					if (ny < 0 || ny >= gridRows) continue;
-					for (let dx = -1; dx <= 1; dx++) {
-						const nx = gx + dx;
-						if (nx < 0 || nx >= gridCols) continue;
-						const cell = grid[ny * gridCols + nx];
-						for (let k = 0; k < cell.length; k++) {
-							const pj = particles[cell[k]];
-							const rx = pi.x - pj.x;
-							const ry = pi.y - pj.y;
-							const r2 = rx * rx + ry * ry;
-							if (r2 < H2) {
-								rho += Math.pow(H2 - r2, 3);
-							}
-						}
-					}
-				}
-
-				pi.rho = Math.max(rho * POLY6, REST_DENS);
-				pi.pressure = GAS_CONST * (pi.rho - REST_DENS);
-			}
-
-			// 2. Calculate Forces (Pressure Gradient + Viscosity + Gravity)
-			for (let i = 0; i < particles.length; i++) {
-				const pi = particles[i];
-				let f_px = 0;
-				let f_py = 0;
-				let f_vx = 0;
-				let f_vy = 0;
-
-				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(pi.x / CELL_SIZE)));
-				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(pi.y / CELL_SIZE)));
-
-				for (let dy = -1; dy <= 1; dy++) {
-					const ny = gy + dy;
-					if (ny < 0 || ny >= gridRows) continue;
-					for (let dx = -1; dx <= 1; dx++) {
-						const nx = gx + dx;
-						if (nx < 0 || nx >= gridCols) continue;
-						const cell = grid[ny * gridCols + nx];
-						for (let k = 0; k < cell.length; k++) {
-							const j = cell[k];
-							if (i === j) continue;
-							const pj = particles[j];
-							const rx = pi.x - pj.x;
-							const ry = pi.y - pj.y;
-							const r = Math.hypot(rx, ry);
-
-							if (r < H && r > 0.001) {
-								const p_term = (pi.pressure + pj.pressure) / (2.0 * pj.rho);
-								const gradW = SPIKY_GRAD * Math.pow(H - r, 2);
-								f_px -= (rx / r) * p_term * gradW;
-								f_py -= (ry / r) * p_term * gradW;
-
-								const lapW = VISC_LAP * (H - r);
-								f_vx += VISC * (pj.vx - pi.vx) / pj.rho * lapW;
-								f_vy += VISC * (pj.vy - pi.vy) / pj.rho * lapW;
-							}
-						}
-					}
-				}
-
-				// Mouse stirring / splash force
-				let mouseFx = 0;
-				let mouseFy = 0;
-				if (isHovered) {
-					const mx = pi.x - mouseX;
-					const my = pi.y - mouseY;
-					const mDist = Math.hypot(mx, my);
-					const mouseRadius = 90;
-
-					if (mDist < mouseRadius && mDist > 0.1) {
-						const mFactor = 1.0 - mDist / mouseRadius;
-						// Repulsion push
-						mouseFx += (mx / mDist) * mFactor * 16.0;
-						mouseFy += (my / mDist) * mFactor * 16.0;
-						// Impart mouse velocity to fluid
-						mouseFx += mouseVx * mFactor * 1.5;
-						mouseFy += mouseVy * mFactor * 1.5;
-
-						if (splashTrigger) {
-							// Explosive upward splash on click
-							mouseFy -= mFactor * 32.0;
-							mouseFx += (Math.random() - 0.5) * 20.0;
-						}
-					}
-				}
-
-				// Total acceleration
-				const ax = (f_px + f_vx + mouseFx);
-				const ay = (f_py + f_vy + mouseFy) + GRAV;
-
-				// Integration
-				pi.vx = (pi.vx + ax * DT) * 0.992;
-				pi.vy = (pi.vy + ay * DT) * 0.992;
-
-				pi.x += pi.vx * DT;
-				pi.y += pi.vy * DT;
-
-				// Boundary Collisions (Sides and bottom of container)
-				const wallDamping = -0.42;
-				// Bottom bed
-				if (pi.y > height - 12) {
-					pi.y = height - 12;
-					pi.vy *= wallDamping;
-				}
-				// Left container wall
-				if (pi.x < 10) {
-					pi.x = 10;
-					pi.vx *= wallDamping;
-				}
-				// Right container wall
-				if (pi.x > width - 10) {
-					pi.x = width - 10;
-					pi.vx *= wallDamping;
-				}
-
-				pi.speed = Math.hypot(pi.vx, pi.vy);
-				pi.angle = Math.atan2(pi.vy, pi.vx);
-			}
-
-			splashTrigger = false;
-		}
-
-		function render() {
-			updatePhysics();
 
 			ctx.clearRect(0, 0, width, height);
 
-			let totalKinetic = 0;
-			let maxSpeed = 0;
+			let avgEnergy = 0;
 
-			// Render each particle as a mini MDUI Card tile
-			for (let i = 0; i < particles.length; i++) {
-				const p = particles[i];
-				totalKinetic += p.speed;
-				if (p.speed > maxSpeed) maxSpeed = p.speed;
+			// Continuous Perpetual Fluid Dynamics (runs constantly without interaction)
+			// Multi-harmonic stream waves flowing across the bottom lattice
+			const freqX1 = 0.007;
+			const freqY1 = 0.016;
+			const freqX2 = 0.014;
+			const freqY2 = 0.011;
 
-				const speedRatio = Math.min(1.0, p.speed / 5.5);
-				
-				// Size dynamics:
-				// Calm: ~10px mini card
-				// High speed / agitation: ~16px-20px expanded card
-				const cardW = 9.5 + speedRatio * 7.5;
-				const cardH = 8.5 + speedRatio * 4.5;
-				const cardRadius = Math.min(cardW, cardH) * 0.28;
+			for (let i = 0; i < tiles.length; i++) {
+				const t = tiles[i];
 
-				// Color dynamics: depth + speed
-				const [cr, cg, cb] = getFluidParticleColor(p.y, speedRatio);
-				const cardAlpha = Math.max(0.4, Math.min(0.96, 0.55 + speedRatio * 0.4));
+				// 1. Natural perpetual fluid flow field (sine/cosine vorticity harmonics)
+				const fluidWave1 = Math.sin(t.originX * freqX1 + time * 1.35) * Math.cos(t.originY * freqY1 - time * 0.85);
+				const fluidWave2 = Math.cos(t.originX * freqX2 - t.originY * freqY2 + time * 1.7);
+				const fluidWave3 = Math.sin((t.originX + t.originY) * 0.006 + time * 1.1);
 
-				drawMiniCard(
-					p.x,
-					p.y,
-					cardW,
-					cardH,
+				// Base perpetual fluid energy normalized to [0, 1]
+				const naturalEnergy = (fluidWave1 * 0.45 + fluidWave2 * 0.35 + fluidWave3 * 0.2 + 1.0) * 0.5;
+
+				// 2. Interactive fluid disturbance from mouse proximity and ripples
+				let interactionEnergy = 0;
+				if (isHovered) {
+					const dx = t.originX - mouseX;
+					const dy = t.originY - mouseY;
+					const dist = Math.hypot(dx, dy);
+					const mouseRadius = 140;
+
+					if (dist < mouseRadius) {
+						const proximity = 1 - dist / mouseRadius;
+						interactionEnergy += Math.pow(proximity, 1.5) * (0.6 + mouseSpeed * 0.08);
+					}
+				}
+
+				// Add ripple wave propagation
+				for (let j = 0; j < ripples.length; j++) {
+					const rp = ripples[j];
+					const d = Math.hypot(t.originX - rp.x, t.originY - rp.y);
+					const diff = Math.abs(d - rp.radius);
+					if (diff < 45) {
+						const ring = Math.cos((diff / 45) * Math.PI * 0.5) * rp.strength;
+						interactionEnergy += ring * 0.8;
+					}
+				}
+
+				// Target fluid energy
+				const targetEnergy = Math.max(0, Math.min(1.0, naturalEnergy + interactionEnergy));
+				// Smooth easing
+				t.energy += (targetEnergy - t.energy) * 0.14;
+				avgEnergy += t.energy;
+
+				// 3. Fluid Swell Displacement (subtle vertical fluid heave, strictly horizontal, NO rotation)
+				const fluidHeave = Math.sin(t.originX * 0.009 + time * 1.5) * (3 + t.energy * 6);
+				t.x = t.originX;
+				t.y = t.originY - fluidHeave;
+
+				// 4. Large Card Size Scaling:
+				// Base card size is generous (~34px to 40px)
+				// Expands up to ~44px to 48px during energetic fluid surges
+				const baseW = stepX * 0.74;
+				const baseH = stepY * 0.74;
+				const scaleFactor = 0.78 + t.energy * 0.44; // Scale between 0.78x and 1.22x
+				t.currentW = baseW * scaleFactor;
+				t.currentH = baseH * scaleFactor;
+				const cardRadius = Math.min(t.currentW, t.currentH) * 0.26;
+
+				// 5. Material Theme Color & Gradient Transition
+				const [cr, cg, cb] = getThemeGradientColor(t.energy);
+				const cardAlpha = Math.max(0.42, Math.min(0.96, 0.48 + t.energy * 0.48));
+				const outlineAlpha = Math.max(0.08, Math.min(0.32, 0.12 + t.energy * 0.2));
+
+				// Draw stable mini-card tile (0 rotation)
+				drawFixedCard(
+					t.x,
+					t.y,
+					t.currentW,
+					t.currentH,
 					cardRadius,
-					p.angle * 0.35, // subtle fluid orientation
 					cr,
 					cg,
 					cb,
-					cardAlpha
+					cardAlpha,
+					outlineAlpha
 				);
 			}
 
 			// Telemetry status
 			if (telemetry) {
-				const avgK = (totalKinetic / particles.length).toFixed(2);
-				const status = isHovered && maxSpeed > 4 ? "STIRRED / SPLASHING" : (maxSpeed > 2 ? "SLOSHING" : "SETTLED");
-				telemetry.textContent = `SPH·FLUID // PARTICLES: ${particles.length} // KINETIC: ${avgK} // ${status}`;
+				const energyVal = (avgEnergy / Math.max(1, tiles.length)).toFixed(2);
+				const statusTag = isHovered && mouseSpeed > 3 ? "TURBULENT SURGE" : (mouseSpeed > 0.5 ? "INTERACTIVE FLOW" : "PERPETUAL FLOW");
+				telemetry.textContent = `FLUID·GRID // MATERIAL TILES: ${tiles.length} // KINETIC: ${energyVal} // ${statusTag}`;
 			}
 
 			requestAnimationFrame(render);
 		}
 
-		// Event handlers
+		// Event listeners
 		root.addEventListener("mousemove", (e) => {
 			const rect = root.getBoundingClientRect();
 			mouseX = e.clientX - rect.left;
@@ -582,31 +502,36 @@
 
 		root.addEventListener("mouseleave", () => {
 			isHovered = false;
-			isPressed = false;
 			mouseX = -9999;
 			mouseY = -9999;
 		});
 
 		root.addEventListener("mousedown", (e) => {
 			if (e.button === 0) {
-				isPressed = true;
-				splashTrigger = true;
+				ripples.push({
+					x: mouseX,
+					y: mouseY,
+					radius: 8,
+					strength: 1.2,
+					decay: 0.02
+				});
 			}
 		});
 
-		window.addEventListener("mouseup", () => {
-			isPressed = false;
-		});
-
-		// Touch
+		// Touch interaction
 		root.addEventListener("touchstart", (e) => {
 			if (e.touches.length > 0) {
 				const rect = root.getBoundingClientRect();
 				mouseX = e.touches[0].clientX - rect.left;
 				mouseY = e.touches[0].clientY - rect.top;
 				isHovered = true;
-				isPressed = true;
-				splashTrigger = true;
+				ripples.push({
+					x: mouseX,
+					y: mouseY,
+					radius: 8,
+					strength: 1.2,
+					decay: 0.02
+				});
 			}
 		}, { passive: true });
 
@@ -620,11 +545,17 @@
 		}, { passive: true });
 
 		root.addEventListener("touchend", () => {
-			isPressed = false;
 			isHovered = false;
 		});
 
 		window.addEventListener("resize", resize);
+
+		updateTheme();
+		const observer = new MutationObserver(() => updateTheme());
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class", "style"]
+		});
 
 		resize();
 		requestAnimationFrame(render);
