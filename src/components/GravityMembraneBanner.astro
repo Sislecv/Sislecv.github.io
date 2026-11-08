@@ -1,67 +1,68 @@
 ---
-// GravityMembraneBanner.astro: Material Card-based Fluid Reservoir Banner
-// Acts as a spacious half-filled container: fluid sits entirely at the bottom,
-// leaving the upper spacious half open for custom user content (via default slot).
+// GravityMembraneBanner.astro: Material Card-based SPH Fluid Dynamics Simulation
+// Inspried by Yusuke Endoh's classic SPH fluid physics.
+// The banner acts as a spacious, partially-filled container with fluid sloshing at the bottom,
+// leaving the upper area open for custom content (via slot).
 ---
 
-<div class="fluid-reservoir-hero" id="fluid-hero-container">
-	<div class="fluid-reservoir-viewport" id="fluid-banner-root">
-		<!-- Canvas simulating fluid at container bottom -->
-		<canvas id="fluid-banner-canvas" aria-hidden="true"></canvas>
+<div class="gravity-fullscreen-hero" id="gravity-hero-container">
+	<div class="gravity-hero-viewport" id="gravity-banner-root">
+		<!-- Canvas simulating fluid particles at bottom of container -->
+		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
 
-		<!-- Upper Spacious Zone: Reserved for user-defined content / slot -->
+		<!-- Upper spacious zone: open for custom user content / elements -->
 		<div class="banner-content-container">
 			<slot />
 		</div>
 
 		<!-- Subtle technical telemetry at bottom corner -->
 		<div class="fluid-telemetry">
-			<span class="telemetry-badge" id="fluid-telemetry-metric">CONTAINER: 48% CAPACITY // KINETIC: 1.00 // SURFACE: CALM</span>
+			<span class="telemetry-badge" id="fluid-telemetry-metric">SPH·FLUID // PARTICLES: 520 // PRESSURE: EQUILIBRIUM</span>
 		</div>
 
 		<!-- Minimalist scroll down indicator -->
-		<button class="fluid-scroll-down" id="fluid-scroll-trigger" aria-label="向下滚动至内容" title="向下滚动">
-			<div class="scroll-glyph-wrap">
-				<span class="glyph-bar"></span>
-				<mdui-icon-keyboard-arrow-down--outlined class="glyph-chevron"></mdui-icon-keyboard-arrow-down--outlined>
+		<button class="gravity-scroll-down" id="gravity-scroll-trigger" aria-label="向下滚动至内容" title="向下滚动">
+			<div class="scroll-ascii-glyph">
+				<span class="glyph-line">|</span>
+				<span class="glyph-arrow">v</span>
 			</div>
 		</button>
 	</div>
 </div>
 
 <style>
-	.fluid-reservoir-hero {
+	/* Preserving original fullscreen hero dimensions strictly */
+	.gravity-fullscreen-hero {
 		position: relative;
 		width: 100vw;
 		margin-left: calc(-50vw + 50%);
 		margin-right: calc(-50vw + 50%);
-		/* Large spacious container height */
-		height: 520px;
-		max-height: 580px;
-		min-height: 420px;
-		margin-top: -20px; /* Align to top navigation flush */
-		margin-bottom: 24px;
+		height: 100vh;
+		min-height: 540px;
+		max-height: 1080px;
+		margin-top: -20px; /* Align to top flush */
+		margin-bottom: 28px;
 		overflow: hidden;
 	}
 
-	.fluid-reservoir-viewport {
+	.gravity-hero-viewport {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle at 50% 30%, rgba(26, 28, 38, 0.95) 0%, rgba(12, 13, 18, 0.99) 100%);
-		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.16);
+		background: radial-gradient(circle at 50% 35%, rgba(24, 25, 34, 0.96) 0%, rgba(10, 11, 16, 0.99) 100%);
+		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.18);
 		user-select: none;
 		-webkit-user-select: none;
 		cursor: crosshair;
 		overflow: hidden;
 	}
 
-	:global(.mdui-theme-dark) .fluid-reservoir-viewport {
-		background: radial-gradient(circle at 50% 30%, rgba(18, 20, 30, 0.96) 0%, rgba(8, 9, 14, 0.99) 100%);
+	:global(.mdui-theme-dark) .gravity-hero-viewport {
+		background: radial-gradient(circle at 50% 35%, rgba(18, 19, 28, 0.96) 0%, rgba(7, 8, 12, 0.99) 100%);
 		border-bottom-color: rgba(255, 255, 255, 0.08);
 	}
 
-	#fluid-banner-canvas {
+	#gravity-banner-canvas {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -73,31 +74,31 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 52%; /* Upper half open for titles, badges, etc. */
+		height: 60%; /* Upper 60% open for user content */
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		pointer-events: auto;
-		z-index: 3;
-		padding: 24px;
+		z-index: 4;
+		padding: 32px;
 		box-sizing: border-box;
 	}
 
 	.fluid-telemetry {
 		position: absolute;
-		bottom: 16px;
-		right: 24px;
+		bottom: 22px;
+		right: 28px;
 		pointer-events: none;
 		opacity: 0.65;
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 		font-size: 11px;
 		letter-spacing: 0.1em;
 		transition: opacity 0.2s ease;
-		z-index: 4;
+		z-index: 5;
 	}
 
-	.fluid-reservoir-viewport:hover .fluid-telemetry {
+	.gravity-hero-viewport:hover .fluid-telemetry {
 		opacity: 0.95;
 	}
 
@@ -106,53 +107,44 @@
 		text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
 	}
 
-	/* Minimalist scroll down indicator */
-	.fluid-scroll-down {
+	/* Minimalist ASCII scroll indicator */
+	.gravity-scroll-down {
 		position: absolute;
-		bottom: 16px;
+		bottom: 24px;
 		left: 50%;
 		transform: translateX(-50%);
 		background: transparent;
 		border: none;
-		padding: 8px 12px;
+		padding: 12px;
 		cursor: pointer;
 		color: #38bdf8;
-		opacity: 0.65;
+		opacity: 0.6;
 		transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
-		z-index: 4;
+		z-index: 5;
 		outline: none;
 	}
 
-	.fluid-scroll-down:hover {
+	.gravity-scroll-down:hover {
 		opacity: 1;
 		color: #67e8f9;
 		transform: translateX(-50%) translateY(3px);
 	}
 
-	.scroll-glyph-wrap {
+	.scroll-ascii-glyph {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		animation: fluid-bob 2.2s ease-in-out infinite;
+		font-family: ui-monospace, SFMono-Regular, monospace;
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1.1;
+		animation: scroll-bob 2.2s ease-in-out infinite;
 	}
 
-	.glyph-bar {
-		width: 2px;
-		height: 12px;
-		background: currentColor;
-		border-radius: 9999px;
-		margin-bottom: -4px;
-		opacity: 0.8;
-	}
-
-	.glyph-chevron {
-		font-size: 20px;
-	}
-
-	@keyframes fluid-bob {
+	@keyframes scroll-bob {
 		0%, 100% {
 			transform: translateY(0);
-			opacity: 0.55;
+			opacity: 0.5;
 		}
 		50% {
 			transform: translateY(6px);
@@ -160,38 +152,38 @@
 		}
 	}
 
-	@media (max-width: 640px) {
-		.fluid-reservoir-hero {
-			height: 380px;
-			min-height: 340px;
-			margin-bottom: 16px;
+	@media (max-width: 600px) {
+		.gravity-fullscreen-hero {
+			height: 82vh;
+			min-height: 480px;
+			margin-bottom: 20px;
 		}
 		.fluid-telemetry {
 			font-size: 9px;
-			bottom: 10px;
-			right: 12px;
+			bottom: 12px;
+			right: 14px;
 		}
-		.fluid-scroll-down {
-			bottom: 10px;
+		.gravity-scroll-down {
+			bottom: 14px;
 		}
 	}
 </style>
 
 <script is:inline>
 	(function () {
-		const root = document.getElementById("fluid-banner-root");
-		const canvas = document.getElementById("fluid-banner-canvas");
+		const root = document.getElementById("gravity-banner-root");
+		const canvas = document.getElementById("gravity-banner-canvas");
 		const telemetry = document.getElementById("fluid-telemetry-metric");
-		const scrollBtn = document.getElementById("fluid-scroll-trigger");
+		const scrollBtn = document.getElementById("gravity-scroll-trigger");
 		if (!canvas || !root) return;
 
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// Scroll indicator interaction
+		// Scroll to content on trigger
 		if (scrollBtn) {
 			scrollBtn.addEventListener("click", () => {
-				const hero = document.getElementById("fluid-hero-container");
+				const hero = document.getElementById("gravity-hero-container");
 				if (hero) {
 					const targetY = hero.offsetTop + hero.offsetHeight - 16;
 					window.scrollTo({ top: targetY, behavior: "smooth" });
@@ -212,61 +204,62 @@
 		let mouseVy = 0;
 		let isHovered = false;
 		let isPressed = false;
-		let pressScale = 0;
+		let splashTrigger = false;
 
-		// Fluid Grid Configuration: bottom-filled reservoir
-		let COLS = 54;
-		let ROWS = 13;
+		// SPH Fluid Physics Constants
+		const H = 32.0;           // Interaction smoothing radius
+		const H2 = H * H;
+		const REST_DENS = 0.0016; // Rest density
+		const GAS_CONST = 240.0;  // Pressure constant
+		const VISC = 0.45;        // Fluid viscosity
+		const GRAV = 0.26;        // Downward gravity towards container bottom
+		const DT = 0.65;          // Time step
 
-		// Free surface 1D wave heights and velocities for water sloshing
-		let surfaceOffsets = [];
-		let surfaceVelocities = [];
+		// Spatial hash grid for O(N) neighbor queries
+		const CELL_SIZE = H;
+		let gridCols = 0;
+		let gridRows = 0;
+		let grid = [];
 
-		class ReservoirCardNode {
-			constructor(c, r) {
-				this.c = c; // column [0, COLS-1]
-				this.r = r; // row [0, ROWS-1], 0 is surface, ROWS-1 is container bed
-				this.originX = 0;
-				this.originY = 0;
-				this.x = 0;
-				this.y = 0;
-				this.vx = 0;
-				this.vy = 0;
+		class SPHParticle {
+			constructor(x, y) {
+				this.x = x;
+				this.y = y;
+				this.vx = (Math.random() - 0.5) * 1.5;
+				this.vy = Math.random() * 0.5;
+				this.fx = 0;
+				this.fy = 0;
+				this.rho = REST_DENS;
+				this.pressure = 0;
 				this.speed = 0;
 				this.angle = 0;
-				this.energy = 0;
 			}
 		}
 
-		let nodes = [];
+		let particles = [];
+		const PARTICLE_COUNT = 480;
 
-		function initGrid() {
-			nodes = [];
-			surfaceOffsets = new Array(COLS).fill(0);
-			surfaceVelocities = new Array(COLS).fill(0);
+		function initParticles() {
+			particles = [];
+			// Fluid initially occupies the bottom 28% of the container, spanning full width
+			const bottomDepth = height * 0.28;
+			const startY = height - bottomDepth;
+			const paddingX = 24;
+			const usableWidth = width - paddingX * 2;
 
-			for (let r = 0; r < ROWS; r++) {
-				for (let c = 0; c < COLS; c++) {
-					const node = new ReservoirCardNode(c, r);
-					nodes.push(node);
+			// Arrange particles in staggered grid at container bottom
+			const cols = Math.ceil(Math.sqrt(PARTICLE_COUNT * (usableWidth / bottomDepth)));
+			const rows = Math.ceil(PARTICLE_COUNT / cols);
+			const stepX = usableWidth / cols;
+			const stepY = (bottomDepth - 20) / rows;
+
+			for (let r = 0; r < rows; r++) {
+				for (let c = 0; c < cols; c++) {
+					if (particles.length >= PARTICLE_COUNT) break;
+					const px = paddingX + c * stepX + (r % 2) * (stepX * 0.5) + (Math.random() - 0.5) * 4;
+					const py = startY + r * stepY + (Math.random() - 0.5) * 4;
+					particles.push(new SPHParticle(px, py));
 				}
-			}
-			updateNodePositions();
-		}
-
-		function updateNodePositions() {
-			// Water level starts at ~52% height of the container, filling downwards to 100%
-			const surfaceBaseY = height * 0.52;
-			const fluidDepth = height - surfaceBaseY - 12; // 12px bottom padding
-			const colWidth = width / (COLS - 1);
-
-			for (let i = 0; i < nodes.length; i++) {
-				const n = nodes[i];
-				n.originX = n.c * colWidth;
-				const rowT = n.r / (ROWS - 1); // 0 (surface) to 1 (bed)
-				n.originY = surfaceBaseY + rowT * fluidDepth;
-				n.x = n.originX;
-				n.y = n.originY;
 			}
 		}
 
@@ -280,62 +273,45 @@
 			canvas.height = Math.round(height * dpr);
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-			if (width < 640) {
-				COLS = 34;
-				ROWS = 10;
-			} else if (width < 1024) {
-				COLS = 46;
-				ROWS = 12;
-			} else {
-				COLS = 58;
-				ROWS = 14;
-			}
+			gridCols = Math.ceil(width / CELL_SIZE) + 2;
+			gridRows = Math.ceil(height / CELL_SIZE) + 2;
 
-			initGrid();
+			initParticles();
 		}
 
-		// Palette interpolation for mini Material 3 cards
-		// Reflects depth (abyss to surface) + kinetic vorticity
-		// Deep bed: Deep ocean navy/indigo -> Mid water: Turquoise/Cyan -> Surface: Mint/Emerald/Coral
-		function getFluidColor(depthRatio, speedRatio, angle) {
-			// depthRatio: 0 (surface) to 1 (container bottom bed)
-			// Angle influence for swirl variation
-			const angleHueShift = Math.sin(angle) * 0.18;
-			const effectiveDepth = Math.max(0, Math.min(1, depthRatio + angleHueShift));
+		// Material Design Palette for Fluid Depth & Kinetic Energy:
+		// Deep Bed: Deep Sapphire / Navy [20, 60, 140]
+		// Mid Water: Bright Cyan / Turquoise [6, 182, 212]
+		// Surface & Wavelets: Vibrant Mint [16, 185, 129]
+		// Airborne Splashes / Agitation: Coral Rose [244, 63, 94] to Golden Amber [251, 191, 36]
+		function getFluidParticleColor(yPos, speedRatio) {
+			const depthRatio = Math.max(0, Math.min(1, (height - yPos) / (height * 0.45))); // 0=bottom, 1=high surface/air
 
 			let r, g, b;
-			if (effectiveDepth > 0.65) {
-				// Deep Bed: Deep Navy & Indigo
-				const t = (effectiveDepth - 0.65) / 0.35;
-				r = Math.round(14 + (30 - 14) * t);
-				g = Math.round(56 + (41 - 56) * t);
-				b = Math.round(122 + (99 - 122) * t);
-			} else if (effectiveDepth > 0.3) {
-				// Mid Water: Bright Cyan to Ocean Blue
-				const t = (effectiveDepth - 0.3) / 0.35;
-				r = Math.round(6 + (14 - 6) * t);
-				g = Math.round(182 + (56 - 182) * t);
-				b = Math.round(212 + (122 - 212) * t);
+			if (speedRatio > 0.45 || depthRatio > 0.75) {
+				// Airborne splash or high energy agitation
+				const t = Math.min(1, (speedRatio - 0.3) * 1.5);
+				r = Math.round(244 + (251 - 244) * t);
+				g = Math.round(63 + (191 - 63) * t);
+				b = Math.round(94 + (36 - 94) * t);
+			} else if (depthRatio > 0.35) {
+				// Mid water toward surface: Mint to Cyan
+				const t = (depthRatio - 0.35) / 0.4;
+				r = Math.round(6 + (16 - 6) * t);
+				g = Math.round(182 + (185 - 182) * t);
+				b = Math.round(212 + (129 - 212) * t);
 			} else {
-				// Surface Layer: Mint / Coral / Amber
-				const t = effectiveDepth / 0.3;
-				if (speedRatio > 0.4) {
-					// High agitation: Warm Coral & Golden Amber
-					r = Math.round(244 + (251 - 244) * speedRatio);
-					g = Math.round(63 + (191 - 63) * speedRatio);
-					b = Math.round(94 + (36 - 94) * speedRatio);
-				} else {
-					// Calm surface: Vibrant Mint / Aquamarine
-					r = Math.round(16 + (6 - 16) * t);
-					g = Math.round(185 + (182 - 185) * t);
-					b = Math.round(129 + (212 - 129) * t);
-				}
+				// Deep bottom bed: Deep Navy into Ocean Cyan
+				const t = depthRatio / 0.35;
+				r = Math.round(20 + (6 - 20) * t);
+				g = Math.round(60 + (182 - 60) * t);
+				b = Math.round(140 + (212 - 140) * t);
 			}
 
 			return [r, g, b];
 		}
 
-		// Helper to draw a sleek rounded rectangular mini-card
+		// Draw single MDUI mini-card tile
 		function drawMiniCard(cx, cy, w, h, radius, rotAngle, r, g, b, alpha) {
 			ctx.save();
 			ctx.translate(cx, cy);
@@ -361,27 +337,23 @@
 				ctx.closePath();
 			}
 
-			// MDUI Solid Card Surface Fill
+			// Solid Card Fill
 			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
 			ctx.fill();
 
-			// Subtle Card Outline for Material Design definition
+			// 1px Material subtle outline
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(0.24, alpha * 0.3)})`;
+			ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(0.3, alpha * 0.35)})`;
 			ctx.stroke();
 
 			ctx.restore();
 		}
 
-		let time = 0;
-
-		function render() {
-			time += 0.016;
-
-			// Mouse velocity
+		function updatePhysics() {
+			// Track mouse velocity
 			if (isHovered && prevMouseX > -1000) {
-				mouseVx = (mouseX - prevMouseX) * 0.5;
-				mouseVy = (mouseY - prevMouseY) * 0.5;
+				mouseVx = (mouseX - prevMouseX) * 0.6;
+				mouseVy = (mouseY - prevMouseY) * 0.6;
 			} else {
 				mouseVx *= 0.85;
 				mouseVy *= 0.85;
@@ -389,146 +361,193 @@
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			if (isPressed) {
-				pressScale += (1 - pressScale) * 0.14;
-			} else {
-				pressScale += (0 - pressScale) * 0.08;
+			// Clear spatial grid
+			const totalCells = gridCols * gridRows;
+			grid = new Array(totalCells);
+			for (let k = 0; k < totalCells; k++) grid[k] = [];
+
+			// Insert particles into grid cells
+			for (let i = 0; i < particles.length; i++) {
+				const p = particles[i];
+				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(p.x / CELL_SIZE)));
+				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(p.y / CELL_SIZE)));
+				const idx = gy * gridCols + gx;
+				grid[idx].push(i);
 			}
 
-			// 1. Solve 1D Free Water Surface Sloshing Wave Equation (Spring-mass mesh)
-			const surfaceBaseY = height * 0.52;
-			const tension = 0.035;
-			const springK = 0.045;
-			const damping = 0.94;
+			// Precomputed kernel coefficients
+			const POLY6 = 315.0 / (64.0 * Math.PI * Math.pow(H, 9));
+			const SPIKY_GRAD = -45.0 / (Math.PI * Math.pow(H, 6));
+			const VISC_LAP = 45.0 / (Math.PI * Math.pow(H, 6));
 
-			for (let c = 0; c < COLS; c++) {
-				const left = c > 0 ? surfaceOffsets[c - 1] : surfaceOffsets[c];
-				const right = c < COLS - 1 ? surfaceOffsets[c + 1] : surfaceOffsets[c];
-				
-				// Wave propagation acceleration
-				const force = -springK * surfaceOffsets[c] + tension * (left + right - 2 * surfaceOffsets[c]);
-				surfaceVelocities[c] = (surfaceVelocities[c] + force) * damping;
-			}
+			// 1. Calculate Density and Pressure
+			for (let i = 0; i < particles.length; i++) {
+				const pi = particles[i];
+				let rho = 0;
 
-			// Apply surface offsets
-			for (let c = 0; c < COLS; c++) {
-				surfaceOffsets[c] += surfaceVelocities[c];
-			}
+				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(pi.x / CELL_SIZE)));
+				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(pi.y / CELL_SIZE)));
 
-			// Mouse interaction with fluid surface & body
-			if (isHovered) {
-				const colWidth = width / (COLS - 1);
-				const mouseCol = Math.round(mouseX / colWidth);
-
-				// If mouse crosses or is near the water line, excite sloshing wave
-				if (mouseY > surfaceBaseY - 60 && mouseY < height) {
-					const mouseSpeed = Math.hypot(mouseVx, mouseVy);
-					const splashRadius = Math.max(2, Math.round(3 + mouseSpeed * 0.4));
-					
-					for (let dc = -splashRadius; dc <= splashRadius; dc++) {
-						const c = mouseCol + dc;
-						if (c >= 0 && c < COLS) {
-							const factor = 1 - Math.abs(dc) / splashRadius;
-							// Push water down or pull up with mouse velocity
-							surfaceVelocities[c] += (mouseVy * 0.15 + (isPressed ? 1.5 : 0.2)) * factor;
+				// Neighbor 3x3 search
+				for (let dy = -1; dy <= 1; dy++) {
+					const ny = gy + dy;
+					if (ny < 0 || ny >= gridRows) continue;
+					for (let dx = -1; dx <= 1; dx++) {
+						const nx = gx + dx;
+						if (nx < 0 || nx >= gridCols) continue;
+						const cell = grid[ny * gridCols + nx];
+						for (let k = 0; k < cell.length; k++) {
+							const pj = particles[cell[k]];
+							const rx = pi.x - pj.x;
+							const ry = pi.y - pj.y;
+							const r2 = rx * rx + ry * ry;
+							if (r2 < H2) {
+								rho += Math.pow(H2 - r2, 3);
+							}
 						}
 					}
 				}
+
+				pi.rho = Math.max(rho * POLY6, REST_DENS);
+				pi.pressure = GAS_CONST * (pi.rho - REST_DENS);
 			}
 
-			ctx.clearRect(0, 0, width, height);
+			// 2. Calculate Forces (Pressure Gradient + Viscosity + Gravity)
+			for (let i = 0; i < particles.length; i++) {
+				const pi = particles[i];
+				let f_px = 0;
+				let f_py = 0;
+				let f_vx = 0;
+				let f_vy = 0;
 
-			let maxFlowSpeed = 0;
-			let totalKinetic = 0;
+				const gx = Math.max(0, Math.min(gridCols - 1, Math.floor(pi.x / CELL_SIZE)));
+				const gy = Math.max(0, Math.min(gridRows - 1, Math.floor(pi.y / CELL_SIZE)));
 
-			// Internal fluid vorticity frequencies
-			const kx = 1.8;
-			const ky = 3.2;
+				for (let dy = -1; dy <= 1; dy++) {
+					const ny = gy + dy;
+					if (ny < 0 || ny >= gridRows) continue;
+					for (let dx = -1; dx <= 1; dx++) {
+						const nx = gx + dx;
+						if (nx < 0 || nx >= gridCols) continue;
+						const cell = grid[ny * gridCols + nx];
+						for (let k = 0; k < cell.length; k++) {
+							const j = cell[k];
+							if (i === j) continue;
+							const pj = particles[j];
+							const rx = pi.x - pj.x;
+							const ry = pi.y - pj.y;
+							const r = Math.hypot(rx, ry);
 
-			for (let i = 0; i < nodes.length; i++) {
-				const n = nodes[i];
-				const depthT = n.r / (ROWS - 1); // 0 (surface) to 1 (bed)
+							if (r < H && r > 0.001) {
+								const p_term = (pi.pressure + pj.pressure) / (2.0 * pj.rho);
+								const gradW = SPIKY_GRAD * Math.pow(H - r, 2);
+								f_px -= (rx / r) * p_term * gradW;
+								f_py -= (ry / r) * p_term * gradW;
 
-				// Surface wave displacement transmitted downwards
-				// Attenuates with depth (deep water barely feels the sloshing surface)
-				const depthDecay = Math.pow(1 - depthT, 1.4);
-				const surfaceDisplacement = surfaceOffsets[n.c] * depthDecay;
-
-				// 2D Incompressible streamfunction velocity in the reservoir
-				const normX = (n.c / (COLS - 1)) * 2 - 1; // [-1, 1]
-				const normY = depthT; // [0, 1]
-				
-				// Gentle natural internal convection in the liquid
-				const fluidVx = Math.sin(normY * ky + time * 0.9) * (1.2 * (1 - depthT * 0.5)) + Math.cos(normX * kx - time * 0.6) * 0.6;
-				const fluidVy = Math.cos(normX * kx + time * 0.9) * 0.8 * depthDecay;
-
-				// Mouse agitation inside fluid
-				let mousePushX = 0;
-				let mousePushY = 0;
-				if (isHovered && mouseY > surfaceBaseY - 40) {
-					const dx = n.x - mouseX;
-					const dy = n.y - mouseY;
-					const dist = Math.hypot(dx, dy);
-					const radius = 120 + pressScale * 60;
-
-					if (dist < radius && dist > 1) {
-						const proximity = 1 - dist / radius;
-						// Tangential swirl + linear drag
-						const tangentX = -dy / dist;
-						const tangentY = dx / dist;
-						const pushMag = proximity * (16 + pressScale * 25);
-
-						mousePushX = mouseVx * proximity * 0.7 + tangentX * pushMag * 0.4;
-						mousePushY = mouseVy * proximity * 0.7 + tangentY * pushMag * 0.4;
+								const lapW = VISC_LAP * (H - r);
+								f_vx += VISC * (pj.vx - pi.vx) / pj.rho * lapW;
+								f_vy += VISC * (pj.vy - pi.vy) / pj.rho * lapW;
+							}
+						}
 					}
 				}
 
-				// Target velocity
-				const targetVx = fluidVx + mousePushX;
-				const targetVy = fluidVy + mousePushY;
+				// Mouse stirring / splash force
+				let mouseFx = 0;
+				let mouseFy = 0;
+				if (isHovered) {
+					const mx = pi.x - mouseX;
+					const my = pi.y - mouseY;
+					const mDist = Math.hypot(mx, my);
+					const mouseRadius = 90;
 
-				n.vx += (targetVx - n.vx) * 0.18;
-				n.vy += (targetVy - n.vy) * 0.18;
+					if (mDist < mouseRadius && mDist > 0.1) {
+						const mFactor = 1.0 - mDist / mouseRadius;
+						// Repulsion push
+						mouseFx += (mx / mDist) * mFactor * 16.0;
+						mouseFy += (my / mDist) * mFactor * 16.0;
+						// Impart mouse velocity to fluid
+						mouseFx += mouseVx * mFactor * 1.5;
+						mouseFy += mouseVy * mFactor * 1.5;
 
-				// Spring anchoring to stay within the bottom-filled grid lattice
-				const spring = 0.14;
-				const dispX = n.x - n.originX;
-				const dispY = n.y - (n.originY + surfaceDisplacement);
+						if (splashTrigger) {
+							// Explosive upward splash on click
+							mouseFy -= mFactor * 32.0;
+							mouseFx += (Math.random() - 0.5) * 20.0;
+						}
+					}
+				}
 
-				n.x += n.vx * 1.3 - dispX * spring;
-				n.y += n.vy * 1.3 - dispY * spring;
+				// Total acceleration
+				const ax = (f_px + f_vx + mouseFx);
+				const ay = (f_py + f_vy + mouseFy) + GRAV;
 
-				// Keep within container horizontal & bottom bounds
-				if (n.y > height - 6) n.y = height - 6;
+				// Integration
+				pi.vx = (pi.vx + ax * DT) * 0.992;
+				pi.vy = (pi.vy + ay * DT) * 0.992;
 
-				const curSpeed = Math.hypot(n.vx, n.vy);
-				n.speed = curSpeed;
-				n.angle = Math.atan2(n.vy, n.vx);
-				n.energy += (curSpeed - n.energy) * 0.14;
+				pi.x += pi.vx * DT;
+				pi.y += pi.vy * DT;
 
-				if (curSpeed > maxFlowSpeed) maxFlowSpeed = curSpeed;
-				totalKinetic += curSpeed;
+				// Boundary Collisions (Sides and bottom of container)
+				const wallDamping = -0.42;
+				// Bottom bed
+				if (pi.y > height - 12) {
+					pi.y = height - 12;
+					pi.vy *= wallDamping;
+				}
+				// Left container wall
+				if (pi.x < 10) {
+					pi.x = 10;
+					pi.vx *= wallDamping;
+				}
+				// Right container wall
+				if (pi.x > width - 10) {
+					pi.x = width - 10;
+					pi.vx *= wallDamping;
+				}
 
-				// Card size scaling:
-				// Surface & high energy: Large (~14px to 20px)
-				// Deep water / calm bed: Compact (~9px to 12px)
-				const speedRatio = Math.min(1.0, curSpeed / 4.0);
-				const baseW = 9 + (1 - depthT * 0.4) * 4 + speedRatio * 7;
-				const baseH = 8 + (1 - depthT * 0.4) * 3 + speedRatio * 4;
-				const cardRadius = Math.min(baseW, baseH) * 0.28;
+				pi.speed = Math.hypot(pi.vx, pi.vy);
+				pi.angle = Math.atan2(pi.vy, pi.vx);
+			}
 
-				// Color from fluid depth and kinetic activity
-				const [cr, cg, cb] = getFluidColor(depthT, speedRatio, n.angle);
-				const cardAlpha = Math.max(0.25, Math.min(0.92, 0.4 + (1 - depthT * 0.25) * 0.35 + speedRatio * 0.25));
+			splashTrigger = false;
+		}
 
-				// Draw mini MDUI-card tile
+		function render() {
+			updatePhysics();
+
+			ctx.clearRect(0, 0, width, height);
+
+			let totalKinetic = 0;
+			let maxSpeed = 0;
+
+			// Render each particle as a mini MDUI Card tile
+			for (let i = 0; i < particles.length; i++) {
+				const p = particles[i];
+				totalKinetic += p.speed;
+				if (p.speed > maxSpeed) maxSpeed = p.speed;
+
+				const speedRatio = Math.min(1.0, p.speed / 5.5);
+				
+				// Size dynamics:
+				// Calm: ~10px mini card
+				// High speed / agitation: ~16px-20px expanded card
+				const cardW = 9.5 + speedRatio * 7.5;
+				const cardH = 8.5 + speedRatio * 4.5;
+				const cardRadius = Math.min(cardW, cardH) * 0.28;
+
+				// Color dynamics: depth + speed
+				const [cr, cg, cb] = getFluidParticleColor(p.y, speedRatio);
+				const cardAlpha = Math.max(0.4, Math.min(0.96, 0.55 + speedRatio * 0.4));
+
 				drawMiniCard(
-					n.x,
-					n.y,
-					baseW,
-					baseH,
+					p.x,
+					p.y,
+					cardW,
+					cardH,
 					cardRadius,
-					n.angle * 0.4, // subtle inclination
+					p.angle * 0.35, // subtle fluid orientation
 					cr,
 					cg,
 					cb,
@@ -536,17 +555,17 @@
 				);
 			}
 
-			// Telemetry info update
+			// Telemetry status
 			if (telemetry) {
-				const avgKinetic = (totalKinetic / Math.max(1, nodes.length)).toFixed(2);
-				const surfState = Math.abs(surfaceVelocities[Math.floor(COLS / 2)]) > 0.8 ? "WAVY" : "CALM";
-				telemetry.textContent = `CONTAINER: 48% CAPACITY // KINETIC: ${avgKinetic} // SURFACE: ${surfState}`;
+				const avgK = (totalKinetic / particles.length).toFixed(2);
+				const status = isHovered && maxSpeed > 4 ? "STIRRED / SPLASHING" : (maxSpeed > 2 ? "SLOSHING" : "SETTLED");
+				telemetry.textContent = `SPH·FLUID // PARTICLES: ${particles.length} // KINETIC: ${avgK} // ${status}`;
 			}
 
 			requestAnimationFrame(render);
 		}
 
-		// Event listeners
+		// Event handlers
 		root.addEventListener("mousemove", (e) => {
 			const rect = root.getBoundingClientRect();
 			mouseX = e.clientX - rect.left;
@@ -571,6 +590,7 @@
 		root.addEventListener("mousedown", (e) => {
 			if (e.button === 0) {
 				isPressed = true;
+				splashTrigger = true;
 			}
 		});
 
@@ -578,7 +598,7 @@
 			isPressed = false;
 		});
 
-		// Touch interaction
+		// Touch
 		root.addEventListener("touchstart", (e) => {
 			if (e.touches.length > 0) {
 				const rect = root.getBoundingClientRect();
@@ -586,6 +606,7 @@
 				mouseY = e.touches[0].clientY - rect.top;
 				isHovered = true;
 				isPressed = true;
+				splashTrigger = true;
 			}
 		}, { passive: true });
 
