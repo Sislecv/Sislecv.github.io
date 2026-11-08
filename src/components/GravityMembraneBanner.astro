@@ -1,16 +1,22 @@
 ---
-// GravityMembraneBanner.astro: Material Card-based 2D Fluid Dynamics Simulation
-// Features: Discrete mini MDUI-card tiles, real-time incompressible fluid vorticity,
-// kinetic size scaling, chromatic flow orientation mapping, and organic non-filling boundary.
+// GravityMembraneBanner.astro: Material Card-based Fluid Reservoir Banner
+// Acts as a spacious half-filled container: fluid sits entirely at the bottom,
+// leaving the upper spacious half open for custom user content (via default slot).
 ---
 
-<div class="fluid-banner-hero" id="fluid-hero-container">
-	<div class="fluid-hero-viewport" id="fluid-banner-root">
+<div class="fluid-reservoir-hero" id="fluid-hero-container">
+	<div class="fluid-reservoir-viewport" id="fluid-banner-root">
+		<!-- Canvas simulating fluid at container bottom -->
 		<canvas id="fluid-banner-canvas" aria-hidden="true"></canvas>
 
-		<!-- Subtle technical telemetry -->
+		<!-- Upper Spacious Zone: Reserved for user-defined content / slot -->
+		<div class="banner-content-container">
+			<slot />
+		</div>
+
+		<!-- Subtle technical telemetry at bottom corner -->
 		<div class="fluid-telemetry">
-			<span class="telemetry-badge" id="fluid-telemetry-metric">FLUID·SIM // DYNAMICS: VORTICITY // KINETIC: 1.00 // EQUILIBRIUM</span>
+			<span class="telemetry-badge" id="fluid-telemetry-metric">CONTAINER: 48% CAPACITY // KINETIC: 1.00 // SURFACE: CALM</span>
 		</div>
 
 		<!-- Minimalist scroll down indicator -->
@@ -24,38 +30,34 @@
 </div>
 
 <style>
-	.fluid-banner-hero {
+	.fluid-reservoir-hero {
 		position: relative;
 		width: 100vw;
 		margin-left: calc(-50vw + 50%);
 		margin-right: calc(-50vw + 50%);
-		/* Comfortable hero height: does not cover the entire screen, allowing content peek */
-		height: 480px;
-		max-height: 520px;
-		min-height: 380px;
+		/* Large spacious container height */
+		height: 520px;
+		max-height: 580px;
+		min-height: 420px;
 		margin-top: -20px; /* Align to top navigation flush */
 		margin-bottom: 24px;
 		overflow: hidden;
 	}
 
-	.fluid-hero-viewport {
+	.fluid-reservoir-viewport {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle at 50% 50%, rgba(26, 28, 38, 0.95) 0%, rgba(13, 14, 20, 0.99) 100%);
+		background: radial-gradient(circle at 50% 30%, rgba(26, 28, 38, 0.95) 0%, rgba(12, 13, 18, 0.99) 100%);
 		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.16);
 		user-select: none;
 		-webkit-user-select: none;
-		cursor: grab;
+		cursor: crosshair;
 		overflow: hidden;
 	}
 
-	.fluid-hero-viewport:active {
-		cursor: grabbing;
-	}
-
-	:global(.mdui-theme-dark) .fluid-hero-viewport {
-		background: radial-gradient(circle at 50% 50%, rgba(20, 22, 32, 0.96) 0%, rgba(8, 9, 14, 0.99) 100%);
+	:global(.mdui-theme-dark) .fluid-reservoir-viewport {
+		background: radial-gradient(circle at 50% 30%, rgba(18, 20, 30, 0.96) 0%, rgba(8, 9, 14, 0.99) 100%);
 		border-bottom-color: rgba(255, 255, 255, 0.08);
 	}
 
@@ -65,9 +67,26 @@
 		height: 100%;
 	}
 
+	/* Upper spacious container slot for custom user elements */
+	.banner-content-container {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 52%; /* Upper half open for titles, badges, etc. */
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		pointer-events: auto;
+		z-index: 3;
+		padding: 24px;
+		box-sizing: border-box;
+	}
+
 	.fluid-telemetry {
 		position: absolute;
-		bottom: 18px;
+		bottom: 16px;
 		right: 24px;
 		pointer-events: none;
 		opacity: 0.65;
@@ -75,10 +94,10 @@
 		font-size: 11px;
 		letter-spacing: 0.1em;
 		transition: opacity 0.2s ease;
-		z-index: 2;
+		z-index: 4;
 	}
 
-	.fluid-hero-viewport:hover .fluid-telemetry {
+	.fluid-reservoir-viewport:hover .fluid-telemetry {
 		opacity: 0.95;
 	}
 
@@ -100,7 +119,7 @@
 		color: #38bdf8;
 		opacity: 0.65;
 		transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
-		z-index: 2;
+		z-index: 4;
 		outline: none;
 	}
 
@@ -142,9 +161,9 @@
 	}
 
 	@media (max-width: 640px) {
-		.fluid-banner-hero {
-			height: 350px;
-			min-height: 320px;
+		.fluid-reservoir-hero {
+			height: 380px;
+			min-height: 340px;
 			margin-bottom: 16px;
 		}
 		.fluid-telemetry {
@@ -195,14 +214,18 @@
 		let isPressed = false;
 		let pressScale = 0;
 
-		// Fluid Grid Configuration
-		let COLS = 44;
-		let ROWS = 22;
+		// Fluid Grid Configuration: bottom-filled reservoir
+		let COLS = 54;
+		let ROWS = 13;
 
-		class MiniCardNode {
-			constructor(gx, gy) {
-				this.gx = gx; // Grid normalized [-1, 1]
-				this.gy = gy; // Grid normalized [-1, 1]
+		// Free surface 1D wave heights and velocities for water sloshing
+		let surfaceOffsets = [];
+		let surfaceVelocities = [];
+
+		class ReservoirCardNode {
+			constructor(c, r) {
+				this.c = c; // column [0, COLS-1]
+				this.r = r; // row [0, ROWS-1], 0 is surface, ROWS-1 is container bed
 				this.originX = 0;
 				this.originY = 0;
 				this.x = 0;
@@ -212,8 +235,6 @@
 				this.speed = 0;
 				this.angle = 0;
 				this.energy = 0;
-				this.baseSize = 12;
-				this.falloff = 1; // Radial edge fade factor
 			}
 		}
 
@@ -221,11 +242,12 @@
 
 		function initGrid() {
 			nodes = [];
+			surfaceOffsets = new Array(COLS).fill(0);
+			surfaceVelocities = new Array(COLS).fill(0);
+
 			for (let r = 0; r < ROWS; r++) {
-				const gy = (r / (ROWS - 1)) * 2 - 1; // [-1, 1]
 				for (let c = 0; c < COLS; c++) {
-					const gx = (c / (COLS - 1)) * 2 - 1; // [-1, 1]
-					const node = new MiniCardNode(gx, gy);
+					const node = new ReservoirCardNode(c, r);
 					nodes.push(node);
 				}
 			}
@@ -233,31 +255,18 @@
 		}
 
 		function updateNodePositions() {
-			const centerX = width * 0.5;
-			const centerY = height * 0.5;
-			// Keep fluid centered and bounded with generous organic margins
-			const fluidWidth = Math.min(width * 0.88, 1160);
-			const fluidHeight = Math.min(height * 0.84, 400);
+			// Water level starts at ~52% height of the container, filling downwards to 100%
+			const surfaceBaseY = height * 0.52;
+			const fluidDepth = height - surfaceBaseY - 12; // 12px bottom padding
+			const colWidth = width / (COLS - 1);
 
 			for (let i = 0; i < nodes.length; i++) {
 				const n = nodes[i];
-				n.originX = centerX + n.gx * (fluidWidth * 0.5);
-				n.originY = centerY + n.gy * (fluidHeight * 0.5);
+				n.originX = n.c * colWidth;
+				const rowT = n.r / (ROWS - 1); // 0 (surface) to 1 (bed)
+				n.originY = surfaceBaseY + rowT * fluidDepth;
 				n.x = n.originX;
 				n.y = n.originY;
-
-				// Smooth elliptical falloff: does NOT touch banner edges, fades out softly
-				const normDistX = Math.abs(n.gx);
-				const normDistY = Math.abs(n.gy);
-				const distSq = Math.pow(normDistX, 2.2) + Math.pow(normDistY, 2.2);
-				
-				// Smoothstep radial fade
-				if (distSq >= 1) {
-					n.falloff = 0;
-				} else {
-					const t = 1 - distSq;
-					n.falloff = Math.pow(Math.max(0, Math.min(1, t)), 0.85);
-				}
 			}
 		}
 
@@ -272,63 +281,55 @@
 			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
 			if (width < 640) {
-				COLS = 28;
-				ROWS = 15;
+				COLS = 34;
+				ROWS = 10;
 			} else if (width < 1024) {
-				COLS = 36;
-				ROWS = 18;
-			} else {
 				COLS = 46;
-				ROWS = 22;
+				ROWS = 12;
+			} else {
+				COLS = 58;
+				ROWS = 14;
 			}
 
 			initGrid();
 		}
 
-		// Palette interpolation for multi-colored Material 3 Cards
-		// 4-Quadrant fluid direction + energy chromatics
-		// Quadrant 1 (Emerald/Mint): [16, 185, 129]
-		// Quadrant 2 (Ocean/Cyan):   [6, 182, 212]
-		// Quadrant 3 (Indigo/Lilac): [99, 102, 241]
-		// Quadrant 4 (Coral/Peach):  [244, 63, 94]
-		// High kinetic surge:       [251, 191, 36] (Amber gold)
-		function getFluidColor(angle, speedRatio, isHighEnergy) {
-			let normAngle = (angle + Math.PI) / (Math.PI * 2); // [0, 1]
-			normAngle = (normAngle + 0.15) % 1; // slight pleasant offset
+		// Palette interpolation for mini Material 3 cards
+		// Reflects depth (abyss to surface) + kinetic vorticity
+		// Deep bed: Deep ocean navy/indigo -> Mid water: Turquoise/Cyan -> Surface: Mint/Emerald/Coral
+		function getFluidColor(depthRatio, speedRatio, angle) {
+			// depthRatio: 0 (surface) to 1 (container bottom bed)
+			// Angle influence for swirl variation
+			const angleHueShift = Math.sin(angle) * 0.18;
+			const effectiveDepth = Math.max(0, Math.min(1, depthRatio + angleHueShift));
 
 			let r, g, b;
-			if (normAngle < 0.25) {
-				const t = normAngle / 0.25;
-				// Mint to Cyan
-				r = Math.round(16 + (6 - 16) * t);
-				g = Math.round(185 + (182 - 185) * t);
-				b = Math.round(129 + (212 - 129) * t);
-			} else if (normAngle < 0.5) {
-				const t = (normAngle - 0.25) / 0.25;
-				// Cyan to Indigo
-				r = Math.round(6 + (99 - 6) * t);
-				g = Math.round(182 + (102 - 182) * t);
-				b = Math.round(212 + (241 - 212) * t);
-			} else if (normAngle < 0.75) {
-				const t = (normAngle - 0.5) / 0.25;
-				// Indigo to Coral
-				r = Math.round(99 + (244 - 99) * t);
-				g = Math.round(102 + (63 - 102) * t);
-				b = Math.round(241 + (94 - 241) * t);
+			if (effectiveDepth > 0.65) {
+				// Deep Bed: Deep Navy & Indigo
+				const t = (effectiveDepth - 0.65) / 0.35;
+				r = Math.round(14 + (30 - 14) * t);
+				g = Math.round(56 + (41 - 56) * t);
+				b = Math.round(122 + (99 - 122) * t);
+			} else if (effectiveDepth > 0.3) {
+				// Mid Water: Bright Cyan to Ocean Blue
+				const t = (effectiveDepth - 0.3) / 0.35;
+				r = Math.round(6 + (14 - 6) * t);
+				g = Math.round(182 + (56 - 182) * t);
+				b = Math.round(212 + (122 - 212) * t);
 			} else {
-				const t = (normAngle - 0.75) / 0.25;
-				// Coral to Mint
-				r = Math.round(244 + (16 - 244) * t);
-				g = Math.round(63 + (185 - 63) * t);
-				b = Math.round(94 + (129 - 94) * t);
-			}
-
-			// If excited with high energy/speed, blend toward bright amber/gold
-			if (isHighEnergy) {
-				const t = Math.min(1, (speedRatio - 0.4) * 1.6);
-				r = Math.round(r + (251 - r) * t);
-				g = Math.round(g + (191 - g) * t);
-				b = Math.round(b + (36 - b) * t);
+				// Surface Layer: Mint / Coral / Amber
+				const t = effectiveDepth / 0.3;
+				if (speedRatio > 0.4) {
+					// High agitation: Warm Coral & Golden Amber
+					r = Math.round(244 + (251 - 244) * speedRatio);
+					g = Math.round(63 + (191 - 63) * speedRatio);
+					b = Math.round(94 + (36 - 94) * speedRatio);
+				} else {
+					// Calm surface: Vibrant Mint / Aquamarine
+					r = Math.round(16 + (6 - 16) * t);
+					g = Math.round(185 + (182 - 185) * t);
+					b = Math.round(129 + (212 - 129) * t);
+				}
 			}
 
 			return [r, g, b];
@@ -348,7 +349,6 @@
 			if (typeof ctx.roundRect === "function") {
 				ctx.roundRect(-halfW, -halfH, w, h, cr);
 			} else {
-				// Fallback roundRect
 				ctx.moveTo(-halfW + cr, -halfH);
 				ctx.lineTo(halfW - cr, -halfH);
 				ctx.quadraticCurveTo(halfW, -halfH, halfW, -halfH + cr);
@@ -367,7 +367,7 @@
 
 			// Subtle Card Outline for Material Design definition
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(0.28, alpha * 0.35)})`;
+			ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(0.24, alpha * 0.3)})`;
 			ctx.stroke();
 
 			ctx.restore();
@@ -378,10 +378,10 @@
 		function render() {
 			time += 0.016;
 
-			// Track mouse velocity
+			// Mouse velocity
 			if (isHovered && prevMouseX > -1000) {
-				mouseVx = (mouseX - prevMouseX) * 0.45;
-				mouseVy = (mouseY - prevMouseY) * 0.45;
+				mouseVx = (mouseX - prevMouseX) * 0.5;
+				mouseVy = (mouseY - prevMouseY) * 0.5;
 			} else {
 				mouseVx *= 0.85;
 				mouseVy *= 0.85;
@@ -395,92 +395,140 @@
 				pressScale += (0 - pressScale) * 0.08;
 			}
 
+			// 1. Solve 1D Free Water Surface Sloshing Wave Equation (Spring-mass mesh)
+			const surfaceBaseY = height * 0.52;
+			const tension = 0.035;
+			const springK = 0.045;
+			const damping = 0.94;
+
+			for (let c = 0; c < COLS; c++) {
+				const left = c > 0 ? surfaceOffsets[c - 1] : surfaceOffsets[c];
+				const right = c < COLS - 1 ? surfaceOffsets[c + 1] : surfaceOffsets[c];
+				
+				// Wave propagation acceleration
+				const force = -springK * surfaceOffsets[c] + tension * (left + right - 2 * surfaceOffsets[c]);
+				surfaceVelocities[c] = (surfaceVelocities[c] + force) * damping;
+			}
+
+			// Apply surface offsets
+			for (let c = 0; c < COLS; c++) {
+				surfaceOffsets[c] += surfaceVelocities[c];
+			}
+
+			// Mouse interaction with fluid surface & body
+			if (isHovered) {
+				const colWidth = width / (COLS - 1);
+				const mouseCol = Math.round(mouseX / colWidth);
+
+				// If mouse crosses or is near the water line, excite sloshing wave
+				if (mouseY > surfaceBaseY - 60 && mouseY < height) {
+					const mouseSpeed = Math.hypot(mouseVx, mouseVy);
+					const splashRadius = Math.max(2, Math.round(3 + mouseSpeed * 0.4));
+					
+					for (let dc = -splashRadius; dc <= splashRadius; dc++) {
+						const c = mouseCol + dc;
+						if (c >= 0 && c < COLS) {
+							const factor = 1 - Math.abs(dc) / splashRadius;
+							// Push water down or pull up with mouse velocity
+							surfaceVelocities[c] += (mouseVy * 0.15 + (isPressed ? 1.5 : 0.2)) * factor;
+						}
+					}
+				}
+			}
+
 			ctx.clearRect(0, 0, width, height);
 
 			let maxFlowSpeed = 0;
 			let totalKinetic = 0;
 
-			// Base continuous harmonic fluid vorticity field
-			const k1 = 1.6;
-			const k2 = 2.4;
+			// Internal fluid vorticity frequencies
+			const kx = 1.8;
+			const ky = 3.2;
 
 			for (let i = 0; i < nodes.length; i++) {
 				const n = nodes[i];
-				if (n.falloff <= 0.005) continue;
+				const depthT = n.r / (ROWS - 1); // 0 (surface) to 1 (bed)
 
-				// Incompressible 2D streamfunction velocity (natural swirl convection)
-				const fluidVx = Math.sin(n.gy * k1 + time * 0.75) * 1.8 + Math.cos(n.gx * k2 - time * 0.4) * 0.9;
-				const fluidVy = Math.cos(n.gx * k1 + time * 0.75) * 1.8 - Math.sin(n.gy * k2 - time * 0.4) * 0.9;
+				// Surface wave displacement transmitted downwards
+				// Attenuates with depth (deep water barely feels the sloshing surface)
+				const depthDecay = Math.pow(1 - depthT, 1.4);
+				const surfaceDisplacement = surfaceOffsets[n.c] * depthDecay;
 
-				// Mouse push & vortex injection
-				let mouseImpulseX = 0;
-				let mouseImpulseY = 0;
-				if (isHovered) {
+				// 2D Incompressible streamfunction velocity in the reservoir
+				const normX = (n.c / (COLS - 1)) * 2 - 1; // [-1, 1]
+				const normY = depthT; // [0, 1]
+				
+				// Gentle natural internal convection in the liquid
+				const fluidVx = Math.sin(normY * ky + time * 0.9) * (1.2 * (1 - depthT * 0.5)) + Math.cos(normX * kx - time * 0.6) * 0.6;
+				const fluidVy = Math.cos(normX * kx + time * 0.9) * 0.8 * depthDecay;
+
+				// Mouse agitation inside fluid
+				let mousePushX = 0;
+				let mousePushY = 0;
+				if (isHovered && mouseY > surfaceBaseY - 40) {
 					const dx = n.x - mouseX;
 					const dy = n.y - mouseY;
 					const dist = Math.hypot(dx, dy);
-					const mouseRadius = 140 + pressScale * 60;
+					const radius = 120 + pressScale * 60;
 
-					if (dist < mouseRadius && dist > 1) {
-						const proximity = 1 - dist / mouseRadius;
-						// Direct push along mouse velocity + gentle swirl around mouse center
-						const pushMag = proximity * (18 + pressScale * 35);
+					if (dist < radius && dist > 1) {
+						const proximity = 1 - dist / radius;
+						// Tangential swirl + linear drag
 						const tangentX = -dy / dist;
 						const tangentY = dx / dist;
+						const pushMag = proximity * (16 + pressScale * 25);
 
-						mouseImpulseX = mouseVx * proximity * 0.8 + tangentX * pushMag * 0.45;
-						mouseImpulseY = mouseVy * proximity * 0.8 + tangentY * pushMag * 0.45;
+						mousePushX = mouseVx * proximity * 0.7 + tangentX * pushMag * 0.4;
+						mousePushY = mouseVy * proximity * 0.7 + tangentY * pushMag * 0.4;
 					}
 				}
 
-				// Total target velocity
-				const targetVx = fluidVx + mouseImpulseX;
-				const targetVy = fluidVy + mouseImpulseY;
+				// Target velocity
+				const targetVx = fluidVx + mousePushX;
+				const targetVy = fluidVy + mousePushY;
 
-				// Damped fluid acceleration
-				n.vx += (targetVx - n.vx) * 0.16;
-				n.vy += (targetVy - n.vy) * 0.16;
+				n.vx += (targetVx - n.vx) * 0.18;
+				n.vy += (targetVy - n.vy) * 0.18;
 
-				// Elastic displacement from anchor point (maintains grid structure while allowing fluid drift)
-				const spring = 0.12;
-				const damping = 0.84;
+				// Spring anchoring to stay within the bottom-filled grid lattice
+				const spring = 0.14;
 				const dispX = n.x - n.originX;
-				const dispY = n.y - n.originY;
-				n.x += n.vx * 1.4 - dispX * spring;
-				n.y += n.vy * 1.4 - dispY * spring;
+				const dispY = n.y - (n.originY + surfaceDisplacement);
 
-				// Kinetic metrics
+				n.x += n.vx * 1.3 - dispX * spring;
+				n.y += n.vy * 1.3 - dispY * spring;
+
+				// Keep within container horizontal & bottom bounds
+				if (n.y > height - 6) n.y = height - 6;
+
 				const curSpeed = Math.hypot(n.vx, n.vy);
 				n.speed = curSpeed;
 				n.angle = Math.atan2(n.vy, n.vx);
-				n.energy += (curSpeed - n.energy) * 0.12;
+				n.energy += (curSpeed - n.energy) * 0.14;
 
 				if (curSpeed > maxFlowSpeed) maxFlowSpeed = curSpeed;
 				totalKinetic += curSpeed;
 
-				// Dynamic Size scaling based on local speed and energy:
-				// Calm: ~8px Mini Card
-				// Fast / Turbulent: ~18px-24px Expanded Card Tile
-				const speedRatio = Math.min(1.0, curSpeed / 4.5);
-				const isHigh = speedRatio > 0.45;
+				// Card size scaling:
+				// Surface & high energy: Large (~14px to 20px)
+				// Deep water / calm bed: Compact (~9px to 12px)
+				const speedRatio = Math.min(1.0, curSpeed / 4.0);
+				const baseW = 9 + (1 - depthT * 0.4) * 4 + speedRatio * 7;
+				const baseH = 8 + (1 - depthT * 0.4) * 3 + speedRatio * 4;
+				const cardRadius = Math.min(baseW, baseH) * 0.28;
 
-				// Stretch along flow direction
-				const cardLen = (8 + speedRatio * 14 + pressScale * 4) * n.falloff;
-				const cardBreadth = (7 + speedRatio * 7 + pressScale * 2) * n.falloff;
-				const cardRadius = Math.min(cardLen, cardBreadth) * 0.3;
-
-				// Dynamic Chromatics
-				const [cr, cg, cb] = getFluidColor(n.angle, speedRatio, isHigh);
-				const cardAlpha = Math.max(0.18, Math.min(0.92, (0.35 + speedRatio * 0.6) * n.falloff));
+				// Color from fluid depth and kinetic activity
+				const [cr, cg, cb] = getFluidColor(depthT, speedRatio, n.angle);
+				const cardAlpha = Math.max(0.25, Math.min(0.92, 0.4 + (1 - depthT * 0.25) * 0.35 + speedRatio * 0.25));
 
 				// Draw mini MDUI-card tile
 				drawMiniCard(
 					n.x,
 					n.y,
-					cardLen,
-					cardBreadth,
+					baseW,
+					baseH,
 					cardRadius,
-					n.angle,
+					n.angle * 0.4, // subtle inclination
 					cr,
 					cg,
 					cb,
@@ -488,24 +536,22 @@
 				);
 			}
 
-			// Telemetry Update
+			// Telemetry info update
 			if (telemetry) {
 				const avgKinetic = (totalKinetic / Math.max(1, nodes.length)).toFixed(2);
-				const statusTag = isPressed ? "COMPRESSED" : (isHovered && mouseSpeed > 2 ? "TURBULENT" : "EQUILIBRIUM");
-				telemetry.textContent = `FLUID·SIM // DYNAMICS: VORTICITY // KINETIC: ${avgKinetic} // ${statusTag}`;
+				const surfState = Math.abs(surfaceVelocities[Math.floor(COLS / 2)]) > 0.8 ? "WAVY" : "CALM";
+				telemetry.textContent = `CONTAINER: 48% CAPACITY // KINETIC: ${avgKinetic} // SURFACE: ${surfState}`;
 			}
 
 			requestAnimationFrame(render);
 		}
 
 		// Event listeners
-		let mouseSpeed = 0;
 		root.addEventListener("mousemove", (e) => {
 			const rect = root.getBoundingClientRect();
 			mouseX = e.clientX - rect.left;
 			mouseY = e.clientY - rect.top;
 			isHovered = true;
-			mouseSpeed = Math.hypot(mouseVx, mouseVy);
 		});
 
 		root.addEventListener("mouseenter", (e) => {
@@ -532,7 +578,7 @@
 			isPressed = false;
 		});
 
-		// Mobile touch interaction
+		// Touch interaction
 		root.addEventListener("touchstart", (e) => {
 			if (e.touches.length > 0) {
 				const rect = root.getBoundingClientRect();
