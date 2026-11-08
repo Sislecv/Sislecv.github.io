@@ -1,18 +1,19 @@
 ---
-// GravityMembraneBanner.astro: Fixed-Grid Solid Fluid Reservoir Banner
+// GravityMembraneBanner.astro: Fixed-Grid Active Fluid Reservoir Banner
 // Features:
-// - Deep, solid multi-layered water body filling 3/5 (60%) of the banner height
-// - Zero initial scattering/bursting: instantly settled in natural equilibrium on load
-// - Absolutely fixed-position MDUI card grid (zero jitter/rotation/warping)
-// - Cells toggle on/off like ASCII terminal characters: adding/removing cards express waves, wall collision climb, and splashes
-// - Perpetual, organic fluid sloshing & convection even without interaction
-// - Strict Material Theme color & gradient transitions from deep abyss to surface highlights
+// - Deep, solid multi-layer fluid filling 3/5 (60%) of the banner height
+// - Zero initial scattering/bursting: starts in perfect fluid equilibrium
+// - Absolutely fixed-position MDUI card grid (zero position/shape jitter or rotation)
+// - Dynamic wave sloshing, wall collision climbing, and airborne splash droplets
+// - Cards toggle on/off like ASCII terminal characters: expressing fluid motion purely through cell activation
+// - Constant perpetual fluid motion (autonomous sloshing and internal convection even without interaction)
+// - Strict Material Theme color & gradient transitions
 // - Upper 40% open for custom user content (via slot)
 ---
 
 <div class="gravity-fullscreen-hero" id="gravity-hero-container">
 	<div class="gravity-hero-viewport" id="gravity-banner-root">
-		<!-- Canvas simulating the thick solid fluid card matrix -->
+		<!-- Canvas simulating active fluid card matrix -->
 		<canvas id="gravity-banner-canvas" aria-hidden="true"></canvas>
 
 		<!-- Upper spacious zone: reserved for user-defined content / elements -->
@@ -22,7 +23,7 @@
 
 		<!-- Subtle technical telemetry at bottom corner -->
 		<div class="fluid-telemetry">
-			<span class="telemetry-badge" id="fluid-telemetry-metric">FLUID·VOXEL // RESERVOIR: 60% (3/5) // SOLID BODY // EQUILIBRIUM</span>
+			<span class="telemetry-badge" id="fluid-telemetry-metric">FLUID·VOXEL // RESERVOIR: 60% (3/5) // ACTIVE SLOSHING // LIVE</span>
 		</div>
 
 		<!-- Minimalist scroll down indicator -->
@@ -231,18 +232,18 @@
 		let cols = 0;
 		let rows = 0;
 		let stepX = 46;
-		let stepY = 38;
+		let stepY = 36;
 		let cardW = 38;
-		let cardH = 30;
-		let cardRadius = 8;
+		let cardH = 28;
+		let cardRadius = 7;
 		let gridStartY = 0;
 
-		// Fluid Surface Heightfield: Exactly 3/5 (60%) of the Banner is filled with water
+		// Fluid Heightfield (Water occupies 60% = 3/5 of container depth)
 		let baseSurfaceY = 0;
 		let surfaceOffsets = [];
 		let surfaceVelocities = [];
 
-		// Free airborne splash droplets (triggered by clicks or high-speed agitation)
+		// Airborne splash droplets triggered by mouse or vigorous waves
 		const droplets = [];
 
 		// Smoothed cell alpha and energy matrices
@@ -250,27 +251,27 @@
 		let cellEnergy = [];
 
 		function initGridAndFluid() {
-			// Water fills exactly 3/5 (60%) of the container height from bottom
+			// Water fills 3/5 (60%) of container height at rest
 			const waterDepth = height * 0.60;
-			baseSurfaceY = height - waterDepth; // Surface rests at y = 40% height
+			baseSurfaceY = height - waterDepth; // y = 0.40 * height
 
-			// Grid starts higher (at ~22% height) to allow splashing and wall impact waves to climb up
-			gridStartY = height * 0.22;
+			// Grid starts at ~22% height to provide ample room for wall impact climbs and splash droplets
+			gridStartY = height * 0.20;
 			const totalActiveH = height - gridStartY - 12;
 
 			const targetStepX = width < 640 ? 36 : (width < 1100 ? 44 : 48);
-			const targetStepY = width < 640 ? 30 : 36;
+			const targetStepY = width < 640 ? 28 : 34;
 
 			cols = Math.floor(width / targetStepX);
 			stepX = width / cols;
 			cardW = Math.round(stepX * 0.82);
 
-			rows = Math.max(10, Math.floor(totalActiveH / targetStepY));
+			rows = Math.max(12, Math.floor(totalActiveH / targetStepY));
 			stepY = totalActiveH / rows;
 			cardH = Math.round(stepY * 0.82);
 			cardRadius = Math.round(Math.min(cardW, cardH) * 0.28);
 
-			// Initialize wave state: perfectly settled in equilibrium from the very first frame (NO scattering/bursting)
+			// Initialize wave state: starts in calm equilibrium (NO scattering, zero explosion)
 			surfaceOffsets = new Float32Array(cols);
 			surfaceVelocities = new Float32Array(cols);
 
@@ -281,10 +282,10 @@
 				const eRow = new Float32Array(cols);
 				const cy = gridStartY + r * stepY + stepY * 0.5;
 
-				// Instant solid pre-fill below the 3/5 surface line
 				for (let c = 0; c < cols; c++) {
+					// Solid multi-layer pre-fill below equilibrium 3/5 water line
 					if (cy >= baseSurfaceY - stepY * 0.3) {
-						aRow[c] = 1.0; // Solid fluid cell pre-filled immediately
+						aRow[c] = 1.0; // Solid fluid cell filled from the very start
 					} else {
 						aRow[c] = 0.0;
 					}
@@ -311,7 +312,7 @@
 		}
 
 		// Theme Color and Gradient Palette:
-		// Strict Material Design primary progression:
+		// Based strictly on Material Theme Primary token
 		// - Deep Bottom Abyss: Rich dark primary shade
 		// - Mid Solid Body: Pure vibrant Material primary
 		// - Surface Crest / Splash: Tinted luminous primary highlight
@@ -319,18 +320,17 @@
 			const [pr, pg, pb] = primaryColor;
 
 			// Base deep tone at the container bed
-			const deepR = Math.round(pr * 0.38);
-			const deepG = Math.round(pg * 0.42);
-			const deepB = Math.round(pb * 0.58);
+			const deepR = Math.round(pr * 0.36);
+			const deepG = Math.round(pg * 0.40);
+			const deepB = Math.round(pb * 0.56);
 
 			// Bright crest/splash highlight
-			const crestR = Math.round(pr + (255 - pr) * 0.68);
-			const crestG = Math.round(pg + (255 - pg) * 0.68);
-			const crestB = Math.round(pb + (255 - pb) * 0.82);
+			const crestR = Math.round(pr + (255 - pr) * 0.70);
+			const crestG = Math.round(pg + (255 - pg) * 0.70);
+			const crestB = Math.round(pb + (255 - pb) * 0.85);
 
 			// depthRatio: 1.0 at container bottom (deepest), 0.0 at water surface
-			// Combined illumination factor
-			const t = Math.max(0, Math.min(1.0, (1.0 - depthRatio) * 0.68 + energyRatio * 0.55));
+			const t = Math.max(0, Math.min(1.0, (1.0 - depthRatio) * 0.65 + energyRatio * 0.55));
 
 			let r, g, b;
 			if (t < 0.5) {
@@ -386,8 +386,8 @@
 
 			// Mouse velocity
 			if (isHovered && prevMouseX > -1000) {
-				mouseVx = (mouseX - prevMouseX) * 0.7;
-				mouseVy = (mouseY - prevMouseY) * 0.7;
+				mouseVx = (mouseX - prevMouseX) * 0.75;
+				mouseVy = (mouseY - prevMouseY) * 0.75;
 			} else {
 				mouseVx *= 0.85;
 				mouseVy *= 0.85;
@@ -395,82 +395,94 @@
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			// 1. Perpetual Natural Wave Dynamics (gentle left-right fluid sloshing & convection)
-			// Slosh drift that creates continuous natural tide and wall reflection
-			const naturalSlosh = Math.sin(time * 1.25) * 4.5;
-			const crossHarmonic = Math.cos(time * 1.8) * 2.2;
+			// 1. Perpetual Natural Wave Dynamics (vigorous, high-amplitude sloshing & traveling swells)
+			// Generates dynamic sloshing that easily covers 2-4 card rows (40px to 80px amplitude)
+			const primarySloshAmp = 42.0; // Large sloshing amplitude
+			const sloshFreq = 1.35;
+			const primarySlosh = Math.sin(time * sloshFreq); // Left-right rock
 
-			// 2. Wave Equation along water surface columns
-			const tension = 0.042;
-			const springK = 0.028;
-			const damping = 0.955;
+			const waveK1 = 0.22;
+			const waveK2 = 0.42;
+
+			// Coupled spring wave propagation with wall reflection
+			const tension = 0.045;
+			const springK = 0.024;
+			const damping = 0.965;
 
 			for (let c = 0; c < cols; c++) {
-				const left = c > 0 ? surfaceOffsets[c - 1] : surfaceOffsets[c] * 1.15; // Wall reflect & pile up
-				const right = c < cols - 1 ? surfaceOffsets[c + 1] : surfaceOffsets[c] * 1.15;
+				const colNorm = (c / (cols - 1)) * 2.0 - 1.0; // [-1, 1]
 
-				// Sloshing driver
-				const colRatio = (c / (cols - 1)) * 2 - 1; // [-1, 1]
-				const ambientDriver = colRatio * naturalSlosh + Math.sin(colRatio * Math.PI + time) * crossHarmonic;
+				// High-energy ambient slosh driver across the container
+				// Left is high when right is low; wall reflection climbs extra high (shoaling run-up)
+				const wallBoost = (colNorm < 0 ? Math.pow(Math.abs(colNorm), 2.2) : -Math.pow(colNorm, 2.2)) * primarySlosh * primarySloshAmp;
+				
+				// Traveling cross-waves propagating across the surface
+				const crossWave = Math.sin(c * waveK1 - time * 2.6) * 14.0 + Math.cos(c * waveK2 + time * 1.9) * 8.5;
 
-				const force = -springK * surfaceOffsets[c] + tension * (left + right - 2 * surfaceOffsets[c]) + ambientDriver * 0.08;
-				surfaceVelocities[c] = (surfaceVelocities[c] + force) * damping;
+				const targetWaveOffset = wallBoost + crossWave;
+
+				const left = c > 0 ? surfaceOffsets[c - 1] : surfaceOffsets[c];
+				const right = c < cols - 1 ? surfaceOffsets[c + 1] : surfaceOffsets[c];
+
+				// Spring-mesh wave acceleration
+				const waveForce = -springK * (surfaceOffsets[c] - targetWaveOffset) + tension * (left + right - 2.0 * surfaceOffsets[c]);
+				surfaceVelocities[c] = (surfaceVelocities[c] + waveForce) * damping;
 			}
 
 			for (let c = 0; c < cols; c++) {
 				surfaceOffsets[c] += surfaceVelocities[c];
 			}
 
-			// 3. Mouse agitation & splashes
-			if (isHovered && mouseY > baseSurfaceY - 80) {
+			// 2. Mouse interactive disturbance (waves & splashes)
+			if (isHovered && mouseY > baseSurfaceY - 100) {
 				const mouseCol = Math.max(0, Math.min(cols - 1, Math.round(mouseX / stepX)));
 				const mouseSpeed = Math.hypot(mouseVx, mouseVy);
-				const splashRadius = Math.max(2, Math.round(3 + mouseSpeed * 0.35));
+				const influenceRadius = Math.max(2, Math.round(3 + mouseSpeed * 0.4));
 
-				for (let dc = -splashRadius; dc <= splashRadius; dc++) {
+				for (let dc = -influenceRadius; dc <= influenceRadius; dc++) {
 					const c = mouseCol + dc;
 					if (c >= 0 && c < cols) {
-						const factor = 1 - Math.abs(dc) / splashRadius;
-						// Push down or pull up water
-						surfaceVelocities[c] += (mouseVy * 0.25) * factor;
+						const factor = 1.0 - Math.abs(dc) / influenceRadius;
+						// Strongly inject mouse vertical momentum into surface
+						surfaceVelocities[c] += (mouseVy * 0.45) * factor;
 
 						if (splashTrigger) {
-							// Push water down hard and create splash wave
-							surfaceVelocities[c] -= 8.5 * factor;
+							// Explosive plunge on click
+							surfaceVelocities[c] -= 18.0 * factor;
 						}
 					}
 				}
 
 				// Click triggers airborne droplet splashes
 				if (splashTrigger) {
-					const dropCount = Math.min(18, Math.round(8 + mouseSpeed * 0.6));
+					const dropCount = Math.min(24, Math.round(12 + mouseSpeed * 0.8));
 					for (let k = 0; k < dropCount; k++) {
 						droplets.push({
-							x: mouseX + (Math.random() - 0.5) * 36,
-							y: Math.max(baseSurfaceY - 20, mouseY) + (Math.random() - 0.5) * 16,
-							vx: mouseVx * 0.4 + (Math.random() - 0.5) * 12,
-							vy: - (8 + Math.random() * 14 + Math.abs(mouseVy) * 0.3),
+							x: mouseX + (Math.random() - 0.5) * 44,
+							y: Math.max(baseSurfaceY - 40, mouseY) + (Math.random() - 0.5) * 20,
+							vx: mouseVx * 0.5 + (Math.random() - 0.5) * 16,
+							vy: - (10 + Math.random() * 16 + Math.abs(mouseVy) * 0.4),
 							life: 1.0
 						});
 					}
 				}
 			}
 
-			// 4. Update airborne droplets
+			// 3. Update airborne droplets
 			for (let i = droplets.length - 1; i >= 0; i--) {
 				const d = droplets[i];
-				d.vy += 0.55; // Gravity
+				d.vy += 0.58; // Gravity
 				d.x += d.vx;
 				d.y += d.vy;
-				d.life -= 0.015;
+				d.life -= 0.018;
 
-				// Land back in water
 				const dCol = Math.floor(d.x / stepX);
 				const surfAtX = dCol >= 0 && dCol < cols ? (baseSurfaceY + surfaceOffsets[dCol]) : baseSurfaceY;
 
+				// Land back in water
 				if (d.y >= surfAtX && d.vy > 0) {
 					if (dCol >= 0 && dCol < cols) {
-						surfaceVelocities[dCol] += 1.8;
+						surfaceVelocities[dCol] += 3.2; // Droplet impact creates splash ripples
 					}
 					droplets.splice(i, 1);
 				} else if (d.life <= 0 || d.x < 0 || d.x > width) {
@@ -488,7 +500,7 @@
 
 			let activeCardsCount = 0;
 
-			// Droplet spatial occupancy map
+			// Droplet spatial occupancy map for airborne cards
 			const dropletMap = new Uint8Array(rows * cols);
 			for (let i = 0; i < droplets.length; i++) {
 				const d = droplets[i];
@@ -503,25 +515,29 @@
 			// The water body is SOLID and THICK: every cell from the dynamic surface down to the container bottom is solid fluid!
 			for (let r = 0; r < rows; r++) {
 				const cy = gridStartY + r * stepY + stepY * 0.5;
-				// Depth ratio: 0.0 at surface, 1.0 at the container bed
-				const depthRatio = Math.max(0, Math.min(1.0, (cy - (baseSurfaceY - 40)) / (height - baseSurfaceY)));
+				// Depth ratio: 0.0 at water surface line, 1.0 at container bottom bed
+				const depthRatio = Math.max(0, Math.min(1.0, (cy - (baseSurfaceY - 50)) / (height - baseSurfaceY)));
 
 				for (let c = 0; c < cols; c++) {
 					const cx = c * stepX + stepX * 0.5;
 
-					// Dynamic surface line at this column (including sloshing & wall climb)
+					// Dynamic surface Y at this column (sloshing + wall impact climb)
 					const currentSurfaceY = baseSurfaceY + surfaceOffsets[c];
 
 					// Check if this cell is submerged in the thick solid water body, or holds an airborne splash droplet
-					const isSubmerged = cy >= (currentSurfaceY - stepY * 0.45);
+					const isSubmerged = cy >= (currentSurfaceY - stepY * 0.35);
 					const hasDroplet = dropletMap[r * cols + c] === 1;
 
+					// Internal fluid convection velocity for energetic illumination
+					const internalFlow = Math.sin(r * 0.45 + time * 1.6) * 0.6 + Math.cos(c * 0.3 - time * 1.2) * 0.5;
+					const surfaceActivity = Math.abs(surfaceVelocities[c]) * 0.18;
+					const cellKinetic = Math.min(1.0, surfaceActivity + Math.abs(internalFlow) * 0.4 + (hasDroplet ? 0.8 : 0.0));
+
 					const targetA = (isSubmerged || hasDroplet) ? 1.0 : 0.0;
-					const localEnergy = Math.min(1.0, Math.abs(surfaceVelocities[c]) * 0.25 + (hasDroplet ? 0.7 : 0.0));
 
 					// Smooth appearance transition
-					cellAlpha[r][c] += (targetA - cellAlpha[r][c]) * 0.28;
-					cellEnergy[r][c] += (localEnergy - cellEnergy[r][c]) * 0.2;
+					cellAlpha[r][c] += (targetA - cellAlpha[r][c]) * 0.32;
+					cellEnergy[r][c] += (cellKinetic - cellEnergy[r][c]) * 0.22;
 
 					const currentA = cellAlpha[r][c];
 
@@ -530,7 +546,7 @@
 						// Dynamic theme color: deep rich base at bottom -> vibrant primary -> light crest
 						const [cr, cg, cb] = getThemeGradientColor(cellEnergy[r][c], depthRatio);
 						const cardAlpha = Math.max(0.48, Math.min(0.98, currentA));
-						const outlineA = Math.max(0.12, Math.min(0.36, currentA * 0.36));
+						const outlineA = Math.max(0.12, Math.min(0.38, currentA * 0.38));
 
 						// Strictly fixed position and shape (no rotation, no warping)
 						drawCardTile(cx, cy, cardW, cardH, cr, cg, cb, cardAlpha, outlineA);
@@ -550,8 +566,8 @@
 			// Telemetry status
 			if (telemetry) {
 				const waveAmp = Math.abs(surfaceOffsets[0]).toFixed(1);
-				const statusTag = isHovered && mouseSpeed > 3 ? "TURBULENT SURGE" : (Math.abs(surfaceVelocities[0]) > 0.5 ? "SLOSHING & CLIMBING" : "STEADY TIDE");
-				telemetry.textContent = `FLUID·VOXEL // RESERVOIR: 60% (3/5) // SOLID BODY // ACTIVE: ${activeCardsCount} // ${statusTag}`;
+				const statusTag = isHovered && mouseSpeed > 3 ? "TURBULENT SURGE" : (Math.abs(surfaceVelocities[0]) > 0.6 ? "SLOSHING & WALL CLIMB" : "CONTINUOUS TIDE");
+				telemetry.textContent = `FLUID·VOXEL // RESERVOIR: 60% (3/5) // SOLID BODY // WAVE: ±${waveAmp}px // ${statusTag}`;
 			}
 
 			let mouseSpeed = Math.hypot(mouseVx, mouseVy);
