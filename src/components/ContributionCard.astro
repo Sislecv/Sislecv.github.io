@@ -41,10 +41,7 @@ const levelColor = (count: number) =>
 				: "#9be9a8";
 ---
 
-<mdui-card clickable href="/archive/" variant="elevated" class="bento-card card-editorial-contrib">
-	<!-- Editorial Typographic Watermark -->
-	<div class="editorial-watermark" aria-hidden="true">CADENCE</div>
-
+<mdui-card clickable href="/archive/" variant="elevated" class="bento-card">
 	<div class="card-body contrib-body">
 		<div class="contrib-grid">
 			{
@@ -64,38 +61,4 @@ const levelColor = (count: number) =>
 </mdui-card>
 
 <style>
-	.card-editorial-contrib {
-		position: relative;
-		overflow: hidden;
-		background: #e5ebe4 !important; /* Pinterest Soft Sage Cream */
-		color: #172619 !important;
-	}
-	:global(.mdui-theme-dark) .card-editorial-contrib {
-		background: #1c261e !important; /* Deep Moss Night */
-		color: #e5ebe4 !important;
-	}
-
-	.editorial-watermark {
-		position: absolute;
-		right: 14px;
-		bottom: -20px;
-		font-family: var(--font-double-line), var(--font-display);
-		font-size: 5.4rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: #172619;
-		opacity: 0.05;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease;
-	}
-	:global(.mdui-theme-dark) .editorial-watermark {
-		color: #e5ebe4;
-		opacity: 0.08;
-	}
-
-	.card-editorial-contrib:hover .editorial-watermark {
-		opacity: 0.07;
-	}
 </style>

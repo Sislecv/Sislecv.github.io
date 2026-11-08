@@ -13,9 +13,7 @@ const url = getPostUrl(getPostSlug(post));
 const cover = resolveMediaUrl(post.data.image);
 ---
 
-<mdui-card clickable href={url} variant={featured ? "elevated" : "filled"} class:list={["bento-card", "tonal-post-card", { "post-featured": featured, "post-card": !featured }]}>
-	<!-- Monoton Double-line Watermark -->
-	<div class="post-card-watermark" aria-hidden="true">ARTICLE</div>
+<mdui-card clickable href={url} variant={featured ? "elevated" : "filled"} class:list={["bento-card", { "post-featured": featured, "post-card": !featured }]}>
 	{
 		cover && (
 			<div class="post-cover-wrap">
@@ -56,39 +54,6 @@ const cover = resolveMediaUrl(post.data.image);
 </mdui-card>
 
 <style>
-	.tonal-post-card {
-		position: relative;
-		overflow: hidden;
-		border: none !important;
-		outline: none !important;
-		background: #fbf8f3 !important;
-		color: #2e2418 !important;
-		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease) !important;
-	}
-	:global(.mdui-theme-dark) .tonal-post-card {
-		background: #241e17 !important;
-		color: #fbf8f3 !important;
-	}
-
-	.post-card-watermark {
-		position: absolute;
-		right: 10px;
-		bottom: -14px;
-		font-family: var(--font-double-line), monospace;
-		font-size: 4rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: currentColor;
-		opacity: 0.05;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease;
-	}
-	.tonal-post-card:hover .post-card-watermark {
-		opacity: 0.09;
-	}
-
 	.post-cover-wrap {
 		width: 100%;
 		overflow: hidden;

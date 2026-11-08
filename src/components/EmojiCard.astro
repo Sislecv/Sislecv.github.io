@@ -3,10 +3,7 @@
 import { status } from "../site.config";
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card card-editorial-emoji">
-	<!-- Editorial Typographic Watermark -->
-	<div class="editorial-watermark" aria-hidden="true">MOOD</div>
-
+<mdui-card clickable variant="elevated" class="bento-card">
 	<div class="card-body status-card-body">
 		<!-- Top Row: Optional Status Badges -->
 		<div class="status-badges-row">
@@ -52,42 +49,6 @@ import { status } from "../site.config";
 </mdui-card>
 
 <style>
-	.card-editorial-emoji {
-		position: relative;
-		overflow: hidden;
-		background: #edd2fe !important; /* Pinterest Lavender / Lilac */
-		color: #2a1140 !important;
-	}
-	:global(.mdui-theme-dark) .card-editorial-emoji {
-		background: #331944 !important; /* Deep Plum Night */
-		color: #edd2fe !important;
-	}
-
-	.card-editorial-emoji .editorial-watermark {
-		position: absolute;
-		right: -8px;
-		bottom: -15px;
-		font-family: var(--font-double-line), var(--font-display);
-		font-size: 4.8rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: #2a1140;
-		opacity: 0.06;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease, transform 0.3s ease;
-	}
-	:global(.mdui-theme-dark) .card-editorial-emoji .editorial-watermark {
-		color: #edd2fe;
-		opacity: 0.09;
-	}
-
-	.card-editorial-emoji:hover .editorial-watermark {
-		opacity: 0.09;
-		transform: translateY(-3px);
-	}
-
 	.status-card-body {
 		height: 100%;
 		display: flex;

@@ -30,7 +30,6 @@ const TAG_THEMES = [
 							variant="filled"
 							class:list={["bento-card", "tag-tonal-card", theme, "reveal"]}
 						>
-							<div class="tag-card-watermark" aria-hidden="true">#{idx + 1}</div>
 							<div class="card-body tag-card-body">
 								<mdui-icon-tag--outlined class="tag-symbol"></mdui-icon-tag--outlined>
 								<div class="tag-name">{tag}</div>
@@ -124,7 +123,8 @@ const TAG_THEMES = [
 	}
 
 	.count-num-art {
-		font-family: var(--font-double-line), monospace;
+		font-family: var(--font-display), var(--font-sans);
+		font-weight: 700;
 		font-size: 0.95rem;
 	}
 

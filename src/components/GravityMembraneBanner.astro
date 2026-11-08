@@ -402,37 +402,37 @@
 			}
 
 			// 1. Natural, Stochastic Wave & Water Sloshing Physics
-			// Multi-harmonic stochastic swells with natural chaos (no repetitive mechanical oscillation)
-			const waveNoise1 = Math.sin(time * 0.52) * Math.cos(time * 0.23);
-			const waveNoise2 = Math.sin(time * 1.05 + 1.2) * 0.4;
-			const currentSlosh = waveNoise1 + waveNoise2;
+			// Enhanced autonomous wave sloshing amplitude without mouse interaction
+			const waveNoise1 = Math.sin(time * 0.65) * Math.cos(time * 0.32);
+			const waveNoise2 = Math.sin(time * 1.25 + 0.8) * 0.45;
+			const currentSlosh = (waveNoise1 + waveNoise2) * 1.35; // Larger natural sloshing swing
 
-			const maxWaveClimb = height * 0.36;
-			const tension = 0.036;
-			const springK = 0.015;
-			const damping = 0.976;
+			const maxWaveClimb = height * 0.42; // Substantially larger wave climb along container walls
+			const tension = 0.042;
+			const springK = 0.018;
+			const damping = 0.978;
 
 			for (let c = 0; c < cols; c++) {
 				const colNorm = (c / (cols - 1)) * 2.0 - 1.0; // [-1.0, 1.0]
 				const absCol = Math.abs(colNorm);
 
-				// Fluid wall run-up & reflection
+				// Fluid wall run-up & dynamic slamming reflection
 				const wallSide = colNorm < 0 ? -1.0 : 1.0;
 				const isPushingWall = (wallSide * currentSlosh) < 0;
 
 				let wallTarget = 0;
 				if (isPushingWall) {
-					const surgeProfile = Math.pow(absCol, 2.3);
+					const surgeProfile = Math.pow(absCol, 2.2);
 					wallTarget = -Math.abs(currentSlosh) * maxWaveClimb * surgeProfile;
 				} else {
-					const drawProfile = Math.pow(absCol, 1.4);
-					wallTarget = Math.abs(currentSlosh) * (height * 0.08) * drawProfile;
+					const drawProfile = Math.pow(absCol, 1.3);
+					wallTarget = Math.abs(currentSlosh) * (height * 0.12) * drawProfile;
 				}
 
-				// Natural cross traveling swells & turbulence
-				const swell1 = Math.sin(c * 0.16 - time * 1.6 + waveNoise2) * (height * 0.024);
-				const swell2 = Math.cos(c * 0.28 + time * 1.3) * (height * 0.016);
-				const swell3 = Math.sin(c * 0.08 + time * 0.7) * (height * 0.020);
+				// Cross traveling swells & turbulence across the reservoir
+				const swell1 = Math.sin(c * 0.18 - time * 1.9 + waveNoise2) * (height * 0.032);
+				const swell2 = Math.cos(c * 0.32 + time * 1.5) * (height * 0.022);
+				const swell3 = Math.sin(c * 0.10 + time * 0.9) * (height * 0.026);
 
 				const targetWaveOffset = wallTarget + swell1 + swell2 + swell3;
 
@@ -444,31 +444,33 @@
 				surfaceVelocities[c] = (surfaceVelocities[c] + waveForce) * damping;
 			}
 
-			// Integrate wave velocities & generate realistic wave breaking splashes
+			// Integrate wave velocities & generate realistic wall crash bursts
 			for (let c = 0; c < cols; c++) {
 				surfaceOffsets[c] += surfaceVelocities[c];
 
 				// Ceiling clamp for main water body
-				const minOffset = -(height * 0.44);
+				const minOffset = -(height * 0.46);
 				if (surfaceOffsets[c] < minOffset) {
 					surfaceOffsets[c] = minOffset;
 					surfaceVelocities[c] = 0;
 				}
 
-				// Physical Wave Breaking & Splash Ejection:
-				// When water surges up walls or sharp wave crests rise rapidly, clusters of spray droplets are cast into the air!
-				const isWall = c <= 3 || c >= cols - 4;
-				const isCrestSurge = surfaceVelocities[c] < -1.8;
+				// Optimized Wall Collision Splash Ejection:
+				// When surging wave hits left or right screen boundary, cast generous spray clusters inward!
+				const isWall = c <= 4 || c >= cols - 5;
+				const isCrestSurge = surfaceVelocities[c] < -1.4 || surfaceOffsets[c] < -(height * 0.18);
 
-				if (isWall && isCrestSurge && Math.random() < 0.14) {
-					const sprayCount = 2 + Math.floor(Math.random() * 4);
+				if (isWall && isCrestSurge && Math.random() < 0.22) {
+					// Substantial burst of flying droplets
+					const sprayCount = 4 + Math.floor(Math.random() * 8);
+					const inwardDir = c <= 4 ? 1 : -1;
 					for (let k = 0; k < sprayCount; k++) {
-						const isHigh = Math.random() < 0.20; // Some droplets shoot high into upper screen
+						const isHigh = Math.random() < 0.26; // High spray arcs up across the screen
 						splashes.push({
 							x: c * step + (Math.random() - 0.5) * step,
-							y: baseSurfaceY + surfaceOffsets[c] - Math.random() * 8,
-							vx: (c <= 3 ? 1 : -1) * (1.8 + Math.random() * 4.5),
-							vy: isHigh ? -(12.0 + Math.random() * 7.5) : -(5.0 + Math.random() * 5.0),
+							y: baseSurfaceY + surfaceOffsets[c] - Math.random() * 10,
+							vx: inwardDir * (2.0 + Math.random() * 6.5), // Project inward into the reservoir
+							vy: isHigh ? -(13.0 + Math.random() * 8.0) : -(6.0 + Math.random() * 6.0),
 							life: 1.0
 						});
 					}

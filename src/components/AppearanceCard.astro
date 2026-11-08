@@ -3,10 +3,7 @@ import { theme } from "../site.config";
 const SCHEMES = theme.schemes;
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card card-editorial-appearance">
-	<!-- Editorial Typographic Watermark -->
-	<div class="editorial-watermark" aria-hidden="true">THEME</div>
-
+<mdui-card clickable variant="elevated" class="bento-card">
 	<div class="card-body">
 		<div class="appearance-row" style="padding: 0">
 			<mdui-icon-light-mode--outlined style="font-size: 20px"></mdui-icon-light-mode--outlined>
@@ -89,56 +86,41 @@ const SCHEMES = theme.schemes;
 </script>
 
 <style>
-	.card-editorial-appearance {
-		position: relative;
-		overflow: hidden;
-		background: #fdf5e6 !important; /* Pinterest Butter Cream / Warm Vanilla */
-		color: #3b2800 !important;
-	}
-	:global(.mdui-theme-dark) .card-editorial-appearance {
-		background: #2e261a !important; /* Rich Dark Vanilla */
-		color: #fdf5e6 !important;
+	.appearance-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		gap: 8px;
+		color: rgb(var(--mdui-color-on-surface));
 	}
 
-	.editorial-watermark {
-		position: absolute;
-		right: -8px;
-		bottom: -15px;
-		font-family: var(--font-double-line), var(--font-display);
-		font-size: 4.6rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: #3b2800;
-		opacity: 0.055;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease;
-	}
-	:global(.mdui-theme-dark) .editorial-watermark {
-		color: #fdf5e6;
-		opacity: 0.08;
+	.scheme-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 8px;
+		width: 100%;
 	}
 
-	.card-editorial-appearance:hover .editorial-watermark {
-		opacity: 0.08;
+	.scheme-dot {
+		width: 22px;
+		height: 22px;
+		border-radius: 50%;
+		border: 2px solid transparent;
+		cursor: pointer;
+		padding: 0;
+		outline: none;
+		transition: transform var(--md-duration-short, 200ms) var(--md-easing-standard, ease),
+			box-shadow var(--md-duration-short, 200ms) var(--md-easing-standard, ease);
+	}
+
+	.scheme-dot:hover {
+		transform: scale(1.15);
 	}
 
 	.scheme-dot.is-active {
-		outline: 2px solid rgb(var(--mdui-color-primary));
-		outline-offset: 3px;
+		border-color: rgb(var(--mdui-color-on-surface));
+		box-shadow: 0 0 0 2px rgb(var(--mdui-color-surface)), 0 0 0 4px rgb(var(--mdui-color-primary));
 		transform: scale(1.1);
-	}
-
-	@media (max-width: 640px) {
-		.card-body {
-			flex-direction: row !important;
-			align-items: center !important;
-			justify-content: space-between !important;
-			padding: 16px 20px !important;
-		}
-		.scheme-grid {
-			margin-top: 0 !important;
-		}
 	}
 </style>

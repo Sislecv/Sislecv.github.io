@@ -25,10 +25,7 @@ const TICKET_PALETTES = [
 ];
 ---
 
-<mdui-card variant="elevated" class="bento-card card-editorial-github">
-	<!-- Editorial Typographic Watermark -->
-	<div class="editorial-watermark" aria-hidden="true">REPOSITORIES</div>
-
+<mdui-card variant="elevated" class="bento-card">
 	<div class="card-body note-grid">
 		{
 			PROJECTS.map((p, i) => {
@@ -66,31 +63,6 @@ const TICKET_PALETTES = [
 </mdui-card>
 
 <style>
-	.card-editorial-github {
-		position: relative;
-		overflow: hidden;
-	}
-
-	.editorial-watermark {
-		position: absolute;
-		right: 12px;
-		bottom: -20px;
-		font-family: var(--font-double-line), var(--font-display);
-		font-size: 5.4rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: rgb(var(--mdui-color-on-surface));
-		opacity: 0.045;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease;
-	}
-
-	.card-editorial-github:hover .editorial-watermark {
-		opacity: 0.07;
-	}
-
 	.note-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

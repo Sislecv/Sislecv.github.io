@@ -10,10 +10,7 @@ const { posts } = Astro.props;
 const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 ---
 
-<mdui-card clickable variant="elevated" class="bento-card card-editorial-tagcloud">
-	<!-- Editorial Typographic Watermark -->
-	<div class="editorial-watermark" aria-hidden="true">TAGS</div>
-
+<mdui-card clickable variant="elevated" class="bento-card">
 	<div class="card-body" style="justify-content: flex-start">
 		<div class="tag-cloud" style="margin-top: 4px">
 			{
@@ -26,40 +23,3 @@ const tags = [...getTags(posts).entries()].slice(0, Astro.props.limit ?? 12);
 		</div>
 	</div>
 </mdui-card>
-
-<style>
-	.card-editorial-tagcloud {
-		position: relative;
-		overflow: hidden;
-		background: #f7ede8 !important; /* Pinterest Peach Blossom Tint */
-		color: #3b190f !important;
-	}
-	:global(.mdui-theme-dark) .card-editorial-tagcloud {
-		background: #2b1a16 !important; /* Deep Terracotta Night */
-		color: #f7ede8 !important;
-	}
-
-	.editorial-watermark {
-		position: absolute;
-		right: -8px;
-		bottom: -15px;
-		font-family: var(--font-double-line), var(--font-display);
-		font-size: 5rem;
-		font-weight: 400;
-		line-height: 0.85;
-		color: #3b190f;
-		opacity: 0.055;
-		letter-spacing: 0.05em;
-		pointer-events: none;
-		user-select: none;
-		transition: opacity 0.3s ease;
-	}
-	:global(.mdui-theme-dark) .editorial-watermark {
-		color: #f7ede8;
-		opacity: 0.09;
-	}
-
-	.card-editorial-tagcloud:hover .editorial-watermark {
-		opacity: 0.08;
-	}
-</style>

@@ -7,9 +7,6 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 	<div class="bento">
 		<div class="col-8">
 			<mdui-card clickable variant="filled" class="bento-card about-main-card">
-				<!-- Double-line Monoton Watermark -->
-				<div class="about-watermark" aria-hidden="true">ABOUT</div>
-
 				<div class="card-body" style="padding: 32px; position: relative; z-index: 2;">
 					<h1 class="about-title">
 						<mdui-icon-person--outlined class="about-title-icon"></mdui-icon-person--outlined>
@@ -49,7 +46,6 @@ import { SITE, SOCIAL_LINKS, AVATAR } from "../consts";
 
 		<div class="col-4" style="display: flex; flex-direction: column; gap: var(--blog-gap)">
 			<mdui-card clickable variant="filled" class="bento-card about-side-profile">
-				<div class="about-watermark" aria-hidden="true">USER</div>
 				<div class="card-body" style="align-items: center; text-align: center; padding: 28px 18px; gap: 10px; position: relative; z-index: 2;">
 					<img
 						src={AVATAR}

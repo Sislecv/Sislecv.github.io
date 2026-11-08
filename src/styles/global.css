@@ -3,8 +3,8 @@
 	--blog-max-width: 1100px;
 	--blog-gap: 16px;
 
-	/* Editorial & Artistic Typography System */
-	--font-double-line: "Monoton", -apple-system, sans-serif;
+	/* Editorial & Typography System (Clean standard fonts) */
+	--font-double-line: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
 	--font-pixel: "Silkscreen", monospace;
 	--font-display: "Plus Jakarta Sans", "Noto Sans SC", system-ui, sans-serif;
 	--font-sans: "Noto Sans SC", "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
