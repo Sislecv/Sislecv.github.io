@@ -176,11 +176,27 @@
 		let isHovered = false;
 		let mouseImpulse = false;
 
-		// Theme colors
-		let primaryColor = [11, 87, 208];
+		// Theme colors extracted from MDUI CSS variables
+		let themePrimary = [11, 87, 208];
+		let themePrimaryContainer = [218, 226, 249];
+		let themeSecondary = [0, 140, 200];
+		let themeTertiary = [120, 80, 210];
+		let themeTertiaryContainer = [255, 216, 253];
 
-		function parseRgb(str, fallback) {
+		function parseColor(str, fallback) {
 			if (!str) return fallback;
+			str = str.trim();
+			if (str.startsWith("#")) {
+				let hex = str.slice(1);
+				if (hex.length === 3) hex = hex.split("").map((c) => c + c).join("");
+				if (hex.length >= 6) {
+					return [
+						parseInt(hex.slice(0, 2), 16),
+						parseInt(hex.slice(2, 4), 16),
+						parseInt(hex.slice(4, 6), 16),
+					];
+				}
+			}
 			const m = str.match(/[\d.]+/g);
 			if (m && m.length >= 3) {
 				return [parseFloat(m[0]), parseFloat(m[1]), parseFloat(m[2])];
@@ -190,7 +206,11 @@
 
 		function updateTheme() {
 			const cs = getComputedStyle(document.documentElement);
-			primaryColor = parseRgb(cs.getPropertyValue("--mdui-color-primary").trim(), [11, 87, 208]);
+			themePrimary = parseColor(cs.getPropertyValue("--mdui-color-primary"), [11, 87, 208]);
+			themePrimaryContainer = parseColor(cs.getPropertyValue("--mdui-color-primary-container"), [218, 226, 249]);
+			themeSecondary = parseColor(cs.getPropertyValue("--mdui-color-secondary"), [0, 140, 200]);
+			themeTertiary = parseColor(cs.getPropertyValue("--mdui-color-tertiary"), [120, 80, 210]);
+			themeTertiaryContainer = parseColor(cs.getPropertyValue("--mdui-color-tertiary-container"), [255, 216, 253]);
 		}
 
 		// Fixed Matrix Configuration
@@ -220,16 +240,18 @@
 		let cellEnergy = [];
 
 		function initGridAndFluid() {
-			// Small square cell dimensioning
-			step = width < 640 ? 20 : (width < 1100 ? 22 : 25);
-			cardSize = Math.round(step * 0.82);
-			cardRadius = Math.max(2, Math.round(cardSize * 0.20));
+			// Small square cell dimensioning - exact width subdivision guarantees zero edge gap
+			const targetStep = width < 640 ? 19 : (width < 1100 ? 22 : 24);
+			cols = Math.round(width / targetStep);
+			step = width / cols; // Exact width division: cols * step === width
+			cardSize = Math.round(step * 0.84);
+			cardRadius = Math.max(2, Math.round(cardSize * 0.18));
 
-			cols = Math.ceil(width / step);
 			rows = Math.ceil(height / step);
 
-			gridStartX = (width - cols * step) * 0.5;
-			gridStartY = (height - rows * step) * 0.5;
+			// Start exactly at left edge (0) and align bottom row to container bed
+			gridStartX = 0;
+			gridStartY = height - rows * step;
 
 			const _px = [];
 			const _py = [];
@@ -238,34 +260,37 @@
 			const _isWall = [];
 			const _rho = [];
 
-			// 1. Static boundary wall particles (prevent penetration, provide natural SPH repulsive cushion)
-			// Left boundary
-			for (let y = 0; y <= rows + 1; y += 0.9) {
-				_px.push(1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(0.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			// 1. Static boundary wall particles placed outside visible grid boundaries
+			// Left boundary: two layers outside grid (x = -0.7 and x = -1.6)
+			for (let y = -1; y <= rows + 2; y += 0.85) {
+				_px.push(-0.7); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(-1.6); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
-			// Right boundary
-			for (let y = 0; y <= rows + 1; y += 0.9) {
-				_px.push(cols - 1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(cols); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			// Right boundary: two layers outside grid (x = cols - 0.3 and x = cols + 0.6)
+			const rightWall1 = cols - 0.3;
+			const rightWall2 = cols + 0.6;
+			for (let y = -1; y <= rows + 2; y += 0.85) {
+				_px.push(rightWall1); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(rightWall2); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
-			// Bottom boundary
-			for (let x = 0; x <= cols; x += 0.9) {
-				_px.push(x); _py.push(rows - 0.5); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(x); _py.push(rows + 0.5); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+			// Bottom boundary: two layers below grid (y = rows - 0.3 and y = rows + 0.6)
+			const botWall1 = rows - 0.3;
+			const botWall2 = rows + 0.6;
+			for (let x = -1.6; x <= cols + 1.0; x += 0.85) {
+				_px.push(x); _py.push(botWall1); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(x); _py.push(botWall2); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
 
-			// 2. Coherent Fluid particles strictly filling bottom 1/5 (20%) at rest
-			// Y starts from rows * 0.80 down to rows - 1.2
+			// 2. Coherent Fluid particles strictly filling bottom 1/5 (20%) at rest, spanning 100% width
 			const fluidStartY = rows * 0.80;
-			const targetFluid = Math.min(420, Math.max(160, Math.floor(cols * (rows * 0.20) * 1.15)));
+			const targetFluid = Math.min(640, Math.max(160, Math.floor(cols * (rows * 0.20) * 1.25)));
 			let added = 0;
 
 			const pSpacing = 0.82;
-			for (let y = fluidStartY; y < rows - 1.2 && added < targetFluid; y += pSpacing) {
-				for (let x = 2.5; x < cols - 2.5 && added < targetFluid; x += pSpacing) {
-					_px.push(x + (Math.random() - 0.5) * 0.1);
-					_py.push(y + (Math.random() - 0.5) * 0.1);
+			for (let y = fluidStartY; y < rows - 0.9 && added < targetFluid; y += pSpacing) {
+				for (let x = 0.0; x <= cols - 1.0 && added < targetFluid; x += pSpacing) {
+					_px.push(x + (Math.random() - 0.5) * 0.08);
+					_py.push(y + (Math.random() - 0.5) * 0.08);
 					_vx.push(0);
 					_vy.push(0);
 					_isWall.push(0);
@@ -284,16 +309,15 @@
 			isWall = new Uint8Array(_isWall);
 			rho = new Float32Array(_rho);
 
-			// Initialize grid matrix
+			// Initialize grid matrix across entire width
 			cellAlpha = [];
 			cellEnergy = [];
 			for (let r = 0; r < rows; r++) {
 				const aRow = new Float32Array(cols);
 				const eRow = new Float32Array(cols);
-				const cy = r;
 				for (let c = 0; c < cols; c++) {
-					// Solid at bottom 1/5
-					if (cy >= fluidStartY - 0.5) {
+					// Solid at resting bottom 1/5
+					if (r >= fluidStartY - 0.5) {
 						aRow[c] = 1.0;
 					} else {
 						aRow[c] = 0.0;
@@ -318,41 +342,46 @@
 			initGridAndFluid();
 		}
 
-		// Light, translucent Material tone
+		// Full-spectrum Material Theme gradient palette
 		function getThemeGradientColor(energyRatio, depthRatio) {
-			const [pr, pg, pb] = primaryColor;
+			// depthRatio: 1.0 at container floor, 0.0 at top
+			const heightFactor = 1.0 - depthRatio; // 0.0 at floor, ~0.20 at baseline, 1.0 at very top
+			// t in [0.0, 1.0]: composite depth + kinetic energy progression
+			const t = Math.max(0, Math.min(1.0, heightFactor * 0.92 + energyRatio * 0.58));
 
-			// Lighter base tone at container bed
-			const deepR = Math.round(pr * 0.55 + (255 - pr) * 0.35);
-			const deepG = Math.round(pg * 0.55 + (255 - pg) * 0.35);
-			const deepB = Math.round(pb * 0.55 + (255 - pb) * 0.45);
-
-			// Mid body tone
-			const midR = Math.round(pr * 0.75 + (255 - pr) * 0.50);
-			const midG = Math.round(pg * 0.75 + (255 - pg) * 0.50);
-			const midB = Math.round(pb * 0.75 + (255 - pb) * 0.60);
-
-			// Bright crest/surge highlight
-			const crestR = Math.round(pr * 0.25 + 255 * 0.75);
-			const crestG = Math.round(pg * 0.25 + 255 * 0.75);
-			const crestB = Math.round(pb * 0.15 + 255 * 0.85);
-
-			const t = Math.max(0, Math.min(1.0, (1.0 - depthRatio) * 0.52 + energyRatio * 0.65));
+			const p = themePrimary;
+			const sec = themeSecondary;
+			const tert = themeTertiary;
+			const cont = themePrimaryContainer;
 
 			let r, g, b;
-			if (t < 0.5) {
-				const subT = t / 0.5;
-				r = Math.round(deepR + (midR - deepR) * subT);
-				g = Math.round(deepG + (midG - deepG) * subT);
-				b = Math.round(deepB + (midB - deepB) * subT);
+			if (t < 0.25) {
+				// Deep calm bed: rich dark primary tone
+				const s = t / 0.25;
+				r = p[0] * 0.58 + (p[0] - p[0] * 0.58) * s;
+				g = p[1] * 0.58 + (p[1] - p[1] * 0.58) * s;
+				b = p[2] * 0.70 + (p[2] - p[2] * 0.70) * s;
+			} else if (t < 0.58) {
+				// Mid layer: transitions from Primary into vibrant Secondary/Tertiary gradient
+				const s = (t - 0.25) / 0.33;
+				r = p[0] + (tert[0] - p[0]) * s;
+				g = p[1] + (sec[1] - p[1]) * s;
+				b = p[2] + (tert[2] - p[2]) * s;
+			} else if (t < 0.85) {
+				// Rising surge / active currents: Tertiary to vibrant Container gradient
+				const s = (t - 0.58) / 0.27;
+				r = tert[0] + (cont[0] - tert[0]) * s;
+				g = sec[1] + (cont[1] - sec[1]) * s;
+				b = tert[2] + (cont[2] - tert[2]) * s;
 			} else {
-				const subT = (t - 0.5) / 0.5;
-				r = Math.round(midR + (crestR - midR) * subT);
-				g = Math.round(midG + (crestG - midG) * subT);
-				b = Math.round(midB + (crestB - midB) * subT);
+				// Splashing wave crest / wall collision / extreme speed: luminous highlight
+				const s = (t - 0.85) / 0.15;
+				r = cont[0] + (248 - cont[0]) * s;
+				g = cont[1] + (252 - cont[1]) * s;
+				b = Math.min(255, cont[2] + (255 - cont[2]) * s);
 			}
 
-			return [r, g, b];
+			return [Math.round(r), Math.round(g), Math.round(b)];
 		}
 
 		function drawCardTile(cx, cy, size, r, g, b, alpha, outlineAlpha) {
@@ -375,7 +404,19 @@
 				ctx.closePath();
 			}
 
-			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+			// Subtle vertical gradient on each card for elevated Material tactile feel
+			const grad = ctx.createLinearGradient(cx, cy - half, cx, cy + half);
+			const r1 = Math.min(255, Math.round(r * 1.12 + 10));
+			const g1 = Math.min(255, Math.round(g * 1.12 + 10));
+			const b1 = Math.min(255, Math.round(b * 1.08 + 12));
+			const r2 = Math.round(r * 0.90);
+			const g2 = Math.round(g * 0.90);
+			const b2 = Math.round(b * 0.92);
+
+			grad.addColorStop(0, `rgba(${r1}, ${g1}, ${b1}, ${alpha})`);
+			grad.addColorStop(1, `rgba(${r2}, ${g2}, ${b2}, ${alpha})`);
+
+			ctx.fillStyle = grad;
 			ctx.fill();
 
 			ctx.lineWidth = 1;
@@ -404,10 +445,11 @@
 			prevMouseY = mouseY;
 
 			// Large natural sloshing swing (gentle perpetual reservoir sway)
-			// Smooth stochastic gravity tilt: sloshes whole fluid body without artificial fireworks
+			// Multi-frequency swell: creates authentic rhythmic ocean slosh from left to right
 			const sway1 = Math.sin(time * 0.85) * Math.cos(time * 0.42);
 			const sway2 = Math.sin(time * 1.55 + 0.6) * 0.35;
-			const gx = (sway1 + sway2) * 0.22; // Substantial natural sloshing acceleration
+			const sway3 = Math.sin(time * 0.28) * 0.18;
+			const gx = (sway1 + sway2 + sway3) * 0.26; // Natural sloshing acceleration
 
 			// Pass 1: Compute density field for all particles
 			for (let i = 0; i < totalParticles; i++) {
@@ -483,6 +525,13 @@
 					}
 				}
 
+				// Natural hydraulic wave lift along container walls when colliding
+				if (px[i] < 1.0 && vx[i] < -0.15) {
+					fy -= Math.abs(vx[i]) * 0.45; // convert horizontal collision momentum into upward surge
+				} else if (px[i] > cols - 2.0 && vx[i] > 0.15) {
+					fy -= Math.abs(vx[i]) * 0.45;
+				}
+
 				// Velocity integration with fluid damping
 				vx[i] = (vx[i] + fx * 0.12) * 0.985;
 				vy[i] = (vy[i] + fy * 0.12) * 0.985;
@@ -490,11 +539,11 @@
 				px[i] += vx[i];
 				py[i] += vy[i];
 
-				// Physical boundary safety constraints (walls)
-				if (px[i] < 1.2) { px[i] = 1.2; vx[i] = -vx[i] * 0.25; }
-				if (px[i] > cols - 1.2) { px[i] = cols - 1.2; vx[i] = -vx[i] * 0.25; }
-				if (py[i] < 0.6) { py[i] = 0.6; vy[i] = 0; }
-				if (py[i] > rows - 0.8) { py[i] = rows - 0.8; vy[i] = -vy[i] * 0.15; }
+				// Physical boundary safety constraints (seamless full screen edge)
+				if (px[i] < -0.1) { px[i] = -0.1; vx[i] = -vx[i] * 0.28; }
+				if (px[i] > cols - 0.9) { px[i] = cols - 0.9; vx[i] = -vx[i] * 0.28; }
+				if (py[i] < 0.2) { py[i] = 0.2; vy[i] = 0; }
+				if (py[i] > rows - 0.9) { py[i] = rows - 0.9; vy[i] = -vy[i] * 0.15; }
 			}
 
 			mouseImpulse = false;
@@ -564,10 +613,10 @@
 					const currentA = cellAlpha[r][c];
 
 					if (currentA > 0.04) {
-						// Render translucent Material square tile
+						// Render translucent Material square tile with theme gradient
 						const [cr, cg, cb] = getThemeGradientColor(cellEnergy[r][c], depthRatio);
-						const cardAlpha = Math.max(0.55, Math.min(0.92, currentA));
-						const outlineA = Math.max(0.14, Math.min(0.42, 0.14 + cellEnergy[r][c] * 0.28));
+						const cardAlpha = Math.max(0.62, Math.min(0.96, currentA * (0.80 + cellEnergy[r][c] * 0.18)));
+						const outlineA = Math.max(0.18, Math.min(0.55, 0.18 + cellEnergy[r][c] * 0.35));
 
 						drawCardTile(cx, cy, cardSize, cr, cg, cb, cardAlpha, outlineA);
 					}
