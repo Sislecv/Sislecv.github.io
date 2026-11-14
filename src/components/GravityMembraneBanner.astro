@@ -51,7 +51,7 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
-		background: radial-gradient(circle at 50% 25%, rgba(24, 25, 34, 0.96) 0%, rgba(10, 11, 16, 0.99) 100%);
+		background: linear-gradient(180deg, #f3f5f9 0%, #eaedf5 50%, #e1e5f0 100%);
 		border-bottom: 1px solid rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.18);
 		user-select: none;
 		-webkit-user-select: none;
@@ -60,8 +60,8 @@
 	}
 
 	:global(.mdui-theme-dark) .gravity-hero-viewport {
-		background: radial-gradient(circle at 50% 25%, rgba(18, 19, 28, 0.96) 0%, rgba(7, 8, 12, 0.99) 100%);
-		border-bottom-color: rgba(255, 255, 255, 0.08);
+		background: linear-gradient(180deg, #23242c 0%, #1c1d25 50%, #16171e 100%);
+		border-bottom-color: rgba(var(--mdui-color-outline-variant, 120, 120, 130), 0.22);
 	}
 
 	#gravity-banner-canvas {
@@ -178,10 +178,7 @@
 
 		// Theme colors extracted from MDUI CSS variables
 		let themePrimary = [11, 87, 208];
-		let themePrimaryContainer = [218, 226, 249];
-		let themeSecondary = [0, 140, 200];
-		let themeTertiary = [120, 80, 210];
-		let themeTertiaryContainer = [255, 216, 253];
+		let isDarkTheme = false;
 
 		function parseColor(str, fallback) {
 			if (!str) return fallback;
@@ -205,12 +202,10 @@
 		}
 
 		function updateTheme() {
-			const cs = getComputedStyle(document.documentElement);
+			const html = document.documentElement;
+			isDarkTheme = html.classList.contains("mdui-theme-dark");
+			const cs = getComputedStyle(html);
 			themePrimary = parseColor(cs.getPropertyValue("--mdui-color-primary"), [11, 87, 208]);
-			themePrimaryContainer = parseColor(cs.getPropertyValue("--mdui-color-primary-container"), [218, 226, 249]);
-			themeSecondary = parseColor(cs.getPropertyValue("--mdui-color-secondary"), [0, 140, 200]);
-			themeTertiary = parseColor(cs.getPropertyValue("--mdui-color-tertiary"), [120, 80, 210]);
-			themeTertiaryContainer = parseColor(cs.getPropertyValue("--mdui-color-tertiary-container"), [255, 216, 253]);
 		}
 
 		// Fixed Matrix Configuration
@@ -228,24 +223,24 @@
 		let totalParticles = 0;
 		let fluidCount = 0;
 
-		// SPH physical parameters in grid coordinate space
+		// SPH physical parameters in grid coordinate space - calm and gentle
 		const H = 2.4; // Interaction smoothing radius (grid units)
 		const H2 = H * H;
 		const P = 0.85; // Incompressible pressure coefficient
-		const V = 0.38; // Fluid viscosity coefficient
-		const G = 0.22; // Gravity downwards
+		const V = 0.50; // Fluid viscosity coefficient (smoother and calmer)
+		const G = 0.20; // Gravity downwards
 
 		// Fixed grid cell activation and energy state matrices
 		let cellAlpha = [];
 		let cellEnergy = [];
 
 		function initGridAndFluid() {
-			// Small square cell dimensioning - exact width subdivision guarantees zero edge gap
+			// Small square cell dimensioning - exact width subdivision
 			const targetStep = width < 640 ? 19 : (width < 1100 ? 22 : 24);
 			cols = Math.round(width / targetStep);
 			step = width / cols; // Exact width division: cols * step === width
-			cardSize = Math.round(step * 0.84);
-			cardRadius = Math.max(2, Math.round(cardSize * 0.18));
+			cardSize = Math.round(step * 0.86);
+			cardRadius = Math.max(2, Math.round(cardSize * 0.16));
 
 			rows = Math.ceil(height / step);
 
@@ -261,22 +256,22 @@
 			const _rho = [];
 
 			// 1. Static boundary wall particles placed outside visible grid boundaries
-			// Left boundary: two layers outside grid (x = -0.7 and x = -1.6)
+			// Left boundary
 			for (let y = -1; y <= rows + 2; y += 0.85) {
-				_px.push(-0.7); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(-1.6); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(-1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
+				_px.push(-1.8); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
-			// Right boundary: two layers outside grid (x = cols - 0.3 and x = cols + 0.6)
-			const rightWall1 = cols - 0.3;
-			const rightWall2 = cols + 0.6;
+			// Right boundary
+			const rightWall1 = cols + 0.0;
+			const rightWall2 = cols + 0.8;
 			for (let y = -1; y <= rows + 2; y += 0.85) {
 				_px.push(rightWall1); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 				_px.push(rightWall2); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
-			// Bottom boundary: two layers below grid (y = rows - 0.3 and y = rows + 0.6)
-			const botWall1 = rows - 0.3;
-			const botWall2 = rows + 0.6;
-			for (let x = -1.6; x <= cols + 1.0; x += 0.85) {
+			// Bottom boundary placed slightly lower so fluid comfortably occupies the bottom row
+			const botWall1 = rows + 0.2;
+			const botWall2 = rows + 1.0;
+			for (let x = -1.8; x <= cols + 1.2; x += 0.85) {
 				_px.push(x); _py.push(botWall1); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 				_px.push(x); _py.push(botWall2); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
 			}
@@ -287,10 +282,10 @@
 			let added = 0;
 
 			const pSpacing = 0.82;
-			for (let y = fluidStartY; y < rows - 0.9 && added < targetFluid; y += pSpacing) {
+			for (let y = fluidStartY; y <= rows - 0.7 && added < targetFluid; y += pSpacing) {
 				for (let x = 0.0; x <= cols - 1.0 && added < targetFluid; x += pSpacing) {
-					_px.push(x + (Math.random() - 0.5) * 0.08);
-					_py.push(y + (Math.random() - 0.5) * 0.08);
+					_px.push(x + (Math.random() - 0.5) * 0.06);
+					_py.push(y + (Math.random() - 0.5) * 0.06);
 					_vx.push(0);
 					_vy.push(0);
 					_isWall.push(0);
@@ -342,92 +337,54 @@
 			initGridAndFluid();
 		}
 
-		// Full-spectrum Material Theme gradient palette
+		// Gentle, soft monochromatic theme palette with minimal gradient
 		function getThemeGradientColor(energyRatio, depthRatio) {
-			// depthRatio: 1.0 at container floor, 0.0 at top
-			const heightFactor = 1.0 - depthRatio; // 0.0 at floor, ~0.20 at baseline, 1.0 at very top
-			// t in [0.0, 1.0]: composite depth + kinetic energy progression
-			const t = Math.max(0, Math.min(1.0, heightFactor * 0.92 + energyRatio * 0.58));
+			const heightFactor = 1.0 - depthRatio;
+			const t = Math.max(0, Math.min(1.0, heightFactor * 0.75 + energyRatio * 0.35));
+			const [pr, pg, pb] = themePrimary;
 
-			const p = themePrimary;
-			const sec = themeSecondary;
-			const tert = themeTertiary;
-			const cont = themePrimaryContainer;
-
-			let r, g, b;
-			if (t < 0.25) {
-				// Deep calm bed: rich dark primary tone
-				const s = t / 0.25;
-				r = p[0] * 0.58 + (p[0] - p[0] * 0.58) * s;
-				g = p[1] * 0.58 + (p[1] - p[1] * 0.58) * s;
-				b = p[2] * 0.70 + (p[2] - p[2] * 0.70) * s;
-			} else if (t < 0.58) {
-				// Mid layer: transitions from Primary into vibrant Secondary/Tertiary gradient
-				const s = (t - 0.25) / 0.33;
-				r = p[0] + (tert[0] - p[0]) * s;
-				g = p[1] + (sec[1] - p[1]) * s;
-				b = p[2] + (tert[2] - p[2]) * s;
-			} else if (t < 0.85) {
-				// Rising surge / active currents: Tertiary to vibrant Container gradient
-				const s = (t - 0.58) / 0.27;
-				r = tert[0] + (cont[0] - tert[0]) * s;
-				g = sec[1] + (cont[1] - sec[1]) * s;
-				b = tert[2] + (cont[2] - tert[2]) * s;
+			if (isDarkTheme) {
+				// Dark mode: soft, pale luminous tint of primary (low saturation, gentle)
+				const r = Math.round(pr * 0.45 + 110 * 0.55 + t * 20);
+				const g = Math.round(pg * 0.45 + 130 * 0.55 + t * 20);
+				const b = Math.round(pb * 0.60 + 160 * 0.40 + t * 15);
+				return [r, g, b];
 			} else {
-				// Splashing wave crest / wall collision / extreme speed: luminous highlight
-				const s = (t - 0.85) / 0.15;
-				r = cont[0] + (248 - cont[0]) * s;
-				g = cont[1] + (252 - cont[1]) * s;
-				b = Math.min(255, cont[2] + (255 - cont[2]) * s);
+				// Light mode: airy, soft pastel tone of primary (light & pale)
+				const r = Math.round(pr * 0.28 + 255 * 0.72 - t * 15);
+				const g = Math.round(pg * 0.28 + 255 * 0.72 - t * 15);
+				const b = Math.round(pb * 0.38 + 255 * 0.62);
+				return [r, g, b];
 			}
-
-			return [Math.round(r), Math.round(g), Math.round(b)];
 		}
 
-		function drawCardTile(cx, cy, size, r, g, b, alpha, outlineAlpha) {
-			const half = size * 0.5;
-			const cr = cardRadius;
-
+		function drawCardTile(x, y, w, h, cr, r, g, b, alpha) {
+			const safeCr = Math.min(cr, Math.floor(Math.min(w, h) * 0.5));
 			ctx.beginPath();
 			if (typeof ctx.roundRect === "function") {
-				ctx.roundRect(cx - half, cy - half, size, size, cr);
+				ctx.roundRect(x, y, w, h, safeCr);
 			} else {
-				ctx.moveTo(cx - half + cr, cy - half);
-				ctx.lineTo(cx + half - cr, cy - half);
-				ctx.quadraticCurveTo(cx + half, cy - half, cx + half, cy - half + cr);
-				ctx.lineTo(cx + half, cy + half - cr);
-				ctx.quadraticCurveTo(cx + half, cy + half, cx + half - cr, cy + half);
-				ctx.lineTo(cx - half + cr, cy + half);
-				ctx.quadraticCurveTo(cx - half, cy + half, cx - half, cy + half - cr);
-				ctx.lineTo(cx - half, cy - half + cr);
-				ctx.quadraticCurveTo(cx - half, cy - half, cx - half + cr, cy - half);
+				ctx.moveTo(x + safeCr, y);
+				ctx.lineTo(x + w - safeCr, y);
+				ctx.quadraticCurveTo(x + w, y, x + w, y + safeCr);
+				ctx.lineTo(x + w, y + h - safeCr);
+				ctx.quadraticCurveTo(x + w, y + h, x + w - safeCr, y + h);
+				ctx.lineTo(x + safeCr, y + h);
+				ctx.quadraticCurveTo(x, y + h, x, y + h - safeCr);
+				ctx.lineTo(x, y + safeCr);
+				ctx.quadraticCurveTo(x, y, x + safeCr, y);
 				ctx.closePath();
 			}
 
-			// Subtle vertical gradient on each card for elevated Material tactile feel
-			const grad = ctx.createLinearGradient(cx, cy - half, cx, cy + half);
-			const r1 = Math.min(255, Math.round(r * 1.12 + 10));
-			const g1 = Math.min(255, Math.round(g * 1.12 + 10));
-			const b1 = Math.min(255, Math.round(b * 1.08 + 12));
-			const r2 = Math.round(r * 0.90);
-			const g2 = Math.round(g * 0.90);
-			const b2 = Math.round(b * 0.92);
-
-			grad.addColorStop(0, `rgba(${r1}, ${g1}, ${b1}, ${alpha})`);
-			grad.addColorStop(1, `rgba(${r2}, ${g2}, ${b2}, ${alpha})`);
-
-			ctx.fillStyle = grad;
+			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
 			ctx.fill();
-
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = `rgba(255, 255, 255, ${outlineAlpha})`;
-			ctx.stroke();
+			// STRICTLY NO WHITE BORDER (no ctx.stroke)
 		}
 
 		let time = 0;
 
 		function updateSPHPhysics() {
-			time += 0.016;
+			time += 0.010; // Calmer, smoother time pace
 
 			// Mouse velocity & coordinates in grid units
 			let mouseGridX = -9999;
@@ -435,7 +392,7 @@
 			let mSpeed = 0;
 			if (isHovered && prevMouseX > -1000) {
 				const dist = Math.hypot(mouseX - prevMouseX, mouseY - prevMouseY);
-				mSpeed = Math.min(12, dist / step);
+				mSpeed = Math.min(10, dist / step);
 				mouseVx = (mouseX - prevMouseX) / step;
 				mouseVy = (mouseY - prevMouseY) / step;
 				mouseGridX = (mouseX - gridStartX) / step;
@@ -444,12 +401,10 @@
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			// Large natural sloshing swing (gentle perpetual reservoir sway)
-			// Multi-frequency swell: creates authentic rhythmic ocean slosh from left to right
-			const sway1 = Math.sin(time * 0.85) * Math.cos(time * 0.42);
-			const sway2 = Math.sin(time * 1.55 + 0.6) * 0.35;
-			const sway3 = Math.sin(time * 0.28) * 0.18;
-			const gx = (sway1 + sway2 + sway3) * 0.26; // Natural sloshing acceleration
+			// Gentle perpetual reservoir sway
+			const sway1 = Math.sin(time * 0.45) * 0.08;
+			const sway2 = Math.cos(time * 0.25) * 0.04;
+			const gx = sway1 + sway2; // Smooth, gentle sway acceleration
 
 			// Pass 1: Compute density field for all particles
 			for (let i = 0; i < totalParticles; i++) {
@@ -490,7 +445,7 @@
 						const dist = Math.sqrt(d2);
 						const w = 1.0 - dist / H;
 
-						// Yusuke Endoh pressure state equation (repulsive when density exceeds 3.0)
+						// Yusuke Endoh pressure state equation
 						const p_term = w * (dist * (3.0 - rho_i - rho[j]) * P);
 						// Fluid viscosity
 						const v_term_x = (vx[j] - vxi) * V * w;
@@ -501,49 +456,39 @@
 					}
 				}
 
-				// Mouse displacement and interaction (pushes water aside and carries waves upwards)
+				// Gentle mouse displacement and interaction
 				if (isHovered && mouseGridY > 0) {
 					const mdx = xi - mouseGridX;
 					const mdy = yi - mouseGridY;
 					const mdist2 = mdx * mdx + mdy * mdy;
-					const mRadius = 4.2; // Mouse influence radius in grid units
+					const mRadius = 4.2;
 					if (mdist2 < mRadius * mRadius && mdist2 > 0.01) {
 						const mdist = Math.sqrt(mdist2);
 						const mfactor = 1.0 - mdist / mRadius;
-						// Push away from cursor
-						fx += (mdx / mdist) * 1.8 * mfactor;
-						fy += (mdy / mdist) * 1.8 * mfactor;
-						// Transfer mouse momentum into water
-						fx += mouseVx * 0.65 * mfactor;
-						fy += mouseVy * 0.65 * mfactor;
+						fx += (mdx / mdist) * 0.9 * mfactor;
+						fy += (mdy / mdist) * 0.9 * mfactor;
+						fx += mouseVx * 0.35 * mfactor;
+						fy += mouseVy * 0.35 * mfactor;
 
 						if (mouseImpulse) {
-							// Burst on click
-							fx += (mdx / mdist) * 4.5 * mfactor;
-							fy += (mdy / mdist) * 4.5 * mfactor;
+							fx += (mdx / mdist) * 2.2 * mfactor;
+							fy += (mdy / mdist) * 2.2 * mfactor;
 						}
 					}
 				}
 
-				// Natural hydraulic wave lift along container walls when colliding
-				if (px[i] < 1.0 && vx[i] < -0.15) {
-					fy -= Math.abs(vx[i]) * 0.45; // convert horizontal collision momentum into upward surge
-				} else if (px[i] > cols - 2.0 && vx[i] > 0.15) {
-					fy -= Math.abs(vx[i]) * 0.45;
-				}
-
-				// Velocity integration with fluid damping
-				vx[i] = (vx[i] + fx * 0.12) * 0.985;
-				vy[i] = (vy[i] + fy * 0.12) * 0.985;
+				// Velocity integration with calm fluid damping
+				vx[i] = (vx[i] + fx * 0.10) * 0.965;
+				vy[i] = (vy[i] + fy * 0.10) * 0.965;
 
 				px[i] += vx[i];
 				py[i] += vy[i];
 
 				// Physical boundary safety constraints (seamless full screen edge)
-				if (px[i] < -0.1) { px[i] = -0.1; vx[i] = -vx[i] * 0.28; }
-				if (px[i] > cols - 0.9) { px[i] = cols - 0.9; vx[i] = -vx[i] * 0.28; }
+				if (px[i] < -0.2) { px[i] = -0.2; vx[i] = -vx[i] * 0.18; }
+				if (px[i] > cols - 0.8) { px[i] = cols - 0.8; vx[i] = -vx[i] * 0.18; }
 				if (py[i] < 0.2) { py[i] = 0.2; vy[i] = 0; }
-				if (py[i] > rows - 0.9) { py[i] = rows - 0.9; vy[i] = -vy[i] * 0.15; }
+				if (py[i] > rows - 0.6) { py[i] = rows - 0.6; vy[i] = -vy[i] * 0.08; }
 			}
 
 			mouseImpulse = false;
@@ -588,37 +533,55 @@
 			// STRICT: Cells render and change color ONLY where water physically exists!
 			for (let r = 0; r < rows; r++) {
 				const cy = gridStartY + r * step + step * 0.5;
-				// Depth ratio relative to fluid bed
 				const depthRatio = Math.max(0, Math.min(1.0, r / rows));
 
 				for (let c = 0; c < cols; c++) {
 					const cx = gridStartX + c * step + step * 0.5;
 					const idx = r * cols + c;
 					const occ = occupancy[idx];
-					const hasWater = occ > 0.42;
+					const hasWater = occ > 0.40;
 
 					if (!hasWater) {
 						// STRICT: Empty air. No color, no hover glow, fade to zero.
-						cellAlpha[r][c] += (0.0 - cellAlpha[r][c]) * 0.40;
+						cellAlpha[r][c] += (0.0 - cellAlpha[r][c]) * 0.35;
 						cellEnergy[r][c] = 0.0;
 					} else {
 						// Natural fluid kinetic energy based on SPH velocity
 						const vSpeed = cellVel[idx];
-						const fluidKinetic = Math.min(1.0, vSpeed * 0.65 + (occ > 1.2 ? 0.35 : 0.15));
+						const fluidKinetic = Math.min(1.0, vSpeed * 0.70 + (occ > 1.2 ? 0.25 : 0.10));
 
-						cellAlpha[r][c] += (1.0 - cellAlpha[r][c]) * 0.45;
-						cellEnergy[r][c] += (fluidKinetic - cellEnergy[r][c]) * 0.25;
+						cellAlpha[r][c] += (1.0 - cellAlpha[r][c]) * 0.40;
+						cellEnergy[r][c] += (fluidKinetic - cellEnergy[r][c]) * 0.20;
 					}
 
 					const currentA = cellAlpha[r][c];
 
 					if (currentA > 0.04) {
-						// Render translucent Material square tile with theme gradient
+						// Render soft, light Material square tile
 						const [cr, cg, cb] = getThemeGradientColor(cellEnergy[r][c], depthRatio);
-						const cardAlpha = Math.max(0.62, Math.min(0.96, currentA * (0.80 + cellEnergy[r][c] * 0.18)));
-						const outlineA = Math.max(0.18, Math.min(0.55, 0.18 + cellEnergy[r][c] * 0.35));
+						const baseA = isDarkTheme ? 0.36 : 0.42;
+						const maxA = isDarkTheme ? 0.62 : 0.70;
+						const cardAlpha = Math.max(baseA, Math.min(maxA, currentA * (baseA + cellEnergy[r][c] * 0.22)));
 
-						drawCardTile(cx, cy, cardSize, cr, cg, cb, cardAlpha, outlineA);
+						const half = cardSize * 0.5;
+						let cardX = cx - half;
+						let cardY = cy - half;
+						let cardW = cardSize;
+						let cardH = cardSize;
+
+						// Seamless flush with banner edges (0 gap)
+						if (c === 0) {
+							cardW += cardX;
+							cardX = 0;
+						}
+						if (c === cols - 1) {
+							cardW = width - cardX;
+						}
+						if (r === rows - 1) {
+							cardH = height - cardY;
+						}
+
+						drawCardTile(cardX, cardY, cardW, cardH, cardRadius, cr, cg, cb, cardAlpha);
 					}
 				}
 			}
