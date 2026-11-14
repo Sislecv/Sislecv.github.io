@@ -219,16 +219,15 @@
 
 		// SPH Particle Engine Arrays
 		// Modeled after Yusuke Endoh's IOCCC SPH formulation
-		let px, py, vx, vy, isWall, rho;
+		let px, py, vx, vy, rho;
 		let totalParticles = 0;
-		let fluidCount = 0;
 
-		// SPH physical parameters in grid coordinate space - calm and gentle
+		// SPH physical parameters in grid coordinate space
 		const H = 2.4; // Interaction smoothing radius (grid units)
 		const H2 = H * H;
 		const P = 0.85; // Incompressible pressure coefficient
-		const V = 0.50; // Fluid viscosity coefficient (smoother and calmer)
-		const G = 0.20; // Gravity downwards
+		const V = 0.35; // Fluid viscosity coefficient
+		const G = 0.22; // Gravity downwards
 
 		// Fixed grid cell activation and energy state matrices
 		let cellAlpha = [];
@@ -239,7 +238,7 @@
 			const targetStep = width < 640 ? 19 : (width < 1100 ? 22 : 24);
 			cols = Math.round(width / targetStep);
 			step = width / cols; // Exact width division: cols * step === width
-			cardSize = Math.round(step * 0.86);
+			cardSize = Math.round(step * 0.90);
 			cardRadius = Math.max(2, Math.round(cardSize * 0.16));
 
 			rows = Math.ceil(height / step);
@@ -252,56 +251,29 @@
 			const _py = [];
 			const _vx = [];
 			const _vy = [];
-			const _isWall = [];
 			const _rho = [];
 
-			// 1. Static boundary wall particles placed outside visible grid boundaries
-			// Left boundary
-			for (let y = -1; y <= rows + 2; y += 0.85) {
-				_px.push(-1.0); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(-1.8); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-			}
-			// Right boundary
-			const rightWall1 = cols + 0.0;
-			const rightWall2 = cols + 0.8;
-			for (let y = -1; y <= rows + 2; y += 0.85) {
-				_px.push(rightWall1); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(rightWall2); _py.push(y); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-			}
-			// Bottom boundary placed slightly lower so fluid comfortably occupies the bottom row
-			const botWall1 = rows + 0.2;
-			const botWall2 = rows + 1.0;
-			for (let x = -1.8; x <= cols + 1.2; x += 0.85) {
-				_px.push(x); _py.push(botWall1); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-				_px.push(x); _py.push(botWall2); _vx.push(0); _vy.push(0); _isWall.push(1); _rho.push(0);
-			}
-
-			// 2. Coherent Fluid particles strictly filling bottom 1/5 (20%) at rest, spanning 100% width
+			// Coherent Fluid particles strictly filling bottom 1/5 (20%) at rest, spanning 100% width
+			// Calibrated spacing (1.18) ensures resting fluid equilibrium precisely occupies bottom 1/5
 			const fluidStartY = rows * 0.80;
-			const targetFluid = Math.min(640, Math.max(160, Math.floor(cols * (rows * 0.20) * 1.25)));
-			let added = 0;
+			const pSpacing = 1.18;
 
-			const pSpacing = 0.82;
-			for (let y = fluidStartY; y <= rows - 0.7 && added < targetFluid; y += pSpacing) {
-				for (let x = 0.0; x <= cols - 1.0 && added < targetFluid; x += pSpacing) {
-					_px.push(x + (Math.random() - 0.5) * 0.06);
-					_py.push(y + (Math.random() - 0.5) * 0.06);
+			for (let y = fluidStartY + 0.3; y <= rows - 0.7; y += pSpacing) {
+				for (let x = 0.5; x <= cols - 0.5; x += pSpacing) {
+					_px.push(x + (Math.random() - 0.5) * 0.05);
+					_py.push(y + (Math.random() - 0.5) * 0.05);
 					_vx.push(0);
 					_vy.push(0);
-					_isWall.push(0);
 					_rho.push(0);
-					added++;
 				}
 			}
 
-			fluidCount = added;
 			totalParticles = _px.length;
 
 			px = new Float32Array(_px);
 			py = new Float32Array(_py);
 			vx = new Float32Array(_vx);
 			vy = new Float32Array(_vy);
-			isWall = new Uint8Array(_isWall);
 			rho = new Float32Array(_rho);
 
 			// Initialize grid matrix across entire width
@@ -384,7 +356,7 @@
 		let time = 0;
 
 		function updateSPHPhysics() {
-			time += 0.010; // Calmer, smoother time pace
+			time += 0.016;
 
 			// Mouse velocity & coordinates in grid units
 			let mouseGridX = -9999;
@@ -401,14 +373,14 @@
 			prevMouseX = mouseX;
 			prevMouseY = mouseY;
 
-			// Gentle perpetual reservoir sway
-			const sway1 = Math.sin(time * 0.45) * 0.08;
-			const sway2 = Math.cos(time * 0.25) * 0.04;
-			const gx = sway1 + sway2; // Smooth, gentle sway acceleration
+			// Natural ocean swell rhythmic sway
+			const sway1 = Math.sin(time * 0.95) * 0.22;
+			const sway2 = Math.sin(time * 1.9 + 0.4) * 0.08;
+			const gx = sway1 + sway2;
 
-			// Pass 1: Compute density field for all particles
+			// Pass 1: Compute density field for all fluid particles
 			for (let i = 0; i < totalParticles; i++) {
-				let r = isWall[i] ? 8.5 : 0.0;
+				let r = 0.0;
 				const xi = px[i];
 				const yi = py[i];
 
@@ -426,8 +398,6 @@
 
 			// Pass 2: SPH Navier-Stokes Pressure & Viscosity Force Integration
 			for (let i = 0; i < totalParticles; i++) {
-				if (isWall[i]) continue;
-
 				let fx = gx;
 				let fy = G;
 				const xi = px[i];
@@ -456,39 +426,70 @@
 					}
 				}
 
-				// Gentle mouse displacement and interaction
+				// Mouse displacement and interaction
 				if (isHovered && mouseGridY > 0) {
 					const mdx = xi - mouseGridX;
 					const mdy = yi - mouseGridY;
 					const mdist2 = mdx * mdx + mdy * mdy;
-					const mRadius = 4.2;
+					const mRadius = 4.6;
 					if (mdist2 < mRadius * mRadius && mdist2 > 0.01) {
 						const mdist = Math.sqrt(mdist2);
 						const mfactor = 1.0 - mdist / mRadius;
-						fx += (mdx / mdist) * 0.9 * mfactor;
-						fy += (mdy / mdist) * 0.9 * mfactor;
-						fx += mouseVx * 0.35 * mfactor;
-						fy += mouseVy * 0.35 * mfactor;
+						fx += (mdx / mdist) * 1.5 * mfactor;
+						fy += (mdy / mdist) * 1.5 * mfactor;
+						fx += mouseVx * 0.65 * mfactor;
+						fy += mouseVy * 0.65 * mfactor;
 
 						if (mouseImpulse) {
-							fx += (mdx / mdist) * 2.2 * mfactor;
-							fy += (mdy / mdist) * 2.2 * mfactor;
+							fx += (mdx / mdist) * 3.5 * mfactor;
+							fy += -4.0 * mfactor;
 						}
 					}
 				}
 
-				// Velocity integration with calm fluid damping
-				vx[i] = (vx[i] + fx * 0.10) * 0.965;
-				vy[i] = (vy[i] + fy * 0.10) * 0.965;
+				// Velocity integration
+				vx[i] = (vx[i] + fx * 0.12) * 0.985;
+				vy[i] = (vy[i] + fy * 0.12) * 0.985;
 
 				px[i] += vx[i];
 				py[i] += vy[i];
 
-				// Physical boundary safety constraints (seamless full screen edge)
-				if (px[i] < -0.2) { px[i] = -0.2; vx[i] = -vx[i] * 0.18; }
-				if (px[i] > cols - 0.8) { px[i] = cols - 0.8; vx[i] = -vx[i] * 0.18; }
-				if (py[i] < 0.2) { py[i] = 0.2; vy[i] = 0; }
-				if (py[i] > rows - 0.6) { py[i] = rows - 0.6; vy[i] = -vy[i] * 0.08; }
+				// Direct Container Wall Collision Physics (tight flush to boundaries + wave surge)
+				// Left wall (x <= 0)
+				if (px[i] <= 0.0) {
+					px[i] = 0.0;
+					if (vx[i] < -0.05) {
+						// Convert horizontal impact momentum into upward surging splash
+						vy[i] -= Math.abs(vx[i]) * 1.35;
+						vx[i] = Math.abs(vx[i]) * 0.35; // Curls inward as it climbs
+					} else {
+						vx[i] = 0;
+					}
+				}
+
+				// Right wall (x >= cols - 1)
+				if (px[i] >= cols - 1) {
+					px[i] = cols - 1;
+					if (vx[i] > 0.05) {
+						// Convert horizontal impact momentum into upward surging splash
+						vy[i] -= Math.abs(vx[i]) * 1.35;
+						vx[i] = -Math.abs(vx[i]) * 0.35; // Curls inward as it climbs
+					} else {
+						vx[i] = 0;
+					}
+				}
+
+				// Bottom floor (y >= rows - 1)
+				if (py[i] >= rows - 1) {
+					py[i] = rows - 1;
+					if (vy[i] > 0) vy[i] = -vy[i] * 0.10;
+				}
+
+				// Ceiling (y <= 0.2)
+				if (py[i] < 0.2) {
+					py[i] = 0.2;
+					if (vy[i] < 0) vy[i] = 0;
+				}
 			}
 
 			mouseImpulse = false;
@@ -504,7 +505,6 @@
 			const cellVel = new Float32Array(cols * rows);
 
 			for (let i = 0; i < totalParticles; i++) {
-				if (isWall[i]) continue;
 				const gx = px[i];
 				const gy = py[i];
 				const baseC = Math.round(gx);
@@ -519,10 +519,10 @@
 						const c = baseC + dc;
 						if (c < 0 || c >= cols) continue;
 						const d = Math.hypot(gx - c, gy - r);
-						if (d < 1.35) {
-							const w = (1.35 - d) / 1.35;
+						if (d < 1.45) {
+							const w = (1.45 - d) / 1.45;
 							const idx = r * cols + c;
-							occupancy[idx] += w * 0.95;
+							occupancy[idx] += w * 1.10;
 							cellVel[idx] = Math.max(cellVel[idx], speed);
 						}
 					}
@@ -539,7 +539,7 @@
 					const cx = gridStartX + c * step + step * 0.5;
 					const idx = r * cols + c;
 					const occ = occupancy[idx];
-					const hasWater = occ > 0.40;
+					const hasWater = occ > 0.32;
 
 					if (!hasWater) {
 						// STRICT: Empty air. No color, no hover glow, fade to zero.
@@ -569,7 +569,7 @@
 						let cardW = cardSize;
 						let cardH = cardSize;
 
-						// Seamless flush with banner edges (0 gap)
+						// Seamless flush with banner edges (strictly 0 gap on left, right, bottom)
 						if (c === 0) {
 							cardW += cardX;
 							cardX = 0;
